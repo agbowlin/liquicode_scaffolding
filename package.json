@@ -1,0 +1,51 @@
+{
+    "name": "liquicode_scaffolding",
+    "version": "0.0.2",
+    "homepage": "https://github.com/agbowlin/liquicode_scaffolding",
+    "description": "Lightweight scaffolding for NodeJS/SocketIO/AngularJS",
+    "authors": [
+        {
+            "name": "Andre G. Bowlin",
+            "email": "agbowlin@gmail.com",
+            "homepage": "http://liquicode.com"
+        }
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/agbowlin/liquicode_scaffolding.git"
+    },
+    "license": "MIT",
+    "keywords": [
+        "nodejs",
+        "socket.io",
+        "angularjs"
+    ],
+    "files": [
+        "package.json",
+        "bower.json",
+        "LICENSE",
+        "VERSION",
+        "README.md"
+    ],
+    "ignore": [
+        ".*",
+        "bower_components",
+        "node_modules"
+    ],
+    "scripts": {
+
+    },
+    "dependencies": {
+        "express": "",
+        "socket.io": "",
+        "sanitize-filename": "",
+        "fs-extra": "",
+        "klaw-sync": "",
+        "rsvp": "",
+        "liquicode_membership": ""
+    },
+    "devDependencies": {
+
+    },
+    "main": "lqc-scaffold"
+}
