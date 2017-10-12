@@ -1,7 +1,6 @@
 {
-	"name": "membership-admin-client",
-	"dependencies":
-	{
+	"name": "application-client",
+	"dependencies": {
 		"jquery": "",
 		"bootstrap": "",
 		"angular": "",

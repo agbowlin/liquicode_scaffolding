@@ -1,11 +1,5 @@
 {
-    "name": "membership-admin-server",
-    "authors": [
-    {
-        "name": "Andre G. Bowlin",
-        "email": "agbowlin@gmail.com",
-        "homepage": "http://liquicode.com"
-    }],
+    "name": "application-server",
     "private": true,
     "dependencies":
     {
@@ -17,4 +11,4 @@
         "liquicode_membership": ""
     },
     "devDependencies": {}
-}
+    }
