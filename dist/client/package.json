@@ -1,0 +1,8 @@
+{
+	"name": "membership-admin-client",
+	"dependencies":
+	{
+		"socket.io-client": "",
+		"liquicode_membership": ""
+	}
+}

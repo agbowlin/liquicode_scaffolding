@@ -1,0 +1,11 @@
+{
+	"name": "membership-admin-client",
+	"dependencies":
+	{
+		"jquery": "",
+		"bootstrap": "",
+		"angular": "",
+		"angular-cookies": "",
+		"rsvp": ""
+	}
+}
