@@ -125,11 +125,14 @@ if (app_options.configpath) {
 }
 
 
+console.log('Running in [' + __dirname + ']');
+
+
 //---------------------------------------------------------------------
 //	Get the source path
 //---------------------------------------------------------------------
 
-var sourcepath = 'dist';
+var sourcepath = npm_path.join(__dirname, 'dist');
 if (app_options.sourcepath) {
 	sourcepath = app_options.sourcepath;
 }
@@ -143,7 +146,7 @@ if (!npm_fs_extra.pathExists(sourcepath)) {
 //	Get the target path
 //---------------------------------------------------------------------
 
-var targetpath = '.';
+var targetpath = '.'; // The caller's cwd.
 if (app_options.targetpath) {
 	targetpath = app_options.targetpath;
 }

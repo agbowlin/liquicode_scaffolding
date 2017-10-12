@@ -12,15 +12,13 @@
 	<title>Membership Admin</title>
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 
 	<link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
-
-	<link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css'>
-	<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+	<!--<link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css'>-->
 	<!--<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/darkly/bootstrap.min.css" rel="stylesheet" integrity="sha384-S7YMK1xjUjSpEnF4P8hPUcgjXYLZKK3fQW1j5ObLSl787II9p8RO9XUGehRmKsxd" crossorigin="anonymous">-->
 
 	<link rel="stylesheet" href="site.css">
+	<link rel="stylesheet" href="app-client.css">
 
 </head>
 
@@ -33,11 +31,11 @@
 
 <body ng-app="TheApplication">
 
-<div ng-controller="TheController">
+	<div ng-controller="TheController">
 
-	<div class="wrapper">
+		<div class="wrapper">
 
-		<!--
+			<!--
 			==========================================
 			==========================================
 	
@@ -47,106 +45,75 @@
 			==========================================
 			-->
 
-		<nav id="sidebar" ng-cloak>
-			<!-- Sidebar Header -->
+			<nav id="sidebar" ng-cloak>
+				<!-- Sidebar Header -->
 
-			<div class="sidebar-header">
-				<h2>
-					<a href="#" id="sidebarCollapse" class="nav navbar-nav navbar-right">
-						<i class="glyphicon glyphicon-menu-hamburger"></i>
-						<span></span>
-					</a>
-				</h2>
-				<h3 ng-cloak>
-					{{ ThisApp.AppConfig.app_title }}
-					<i class="glyphicon glyphicon-send"></i>
-				</h3>
-				<strong>
-					<i class="glyphicon glyphicon-send"></i>
-				</strong>
-			</div>
+				<div class="sidebar-header" ng-show="ThisApp.IsSidebarCollapsed">
+					<h2>
+						<a href="#" class="nav navbar-nav navbar-right" ng-click="ThisApp.ToggleSidebarCollapsed()">
+							<i class="glyphicon glyphicon-menu-hamburger"></i>
+						</a>
+					</h2>
+				</div>
 
-			<!-- Sidebar links, user is NOT logged in. -->
+				<div class="sidebar-header" ng-show="!ThisApp.IsSidebarCollapsed">
+					<h2>
+						<a href="#" class="nav navbar-nav navbar-right" ng-click="ThisApp.ToggleSidebarCollapsed()">
+							<i class="glyphicon glyphicon-menu-hamburger"></i>
+						</a>
+					</h2>
+					<h3 ng-cloak>
+						{{ ThisApp.AppConfig.app_title }}
+						<i class="glyphicon glyphicon-send"></i>
+					</h3>
+				</div>
 
-			<ul class="sidebar-item-list">
+				<!-- Sidebar links, user is NOT logged in. -->
 
-				<!-- Login link, user is NOT logged in. -->
-				<li class="sidebar-item" ng-hide="Member.member_logged_in" ng-cloak>
-					<a href="#" ng-click="ThisApp.LoadPartial('member-login')">
-						<i class="glyphicon glyphicon-log-in"></i>
-						Login
-					</a>
-				</li>
+				<ul class="sidebar-item-list" ng-show="!ThisApp.IsSidebarCollapsed">
 
-				<!-- Signup link, user is NOT logged in. -->
-				<li class="sidebar-item" ng-hide="Member.member_logged_in" ng-cloak>
-					<a href="#" ng-click="ThisApp.LoadPartial('member-signup')">
-						<i class="glyphicon glyphicon-user"></i>
-						Signup
-					</a>
-				</li>
+					<!-- Login link, user is NOT logged in. -->
+					<li class="sidebar-item" ng-hide="Member.member_logged_in" ng-cloak>
+						<a href="#" ng-click="ThisApp.LoadPartial('member-login')">
+							<i class="glyphicon glyphicon-log-in"></i>
+							Login
+						</a>
+					</li>
 
-				<!-- Profile link, user IS logged in. -->
-				<li class="sidebar-item" ng-hide="!Member.member_logged_in" ng-cloak>
-					<a href="#" ng-click="ThisApp.LoadPartial('member-profile')">
-						<i class="glyphicon glyphicon-user"></i>
-						Profile: {{ Member.member_name }}
-					</a>
-				</li>
-	
-				<!-- Home link, Always shown. -->
-				<li class="sidebar-item">
-					<a href="#" class="sidebar-item" ng-click="ThisApp.LoadPartial('site-home')">
-						<i class="glyphicon glyphicon-home"></i>
-						Home
-					</a>
-				</li>
-			
-			</ul>
+					<!-- Signup link, user is NOT logged in. -->
+					<li class="sidebar-item" ng-hide="Member.member_logged_in" ng-cloak>
+						<a href="#" ng-click="ThisApp.LoadPartial('member-signup')">
+							<i class="glyphicon glyphicon-user"></i>
+							Signup
+						</a>
+					</li>
 
-			<ul id="app-sidebar-list" class="sidebar-item-list">
+					<!-- Profile link, user IS logged in. -->
+					<li class="sidebar-item" ng-hide="!Member.member_logged_in" ng-cloak>
+						<a href="#" ng-click="ThisApp.LoadPartial('member-profile')">
+							<i class="glyphicon glyphicon-user"></i>
+							Profile: {{ Member.member_name }}
+						</a>
+					</li>
 
-				<li class="sidebar-item" ng-show="Member.member_logged_in">
-					<a href="#" class="sidebar-item" ng-click="ThisApp.LoadPartial('site-home')">
-						<i class="glyphicon glyphicon-home"></i>
-						Sample
-					</a>
-				</li>
-				
-				<li class="sidebar-item" ng-show="Member.member_logged_in">
-					<a href="#PagesSubmenu" data-toggle="collapse" aria-expanded="false">
-						<i class="glyphicon glyphicon-duplicate"></i>
-						Pages
-					</a>
-					<ul class="collapse list-unstyled" id="PagesSubmenu">
-						<li><a href="#">Page 1</a></li>
-						<li><a href="#">Page 2</a></li>
-						<li><a href="#">Page 3</a></li>
-					</ul>
-				</li>
+					<!-- Home link, Always shown. -->
+					<li class="sidebar-item">
+							<a href="#" class="sidebar-item" ng-click="ThisApp.LoadPartial('site-home')">
+							<i class="glyphicon glyphicon-home"></i>
+							Home
+						</a>
+					</li>
 
-				<li class="sidebar-item" ng-show="Member.member_logged_in">
-					<a href="#ContainerSubmenu" data-toggle="collapse" aria-expanded="false">
-						<i class="glyphicon glyphicon-duplicate"></i>
-						Container
-					</a>
-					<ul class="collapse list-unstyled" id="ContainerSubmenu">
-						<li><a href="#">Item 1</a></li>
-						<li><a href="#">Item 2</a></li>
-						<li><a href="#">Item 3</a></li>
-					</ul>
-				</li>
+				</ul>
 
-			</ul>
+				<ul id="app-sidebar-list" class="sidebar-item-list" ng-show="!ThisApp.IsSidebarCollapsed">
+					<!-- App Content -->
+				</ul>
 
-			<!--<ul class="list-unstyled CTAs">-->
-			<!--	<li><a href="https://bootstrapious.com/tutorial/files/sidebar.zip" class="download">Download source</a></li>-->
-			<!--	<li><a href="https://bootstrapious.com/p/bootstrap-sidebar" class="article">Back to article</a></li>-->
-			<!--</ul>-->
-		</nav>
+			</nav>
 
 
-		<!--
+			<!--
 			==========================================
 			==========================================
 	
@@ -156,16 +123,16 @@
 			==========================================
 			-->
 
-		<!--<hr ng-cloak>-->
-		<!--<h5 ng-cloak>{{ Member.status_message }}</h5>-->
-		<!--<ul ng-cloak>-->
-		<!--	<li ng-repeat="error in errors" ng-bind="error">-->
-		<!--	</li>-->
-		<!--</ul>-->
-		<!--<hr ng-cloak>-->
+			<!--<hr ng-cloak>-->
+			<!--<h5 ng-cloak>{{ Member.status_message }}</h5>-->
+			<!--<ul ng-cloak>-->
+			<!--	<li ng-repeat="error in errors" ng-bind="error">-->
+			<!--	</li>-->
+			<!--</ul>-->
+			<!--<hr ng-cloak>-->
 
 
-		<!--
+			<!--
 			==========================================
 			==========================================
 	
@@ -175,20 +142,24 @@
 			==========================================
 			-->
 
-		<div id="content">
-			<div id="content-partial-container">
+			<div id="content">
+				<div class="container-fluid">
+					<div class="row">
+						<div id="content-partial-container">
+						</div>
+					</div>
+				</div>
 			</div>
-		</div>
 
+
+		</div>
+		<!--container-->
 
 	</div>
-	<!--container-->
+	<!--wrapper-->
 
-</div>
-<!--wrapper-->
-
-</div>
-<!--TheController-->
+	</div>
+	<!--TheController-->
 
 </body>
 
@@ -212,7 +183,7 @@
 
 <!--
 ==========================================
-	Load the main application
+	Load the scaffolding code
 ==========================================
 -->
 
@@ -228,27 +199,17 @@
 <script src="/partials/member-profile.js"></script>
 
 
+<!--
+==========================================
+	Load the main application
+==========================================
+-->
+
+<link rel="import" href="app-client.html">
+<script src="/app-client.js"></script>
+
+
 <script>
-	/* global $ */
-	/* global app */
-
-	// Add modal window activator functions.
-	// app.run(function($rootScope) {
-	// 	//==========================================
-	// 	$rootScope.show_member_login_modal = function show_member_login_modal() {
-	// 		$('#member_login_modal').modal('show');
-	// 		return;
-	// 	};
-	// });
-
-
-	$(document).ready(
-		function() {
-			$('#sidebarCollapse').on('click', function() {
-				$('#sidebar').toggleClass('active');
-			});
-		});
-		
 </script>
 
 </html>

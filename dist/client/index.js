@@ -3,6 +3,7 @@
 /* global angular */
 /* global MembershipClient */
 /* global MembershipClientRsvp */
+/* global AppClient */
 /* global RSVP */
 
 'use strict';
@@ -23,22 +24,34 @@ var TheController = TheApplication.controller('TheController',
 			app_title: 'Application',
 			content_selector: '#content',
 			intiial_view: 'site-home', // Loaded when the user is not logged in or initially logs in.
-			partials_path: '/partials',
-			style: {
-
-				content_backcolor: '#999',
-				content_forecolor: '#FAFAFA',
-
-				sidebar_backcolor: '#999',
-				sidebar_forecolor: '#FAFAFA',
-
-				sidebar_header_backcolor: '#999',
-				sidebar_header_forecolor: '#FAFAFA',
-
-				sidebar_selected_backcolor: '#FAFAFA',
-				sidebar_selected_forecolor: '#999'
-			}
+			partials_path: '/partials'
+			// style: {
+			// 	content_backcolor: '#999',
+			// 	content_forecolor: '#FAFAFA',
+			// 	sidebar_backcolor: '#999',
+			// 	sidebar_forecolor: '#FAFAFA',
+			// 	sidebar_header_backcolor: '#999',
+			// 	sidebar_header_forecolor: '#FAFAFA',
+			// 	sidebar_selected_backcolor: '#FAFAFA',
+			// 	sidebar_selected_forecolor: '#999'
+			// }
 		};
+
+
+		//------------------------------------------
+		$scope.ThisApp.IsSidebarCollapsed = false;
+		$scope.ThisApp.ToggleSidebarCollapsed =
+			function() {
+				$scope.ThisApp.IsSidebarCollapsed = !$scope.ThisApp.IsSidebarCollapsed;
+				if($scope.ThisApp.IsSidebarCollapsed)
+				{
+					$('#sidebar').addClass('collapsed');
+				}
+				else
+				{
+					$('#sidebar').removeClass('collapsed');
+				}
+			};
 
 
 		//------------------------------------------
@@ -105,38 +118,38 @@ var TheController = TheApplication.controller('TheController',
 			};
 
 
-		//------------------------------------------
-		$scope.ThisApp.ApplyStyle =
-			function(Style) {
+		// //------------------------------------------
+		// $scope.ThisApp.ApplyStyle =
+		// 	function(Style) {
 
-				$('body').css({ "background": Style.content_backcolor });
-				$('body').css({ "color": Style.content_forecolor });
+		// 		$('body').css({ "background": Style.content_backcolor });
+		// 		$('body').css({ "color": Style.content_forecolor });
 
-				// $('#navbar').css({ "background": Style.sidebar_backcolor });
-				// $('#navbar').css({ "color": Style.sidebar_forecolor });
+		// 		// $('#navbar').css({ "background": Style.sidebar_backcolor });
+		// 		// $('#navbar').css({ "color": Style.sidebar_forecolor });
 
-				$('#sidebar').css({ "background": Style.sidebar_backcolor });
-				$('#sidebar').css({ "color": Style.sidebar_forecolor });
+		// 		$('#sidebar').css({ "background": Style.sidebar_backcolor });
+		// 		$('#sidebar').css({ "color": Style.sidebar_forecolor });
 
-				$('#sidebar .sidebar-header').css({ "background": Style.sidebar_header_backcolor });
-				$('#sidebar .sidebar-header').css({ "color": Style.sidebar_header_forecolor });
+		// 		$('#sidebar .sidebar-header').css({ "background": Style.sidebar_header_backcolor });
+		// 		$('#sidebar .sidebar-header').css({ "color": Style.sidebar_header_forecolor });
 
-				//TODO: Need to figure out how to set properties of
-				//	an HTML element that is being hovered and selected.
+		// 		//TODO: Need to figure out how to set properties of
+		// 		//	an HTML element that is being hovered and selected.
 
-				// $('#sidebar ul li a:hover').css({ "background": Style.sidebar_selected_backcolor });
-				// $('#sidebar ul li a:hover').css({ "color": Style.sidebar_selected_forecolor });
+		// 		// $('#sidebar ul li a:hover').css({ "background": Style.sidebar_selected_backcolor });
+		// 		// $('#sidebar ul li a:hover').css({ "color": Style.sidebar_selected_forecolor });
 
-				// $('#sidebar ul li.active>a,a[aria-expanded="true"]').css({ "background": Style.sidebar_selected_backcolor });
-				// $('#sidebar ul li.active>a,a[aria-expanded="true"]').css({ "color": Style.sidebar_selected_forecolor });
+		// 		// $('#sidebar ul li.active>a,a[aria-expanded="true"]').css({ "background": Style.sidebar_selected_backcolor });
+		// 		// $('#sidebar ul li.active>a,a[aria-expanded="true"]').css({ "color": Style.sidebar_selected_forecolor });
 
-				// $('#sidebar ul li.active>a').css({ "background": Style.sidebar_selected_backcolor });
-				// $('#sidebar ul li.active>a').css({ "color": Style.sidebar_selected_forecolor });
+		// 		// $('#sidebar ul li.active>a').css({ "background": Style.sidebar_selected_backcolor });
+		// 		// $('#sidebar ul li.active>a').css({ "color": Style.sidebar_selected_forecolor });
 
-				// $('a[aria-expanded="true"]').css({ "background": Style.sidebar_selected_backcolor });
-				// $('a[aria-expanded="true"]').css({ "color": Style.sidebar_selected_forecolor });
+		// 		// $('a[aria-expanded="true"]').css({ "background": Style.sidebar_selected_backcolor });
+		// 		// $('a[aria-expanded="true"]').css({ "color": Style.sidebar_selected_forecolor });
 
-			};
+		// 	};
 
 
 		//=====================================================================
@@ -300,17 +313,8 @@ var TheController = TheApplication.controller('TheController',
 			$scope.ThisApp.LoadPartial($scope.ThisApp.AppConfig.intiial_view);
 		}
 
-		// Set an initial view
-		$scope.ThisApp.ApplyStyle($scope.ThisApp.AppConfig.style);
-		$scope.ThisApp.AddSidebarItem({
-			item_name: 'test-item-1',
-			caption: 'My First Test Item',
-			partial_name: 'site-home',
-			requires_login: true,
-			icon_class: 'glyphicon glyphicon-leaf',
-			on_click: function(Item) {
-				$scope.ThisApp.LoadPartial('site-home');
-			}
-		});
+
+		AppClient.Connect($scope, $scope.ThisApp, $scope.Member, socket, null);
+
 
 	});

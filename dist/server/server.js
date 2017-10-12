@@ -30,7 +30,9 @@ var Membership_SocketIO = require('liquicode_membership/Membership-SocketIO.js')
 // var Membership = require('../../../Membership.js');
 // var Membership_SocketIO = require('../../../Membership-SocketIO.js');
 Membership.RootFolder = npm_path.resolve(__dirname, '../members');
-Membership.ApplicationName = 'MembershipAdmin';
+Membership.ApplicationName = 'Application';
+
+var AppServer = require('app-server');
 
 
 //=====================================================================
@@ -85,6 +87,8 @@ SocketIo.on('connection',
 
 		// Add the membership functions.
 		Membership_SocketIO.WireSocketEvents(Membership, Socket, null);
+
+		AppServer.OnConnection(Membership, Socket, null);
 
 	});
 
