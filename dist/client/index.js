@@ -99,8 +99,10 @@ var TheController = TheApplication.controller('TheController',
 				html += ' class="sidebar-item"';
 				if (Item.is_group) {
 					html += ' href="#' + Item.item_name + '_items"';
-					html += ' data-toggle="collapse"';
-					html += ' aria-expanded="false"';
+					if (Item.is_collapsable) {
+						html += ' data-toggle="collapse"';
+						html += ' aria-expanded="false"';
+					}
 				}
 				else {
 					html += ' href="#"';
@@ -108,7 +110,9 @@ var TheController = TheApplication.controller('TheController',
 				if (Item.requires_login) {
 					html += ' ng-show="Member.member_logged_in"';
 				}
-				html += ' ng-click="ThisApp.OnSidebarItemClick(\'' + Item.item_name + '\')"';
+				if (Item.on_click) {
+					html += ' ng-click="ThisApp.OnSidebarItemClick(\'' + Item.item_name + '\')"';
+				}
 				html += '>';
 
 				if (Item.icon_class) {
@@ -117,7 +121,12 @@ var TheController = TheApplication.controller('TheController',
 
 				html += Item.caption;
 				if (Item.is_group) {
-					html += '<ul class="collapse list-unstyled" id="' + Item.item_name + '_items">';
+					if (Item.is_collapsable) {
+						html += '<ul class="collapse list-unstyled" id="' + Item.item_name + '_items">';
+					}
+					else {
+						html += '<ul class="list-unstyled" id="' + Item.item_name + '_items">';
+					}
 					html += '</ul>';
 				}
 
