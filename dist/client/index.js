@@ -25,16 +25,6 @@ var TheController = TheApplication.controller('TheController',
 			content_selector: '#content',
 			intiial_view: 'site-home', // Loaded when the user is not logged in or initially logs in.
 			partials_path: '/partials'
-			// style: {
-			// 	content_backcolor: '#999',
-			// 	content_forecolor: '#FAFAFA',
-			// 	sidebar_backcolor: '#999',
-			// 	sidebar_forecolor: '#FAFAFA',
-			// 	sidebar_header_backcolor: '#999',
-			// 	sidebar_header_forecolor: '#FAFAFA',
-			// 	sidebar_selected_backcolor: '#FAFAFA',
-			// 	sidebar_selected_forecolor: '#999'
-			// }
 		};
 
 
@@ -43,12 +33,10 @@ var TheController = TheApplication.controller('TheController',
 		$scope.ThisApp.ToggleSidebarCollapsed =
 			function() {
 				$scope.ThisApp.IsSidebarCollapsed = !$scope.ThisApp.IsSidebarCollapsed;
-				if($scope.ThisApp.IsSidebarCollapsed)
-				{
+				if ($scope.ThisApp.IsSidebarCollapsed) {
 					$('#sidebar').addClass('collapsed');
 				}
-				else
-				{
+				else {
 					$('#sidebar').removeClass('collapsed');
 				}
 			};
@@ -98,58 +86,55 @@ var TheController = TheApplication.controller('TheController',
 
 
 		//------------------------------------------
-		$scope.ThisApp.AddSidebarItem =
+		$scope.ThisApp.NewSidebarItem =
 			function(Item) {
 				$scope.ThisApp.SidebarItems[Item.item_name] = Item;
-				var html = '<li id="' + Item.item_name + '" class="sidebar-item">';
-				html += '<a href="#" class="sidebar-item" ng-click="ThisApp.OnSidebarItemClick(\'' + Item.item_name + '\')"';
+
+				var html = '<li';
+				html += ' id="' + Item.item_name + '"';
+				html += ' class="sidebar-item"';
+				html += '>';
+
+				html += '<a';
+				html += ' class="sidebar-item"';
+				if (Item.is_group) {
+					html += ' href="#' + Item.item_name + '_items"';
+					html += ' data-toggle="collapse"';
+					html += ' aria-expanded="false"';
+				}
+				else {
+					html += ' href="#"';
+				}
 				if (Item.requires_login) {
 					html += ' ng-show="Member.member_logged_in"';
 				}
+				html += ' ng-click="ThisApp.OnSidebarItemClick(\'' + Item.item_name + '\')"';
 				html += '>';
+
 				if (Item.icon_class) {
 					html += '<i class="' + Item.icon_class + '"></i>';
 				}
+
 				html += Item.caption;
+				if (Item.is_group) {
+					html += '<ul class="collapse list-unstyled" id="' + Item.item_name + '_items">';
+					html += '</ul>';
+				}
+
 				html += '</li>';
 				var linker = $compile(html);
 				var linker_result = linker($scope);
-				$('#app-sidebar-list').append(linker_result).show();
+				return linker_result;
 			};
 
 
-		// //------------------------------------------
-		// $scope.ThisApp.ApplyStyle =
-		// 	function(Style) {
-
-		// 		$('body').css({ "background": Style.content_backcolor });
-		// 		$('body').css({ "color": Style.content_forecolor });
-
-		// 		// $('#navbar').css({ "background": Style.sidebar_backcolor });
-		// 		// $('#navbar').css({ "color": Style.sidebar_forecolor });
-
-		// 		$('#sidebar').css({ "background": Style.sidebar_backcolor });
-		// 		$('#sidebar').css({ "color": Style.sidebar_forecolor });
-
-		// 		$('#sidebar .sidebar-header').css({ "background": Style.sidebar_header_backcolor });
-		// 		$('#sidebar .sidebar-header').css({ "color": Style.sidebar_header_forecolor });
-
-		// 		//TODO: Need to figure out how to set properties of
-		// 		//	an HTML element that is being hovered and selected.
-
-		// 		// $('#sidebar ul li a:hover').css({ "background": Style.sidebar_selected_backcolor });
-		// 		// $('#sidebar ul li a:hover').css({ "color": Style.sidebar_selected_forecolor });
-
-		// 		// $('#sidebar ul li.active>a,a[aria-expanded="true"]').css({ "background": Style.sidebar_selected_backcolor });
-		// 		// $('#sidebar ul li.active>a,a[aria-expanded="true"]').css({ "color": Style.sidebar_selected_forecolor });
-
-		// 		// $('#sidebar ul li.active>a').css({ "background": Style.sidebar_selected_backcolor });
-		// 		// $('#sidebar ul li.active>a').css({ "color": Style.sidebar_selected_forecolor });
-
-		// 		// $('a[aria-expanded="true"]').css({ "background": Style.sidebar_selected_backcolor });
-		// 		// $('a[aria-expanded="true"]').css({ "color": Style.sidebar_selected_forecolor });
-
-		// 	};
+		//------------------------------------------
+		$scope.ThisApp.AddSidebarItem =
+			function(Item) {
+				$('#app-sidebar-list').append(
+					$scope.ThisApp.NewSidebarItem(Item)
+				);
+			};
 
 
 		//=====================================================================

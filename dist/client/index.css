@@ -3,20 +3,6 @@
 ----------------------------------------------------- */
 
 
-a,
-a:hover,
-a:focus {
-	color: inherit;
-	text-decoration: none;
-	transition: all 0.3s;
-}
-
-i,
-span {
-	display: inline-block;
-}
-
-
 /* ---------------------------------------------------
     SIDEBAR STYLES
 ----------------------------------------------------- */
@@ -34,9 +20,21 @@ span {
 }
 
 #sidebar.collapsed {
-	min-width: 40px;
-	max-width: 40px;
+	min-width: 50px;
+	max-width: 50px;
+	padding-left: 0px !important;
+	padding-right: 0px !important;
 	text-align: center;
+}
+
+#sidebar.collapsed .sidebar-header {
+	padding-left: 0px !important;
+	padding-right: 0px !important;
+}
+
+#collapser-button{
+	font-size: 125%;
+	padding: 10px;
 }
 
 #sidebar .sidebar-header {
@@ -44,11 +42,11 @@ span {
 }
 
 #sidebar .sidebar-item-list {
-	margin-left: 2px;
-	padding: 20px 0;
+	width: 100%;
 }
 
 #sidebar .sidebar-item {
+	width: 100%;
 	list-style-type: none;
 }
 

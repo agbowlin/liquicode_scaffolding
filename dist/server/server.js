@@ -32,7 +32,7 @@ var Membership_SocketIO = require('liquicode_membership/Membership-SocketIO.js')
 Membership.RootFolder = npm_path.resolve(__dirname, '../members');
 Membership.ApplicationName = 'Application';
 
-var AppServer = require('./app-server.js');
+var AppServer = require('./app-server.js')(Membership);
 
 
 //=====================================================================
