@@ -98,14 +98,11 @@ var TheController = TheApplication.controller('TheController',
 				html += '<a';
 				html += ' class="sidebar-item"';
 				if (Item.is_group) {
-					html += ' href="#' + Item.item_name + '_items"';
 					if (Item.is_collapsable) {
+						html += ' href="#' + Item.item_name + '_items"';
 						html += ' data-toggle="collapse"';
 						html += ' aria-expanded="false"';
 					}
-				}
-				else {
-					html += ' href="#"';
 				}
 				if (Item.requires_login) {
 					html += ' ng-show="Member.member_logged_in"';
@@ -120,6 +117,8 @@ var TheController = TheApplication.controller('TheController',
 				}
 
 				html += Item.caption;
+
+				
 				if (Item.is_group) {
 					if (Item.is_collapsable) {
 						html += '<ul class="collapse list-unstyled" id="' + Item.item_name + '_items">';
@@ -130,6 +129,7 @@ var TheController = TheApplication.controller('TheController',
 					html += '</ul>';
 				}
 
+				html += '</a>';
 				html += '</li>';
 				var linker = $compile(html);
 				var linker_result = linker($scope);
@@ -183,7 +183,7 @@ var TheController = TheApplication.controller('TheController',
 		//=====================================================================
 
 
-		$scope.Member = MembershipClient.GetMember('Application', socket, $cookies);
+		$scope.Member = MembershipClient.GetMember('work-time', socket, $cookies);
 		$rootScope.Member = $scope.Member;
 		MembershipClientRsvp.WireMembershipWithRsvpPromises($scope.Member);
 
