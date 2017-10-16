@@ -7,36 +7,71 @@
 'use strict';
 
 
+// Define the main AngularJS module.
 var TheApplication = angular.module('TheApplication', ['ngCookies']);
 
 
+// Define the main AngularJS controller.
 var TheController = TheApplication.controller('TheController',
 	function($rootScope, $scope, $http, $compile, $injector, $sce, $cookies) {
-		var socket = io.connect();
 
+
+		//=====================================================================
+		//=====================================================================
+		//
+		//		Initialize the main Scope services and variables.
+		//
+		//=====================================================================
+		//=====================================================================
 
 		//==========================================
-		$scope.ThisApp = {};
+		// Main scaffolding framework functionality.
+		// Rename to 'Framework'
+		var Framework = {};
+		$scope.Framework = Framework;
 
-		$scope.ThisApp.AppConfig = {
+		//==========================================
+		// Application configuration.
+		// Values to be set in app-client.js
+		var AppConfig = {
 			app_title: 'Application',
 			content_selector: '#content',
-			intiial_view: 'site-home', // Loaded when the user is not logged in or initially logs in.
+			intiial_view: 'app-home',
 			partials_path: '/partials'
 		};
+		$scope.AppConfig = AppConfig;
+
+		//==========================================
+		// Logging functions.
+		var Logger = {};
+		$scope.Logger = Logger;
+
+		//==========================================
+		// Connect to the server with SocketIO.
+		var Socket = io.connect();
+		$scope.Socket = Socket;
+
+		//==========================================
+		// Membership functions.
+		var Member = MembershipClient.GetMember('work-time', Socket, $cookies);
+		$scope.Member = Member;
+		$rootScope.Member = Member; // Do we need this ???
 
 
 		//=====================================================================
 		//=====================================================================
 		//
+		//		Framework
+		//
+		//=====================================================================
+		//=====================================================================
+
+		//=====================================================================
 		//		Content Injection
-		//
-		//=====================================================================
 		//=====================================================================
 
-
-		//------------------------------------------
-		$scope.ThisApp.InjectContent =
+		//==========================================
+		Framework.InjectContent =
 			function(ContentSelector, ContentUrl) {
 				$http.get(ContentUrl)
 					.then(
@@ -48,17 +83,18 @@ var TheController = TheApplication.controller('TheController',
 			};
 
 
-		//------------------------------------------
-		$scope.ThisApp.LoadContent =
+		//==========================================
+		Framework.LoadContent =
 			function(ContentUrl) {
-				$scope.ThisApp.InjectContent('#content-partial-container', ContentUrl);
+				Framework.InjectContent('#content-partial-container', ContentUrl);
 			};
 
-		//------------------------------------------
-		$scope.ThisApp.LoadPartial =
+
+		//==========================================
+		Framework.LoadPartial =
 			function(PartialName) {
-				var url = $scope.ThisApp.AppConfig.partials_path + '/' + PartialName + '.html';
-				$scope.ThisApp.InjectContent('#content-partial-container', url);
+				var url = AppConfig.partials_path + '/' + PartialName + '.html';
+				Framework.InjectContent('#content-partial-container', url);
 			};
 
 
@@ -70,17 +106,16 @@ var TheController = TheApplication.controller('TheController',
 		//=====================================================================
 		//=====================================================================
 
+		//==========================================
+		Framework.SidebarItems = [];
 
-		//------------------------------------------
-		$scope.ThisApp.SidebarItems = [];
 
-
-		//------------------------------------------
-		$scope.ThisApp.IsSidebarCollapsed = false;
-		$scope.ThisApp.ToggleSidebarCollapsed =
+		//==========================================
+		Framework.IsSidebarCollapsed = false;
+		Framework.ToggleSidebarCollapsed =
 			function() {
-				$scope.ThisApp.IsSidebarCollapsed = !$scope.ThisApp.IsSidebarCollapsed;
-				if ($scope.ThisApp.IsSidebarCollapsed) {
+				Framework.IsSidebarCollapsed = !Framework.IsSidebarCollapsed;
+				if (Framework.IsSidebarCollapsed) {
 					$('#sidebar').addClass('collapsed');
 				}
 				else {
@@ -89,10 +124,10 @@ var TheController = TheApplication.controller('TheController',
 			};
 
 
-		//------------------------------------------
-		$scope.ThisApp.OnSidebarItemClick =
+		//==========================================
+		Framework.OnSidebarItemClick =
 			function(ItemName) {
-				var item = $scope.ThisApp.SidebarItems[ItemName];
+				var item = Framework.SidebarItems[ItemName];
 				if (item) {
 					if (item.on_click) {
 						item.on_click(item);
@@ -101,10 +136,10 @@ var TheController = TheApplication.controller('TheController',
 			};
 
 
-		//------------------------------------------
-		$scope.ThisApp.NewSidebarItem =
+		//==========================================
+		Framework.NewSidebarItem =
 			function(Item) {
-				$scope.ThisApp.SidebarItems[Item.item_name] = Item;
+				Framework.SidebarItems[Item.item_name] = Item;
 
 				var html = '<li';
 				html += ' id="' + Item.item_name + '"';
@@ -124,7 +159,7 @@ var TheController = TheApplication.controller('TheController',
 					html += ' ng-show="Member.member_logged_in"';
 				}
 				if (Item.on_click) {
-					html += ' ng-click="ThisApp.OnSidebarItemClick(\'' + Item.item_name + '\')"';
+					html += ' ng-click="Framework.OnSidebarItemClick(\'' + Item.item_name + '\')"';
 				}
 				html += '>';
 
@@ -153,11 +188,11 @@ var TheController = TheApplication.controller('TheController',
 			};
 
 
-		//------------------------------------------
-		$scope.ThisApp.AddSidebarItem =
+		//==========================================
+		Framework.AddSidebarItem =
 			function(Item) {
 				$('#app-sidebar-list').append(
-					$scope.ThisApp.NewSidebarItem(Item)
+					Framework.NewSidebarItem(Item)
 				);
 			};
 
@@ -172,7 +207,7 @@ var TheController = TheApplication.controller('TheController',
 
 
 		//==========================================
-		socket.on('connect', function() {
+		Socket.on('connect', function() {
 			$scope.notice = "... connected";
 			$scope.$apply();
 		});
@@ -182,7 +217,7 @@ var TheController = TheApplication.controller('TheController',
 
 
 		//==========================================
-		socket.on('server_error', function(server_error) {
+		Socket.on('server_error', function(server_error) {
 			console.log('> server_error', server_error);
 			$scope.errors.push(server_error);
 			$scope.$apply();
@@ -199,65 +234,45 @@ var TheController = TheApplication.controller('TheController',
 		//=====================================================================
 
 
-		$scope.Member = MembershipClient.GetMember('work-time', socket, $cookies);
-		$rootScope.Member = $scope.Member;
-		// MembershipClientRsvp.WireMembershipWithRsvpPromises($scope.Member);
-
-
-		$scope.ThisApp.DoMemberSignup =
+		Framework.DoMemberSignup =
 			function() {
-				$scope.Member.MemberSignup(
+				Member.MemberSignup(
 					function(Err, Response) {
 						if (Err) {
 							alert('ERROR: ' + Err.message);
 							$scope.$apply();
 							return;
 						}
-						$scope.Member.member_data.signup_time = Date.now();
-						$scope.Member.PutMemberData();
-						$scope.ThisApp.LoadPartial($scope.ThisApp.AppConfig.intiial_view);
+						Member.member_data.signup_time = Date.now();
+						Member.PutMemberData();
+						Framework.LoadPartial(AppConfig.intiial_view);
 						$scope.$apply();
 						return;
-					})
+					});
 			};
 
 
-		$scope.ThisApp.DoMemberLogin =
+		Framework.DoMemberLogin =
 			function() {
-				$scope.Member.MemberLogin(
+				Member.MemberLogin(
 					function(Err, Response) {
 						if (Err) {
 							alert('ERROR: ' + Err.message);
 							$scope.$apply();
 							return;
 						}
-						$scope.Member.member_data.login_time = Date.now();
-						$scope.Member.PutMemberData();
-						$scope.ThisApp.LoadPartial($scope.ThisApp.AppConfig.intiial_view);
+						Member.member_data.login_time = Date.now();
+						Member.PutMemberData();
+						Framework.LoadPartial(AppConfig.intiial_view);
 						$scope.$apply();
 						return;
-					})
+					});
 			};
 
 
-		$scope.ThisApp.DoMemberReconnect =
+		Framework.DoMemberReconnect =
 			function() {
-				$scope.Member.MemberReconnect(
-					function(Err, Response) {
-						if (Err) {
-							alert('ERROR: ' + Err.message);
-							$scope.$apply();
-							return;
-						}
-						$scope.$apply();
-						return;
-					})
-			};
-
-
-		$scope.ThisApp.DoMemberLogout =
-			function() {
-				$scope.Member.MemberLogout(
+				Member.MemberReconnect(
 					function(Err, Response) {
 						if (Err) {
 							alert('ERROR: ' + Err.message);
@@ -266,19 +281,45 @@ var TheController = TheApplication.controller('TheController',
 						}
 						$scope.$apply();
 						return;
-					})
+					});
 			};
 
+
+		Framework.DoMemberLogout =
+			function() {
+				Member.MemberLogout(
+					function(Err, Response) {
+						if (Err) {
+							alert('ERROR: ' + Err.message);
+							$scope.$apply();
+							return;
+						}
+						$scope.$apply();
+						return;
+					});
+			};
+
+
+		//=====================================================================
+		//=====================================================================
+		//
+		//		Application
+		//
+		//=====================================================================
+		//=====================================================================
+
+
+		// Initialize the application.
+		AppClient.OnInitialize($scope);
+
+		window.document.title = AppConfig.app_title;
 
 		// Get the user data if our login is cached.
-		if ($scope.Member.member_logged_in) {
-			$scope.ThisApp.DoMemberReconnect();
+		if (Member.member_logged_in) {
+			Framework.DoMemberReconnect();
 		}
-		else {
-			$scope.ThisApp.LoadPartial($scope.ThisApp.AppConfig.intiial_view);
-		}
+		Framework.LoadPartial(AppConfig.intiial_view);
 
-		AppClient.Connect($scope, $scope.ThisApp, $scope.Member, socket, null);
-
+		// Return
 		return;
 	});

@@ -51,13 +51,13 @@
 				<ul class="nav navbar-header sidebar-header">
 
 					<li class="nav navbar-nav navbar-right">
-						<a href="#" id="collapser-button" class="btn btn-default" ng-click="ThisApp.ToggleSidebarCollapsed()">
+						<a href="#" id="collapser-button" class="btn btn-default" ng-click="Framework.ToggleSidebarCollapsed()">
 							<i class="glyphicon glyphicon-menu-hamburger"></i>
 						</a>
 					</li>
 
-					<li class="navbar-brand" ng-show="!ThisApp.IsSidebarCollapsed" ng-cloak>
-						{{ ThisApp.AppConfig.app_title }}
+					<li class="navbar-brand" ng-show="!Framework.IsSidebarCollapsed" ng-cloak>
+						{{ AppConfig.app_title }}
 						<i class="glyphicon glyphicon-send"></i>
 					</li>
 					
@@ -65,11 +65,11 @@
 
 				<!-- Sidebar links, user is NOT logged in. -->
 
-				<ul class="nav navbar-nav sidebar-item-list" ng-show="!ThisApp.IsSidebarCollapsed">
+				<ul class="nav navbar-nav sidebar-item-list" ng-show="!Framework.IsSidebarCollapsed">
 
 					<!-- Login link, user is NOT logged in. -->
 					<li class="sidebar-item" ng-hide="Member.member_logged_in" ng-cloak>
-						<a href="#" ng-click="ThisApp.LoadPartial('member-login')">
+						<a href="#" ng-click="Framework.LoadPartial('member-login')">
 							<i class="glyphicon glyphicon-log-in"></i>
 							Login
 						</a>
@@ -77,7 +77,7 @@
 
 					<!-- Signup link, user is NOT logged in. -->
 					<li class="sidebar-item" ng-hide="Member.member_logged_in" ng-cloak>
-						<a href="#" ng-click="ThisApp.LoadPartial('member-signup')">
+						<a href="#" ng-click="Framework.LoadPartial('member-signup')">
 							<i class="glyphicon glyphicon-user"></i>
 							Signup
 						</a>
@@ -85,7 +85,7 @@
 
 					<!-- Profile link, user IS logged in. -->
 					<li class="sidebar-item" ng-hide="!Member.member_logged_in" ng-cloak>
-						<a href="#" ng-click="ThisApp.LoadPartial('member-profile')">
+						<a href="#" ng-click="Framework.LoadPartial('member-profile')">
 							<i class="glyphicon glyphicon-user"></i>
 							Profile: {{ Member.member_name }}
 						</a>
@@ -93,7 +93,7 @@
 
 					<!-- Home link, Always shown. -->
 					<li class="sidebar-item">
-						<a href="#" class="sidebar-item" ng-click="ThisApp.LoadPartial('site-home')">
+						<a href="#" class="sidebar-item" ng-click="Framework.LoadPartial('app-home')">
 							<i class="glyphicon glyphicon-home"></i>
 							Home
 						</a>
@@ -101,7 +101,7 @@
 
 				</ul>
 
-				<ul id="app-sidebar-list" class="nav navbar-nav sidebar-item-list" ng-show="!ThisApp.IsSidebarCollapsed">
+				<ul id="app-sidebar-list" class="nav navbar-nav sidebar-item-list" ng-show="!Framework.IsSidebarCollapsed">
 					<!-- App Content -->
 				</ul>
 

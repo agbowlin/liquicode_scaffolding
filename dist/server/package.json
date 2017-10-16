@@ -8,7 +8,7 @@
         "string": "",
         "sanitize-filename": "",
         "fs-extra": "",
-        "node-json-rpc": "",
+        "tingodb": "",
         "liquicode_membership": ""
     },
     "devDependencies": {}
