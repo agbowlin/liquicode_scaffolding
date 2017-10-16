@@ -4,7 +4,6 @@
 		"jquery": "",
 		"bootstrap": "",
 		"angular": "",
-		"angular-cookies": "",
-		"rsvp": ""
+		"angular-cookies": ""
 	}
 }
