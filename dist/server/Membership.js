@@ -141,13 +141,13 @@ Membership.MemberSignup =
 
 		// Check if member already exists.
 		if (get_member_object(MemberName)) {
-			return false;
+			return null;
 		}
 
 		// Generate a new Member Data object.
 		var member = {};
 		member.credentials = {};
-		member.credentials.member_name = MemberName;
+		member.credentials.member_name = MemberName.toLowerCase();
 		member.credentials.member_email = MemberEmail;
 		if (this.PASSWORDS_USE_SALTED_HASH) {
 			var passwordData = sha512(MemberPassword, genRandomString(16));
@@ -167,8 +167,9 @@ Membership.MemberSignup =
 
 		// Return the Member Data object.
 		return {
-			"session_id": member.session.session_id,
-			"member_data": {}
+			session_id: member.session.session_id,
+			member_name: MemberName,
+			member_data: {}
 		};
 	};
 
@@ -180,19 +181,19 @@ Membership.MemberLogin =
 		// Read the Member object.
 		var member = get_member_object(MemberName);
 		if (!member) {
-			return false;
+			return null;
 		}
 
 		// Authenticate
 		if (this.PASSWORDS_USE_SALTED_HASH) {
 			var passwordData = sha512(MemberPassword, member.credentials.member_password_salt);
 			if (member.credentials.member_password_hash != passwordData.passwordHash) {
-				return false;
+				return null;
 			}
 		}
 		else {
 			if (MemberPassword != member.credentials.member_password) {
-				return false;
+				return null;
 			}
 		}
 
@@ -209,8 +210,9 @@ Membership.MemberLogin =
 
 		// Return the Member Data object.
 		return {
-			"session_id": member.session.session_id,
-			"member_data": member_data
+			session_id: member.session.session_id,
+			member_name: member.credentials.member_name,
+			member_data: member_data
 		};
 	};
 
@@ -222,12 +224,12 @@ Membership.MemberReconnect =
 		// Read the Member object.
 		var member = get_member_object(MemberName);
 		if (!member) {
-			return false;
+			return null;
 		}
 
 		// Authenticate
 		if (SessionID != member.session.session_id) {
-			return false;
+			return null;
 		}
 
 		// Read the Member data object.
@@ -236,8 +238,9 @@ Membership.MemberReconnect =
 
 		// Return the Member Data object.
 		return {
-			"session_id": member.session.session_id,
-			"member_data": member_data
+			session_id: member.session.session_id,
+			member_name: member.credentials.member_name,
+			member_data: member_data
 		};
 	};
 
@@ -249,7 +252,7 @@ Membership.MemberLogout =
 		// Read the Member object.
 		var member = get_member_object(MemberName);
 		if (!member) {
-			return false;
+			return null;
 		}
 
 		// Destroy the session.
@@ -259,7 +262,9 @@ Membership.MemberLogout =
 		put_member_object(MemberName, member);
 
 		// Return Success
-		return true;
+		return {
+			success: true
+		};
 	};
 
 

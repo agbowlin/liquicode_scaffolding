@@ -2,9 +2,7 @@
 /* global io */
 /* global angular */
 /* global MembershipClient */
-/* global MembershipClientRsvp */
 /* global AppClient */
-/* global RSVP */
 
 'use strict';
 
@@ -28,18 +26,13 @@ var TheController = TheApplication.controller('TheController',
 		};
 
 
-		//------------------------------------------
-		$scope.ThisApp.IsSidebarCollapsed = false;
-		$scope.ThisApp.ToggleSidebarCollapsed =
-			function() {
-				$scope.ThisApp.IsSidebarCollapsed = !$scope.ThisApp.IsSidebarCollapsed;
-				if ($scope.ThisApp.IsSidebarCollapsed) {
-					$('#sidebar').addClass('collapsed');
-				}
-				else {
-					$('#sidebar').removeClass('collapsed');
-				}
-			};
+		//=====================================================================
+		//=====================================================================
+		//
+		//		Content Injection
+		//
+		//=====================================================================
+		//=====================================================================
 
 
 		//------------------------------------------
@@ -69,8 +62,31 @@ var TheController = TheApplication.controller('TheController',
 			};
 
 
+		//=====================================================================
+		//=====================================================================
+		//
+		//		Sidebar
+		//
+		//=====================================================================
+		//=====================================================================
+
+
 		//------------------------------------------
 		$scope.ThisApp.SidebarItems = [];
+
+
+		//------------------------------------------
+		$scope.ThisApp.IsSidebarCollapsed = false;
+		$scope.ThisApp.ToggleSidebarCollapsed =
+			function() {
+				$scope.ThisApp.IsSidebarCollapsed = !$scope.ThisApp.IsSidebarCollapsed;
+				if ($scope.ThisApp.IsSidebarCollapsed) {
+					$('#sidebar').addClass('collapsed');
+				}
+				else {
+					$('#sidebar').removeClass('collapsed');
+				}
+			};
 
 
 		//------------------------------------------
@@ -118,7 +134,7 @@ var TheController = TheApplication.controller('TheController',
 
 				html += Item.caption;
 
-				
+
 				if (Item.is_group) {
 					if (Item.is_collapsable) {
 						html += '<ul class="collapse list-unstyled" id="' + Item.item_name + '_items">';
@@ -185,130 +201,84 @@ var TheController = TheApplication.controller('TheController',
 
 		$scope.Member = MembershipClient.GetMember('work-time', socket, $cookies);
 		$rootScope.Member = $scope.Member;
-		MembershipClientRsvp.WireMembershipWithRsvpPromises($scope.Member);
+		// MembershipClientRsvp.WireMembershipWithRsvpPromises($scope.Member);
 
 
-		$scope.Member.OnMemberSignup = function(Success) {
-			if (!Success) {
-				$scope.$apply();
-				return;
-			}
-			var date = new Date();
-			$scope.Member.member_data.signup_time = date.toISOString();
-			$scope.Member.PutMemberData();
-			$scope.ThisApp.LoadPartial($scope.ThisApp.AppConfig.intiial_view);
-			$scope.$apply();
-			return;
-		};
+		$scope.ThisApp.DoMemberSignup =
+			function() {
+				$scope.Member.MemberSignup(
+					function(Err, Response) {
+						if (Err) {
+							alert('ERROR: ' + Err.message);
+							$scope.$apply();
+							return;
+						}
+						$scope.Member.member_data.signup_time = Date.now();
+						$scope.Member.PutMemberData();
+						$scope.ThisApp.LoadPartial($scope.ThisApp.AppConfig.intiial_view);
+						$scope.$apply();
+						return;
+					})
+			};
 
-		$scope.Member.OnMemberLogin = function(Success) {
-			if (!Success) {
-				$scope.$apply();
-				return;
-			}
-			var date = new Date();
-			$scope.Member.member_data.login_time = date.toISOString();
-			$scope.Member.PutMemberData();
-			$scope.ThisApp.LoadPartial($scope.ThisApp.AppConfig.intiial_view);
-			$scope.$apply();
-			return;
-		};
 
-		$scope.Member.OnMemberReconnect = function(Success) {
-			$scope.ThisApp.LoadPartial($scope.ThisApp.AppConfig.intiial_view);
-			$scope.$apply();
-			return;
-		};
+		$scope.ThisApp.DoMemberLogin =
+			function() {
+				$scope.Member.MemberLogin(
+					function(Err, Response) {
+						if (Err) {
+							alert('ERROR: ' + Err.message);
+							$scope.$apply();
+							return;
+						}
+						$scope.Member.member_data.login_time = Date.now();
+						$scope.Member.PutMemberData();
+						$scope.ThisApp.LoadPartial($scope.ThisApp.AppConfig.intiial_view);
+						$scope.$apply();
+						return;
+					})
+			};
 
-		$scope.Member.OnMemberLogout = function(Success) {
-			$scope.$apply();
-			return;
-		};
 
-		// $scope.Member.OnGetMemberData = function(Success) {
-		// 	if (!Success) {
-		// 		$scope.$apply();
-		// 		return;
-		// 	}
-		// 	// `$scope.Member.member_data` has been updated.
-		// 	$scope.$apply();
-		// 	return;
-		// };
+		$scope.ThisApp.DoMemberReconnect =
+			function() {
+				$scope.Member.MemberReconnect(
+					function(Err, Response) {
+						if (Err) {
+							alert('ERROR: ' + Err.message);
+							$scope.$apply();
+							return;
+						}
+						$scope.$apply();
+						return;
+					})
+			};
 
-		// $scope.Member.OnPutMemberData = function(Success) {
-		// 	$scope.$apply();
-		// 	return;
-		// };
 
-		// $scope.Member.OnPathList = function(Path, List) {
-		// 	$scope.current_path = Path;
-		// 	$scope.path_list = List;
-		// 	$scope.$apply();
-		// 	return;
-		// };
-
-		// $scope.Member.OnPathRead = function(Path, Content) {
-		// 	$scope.$apply();
-		// 	return;
-		// };
-
-		// $scope.Member.OnPathWrite = function(Path, Success) {
-		// 	$scope.$apply();
-		// 	return;
-		// };
-
-		// $scope.Member.OnPathMake = function(Path, Success) {
-		// 	$scope.$apply();
-		// 	return;
-		// };
-
-		// $scope.Member.OnPathClean = function(Path, Success) {
-		// 	$scope.$apply();
-		// 	return;
-		// };
-
-		// $scope.Member.OnPathDelete = function(Path, Success) {
-		// 	$scope.$apply();
-		// 	return;
-		// };
+		$scope.ThisApp.DoMemberLogout =
+			function() {
+				$scope.Member.MemberLogout(
+					function(Err, Response) {
+						if (Err) {
+							alert('ERROR: ' + Err.message);
+							$scope.$apply();
+							return;
+						}
+						$scope.$apply();
+						return;
+					})
+			};
 
 
 		// Get the user data if our login is cached.
 		if ($scope.Member.member_logged_in) {
-			$scope.Member.MemberReconnect();
-
-			// // Test the path functions.
-			// $scope.Member.PathWrite_Promise('/example1-test.dat', "This is my test data.")
-			// 	.then(function() {
-			// 		return $scope.Member.PathRead_Promise('/example1-test.dat');
-			// 	})
-			// 	.then(function(Content) {
-			// 		console.log("Content 1: " + Content);
-			// 	})
-			// 	.then(function() {
-			// 		return $scope.Member.PathWrite_Promise('/example1-test.dat', [1, 3, 5, 7, 11]);
-			// 	})
-			// 	.then(function() {
-			// 		return $scope.Member.PathRead_Promise('/example1-test.dat');
-			// 	})
-			// 	.then(function(Content) {
-			// 		console.log("Content 2: " + Content);
-			// 	})
-			// 	.then(function() {
-			// 		return $scope.Member.PathDelete_Promise('/example1-test.dat');
-			// 	})
-			// 	.catch(function(error) {
-			// 		console.log("Error: " + error);
-			// 	})
-			// 	.finally(function() {});
-
+			$scope.ThisApp.DoMemberReconnect();
 		}
 		else {
 			$scope.ThisApp.LoadPartial($scope.ThisApp.AppConfig.intiial_view);
 		}
 
-
 		AppClient.Connect($scope, $scope.ThisApp, $scope.Member, socket, null);
 
-
+		return;
 	});

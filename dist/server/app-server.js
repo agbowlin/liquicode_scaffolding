@@ -19,19 +19,19 @@ var ERR_AppServerError = new Error("Application Server Error.");
 
 //---------------------------------------------------------------------
 AppServer.OnConnection =
-	function OnConnection(Membership, Socket, Logger) {
+	function OnConnection(Membership) {
 
-		Socket.on('my_function',
+		Membership.Socket.on('my_function',
 			function(Param1, Param2) {
 				var response = {};
 				try {
 					response.Param1 = Param1;
 					response.Param2 = Param2;
-					Socket.emit('my_function_response', response);
+					Membership.Socket.emit('my_function_response', response);
 				}
 				catch (err) {
 					console.error('Error in [my_function]: ', err);
-					Socket.emit('server_error', '[SERVER ERROR] ' + err.message);
+					Membership.Socket.emit('server_error', '[SERVER ERROR] ' + err.message);
 				}
 			});
 

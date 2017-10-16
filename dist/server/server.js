@@ -27,11 +27,13 @@ var npm_socketio = require('socket.io');
 
 var ServerConfig = npm_fs_extra.readJsonSync('./app-server.config');
 
+var Logger = null;
+
 // Include the membership module.
-var Membership = require('liquicode_membership');
-var Membership_SocketIO = require('liquicode_membership/Membership-SocketIO.js');
-// var Membership = require('../../../Membership.js');
-// var Membership_SocketIO = require('../../../Membership-SocketIO.js');
+// var Membership = require('liquicode_membership');
+// var Membership_SocketIO = require('liquicode_membership/Membership-SocketIO.js');
+// var Membership = require('./Membership.js');
+var Membership = require('./MembershipSocketIO.js');
 Membership.RootFolder = npm_path.resolve(__dirname, ServerConfig.Membership.members_folder);
 Membership.ApplicationName = ServerConfig.Application.application_name;
 
@@ -85,14 +87,17 @@ SocketIo.on('connection',
 		// Socket disconnection.
 		Socket.on('disconnect',
 			function() {
+				// Unregister the socket.
 				HttpSockets.splice(HttpSockets.indexOf(Socket), 1);
 			});
 
 		// Add the membership functions.
-		Membership_SocketIO.WireSocketEvents(Membership, Socket, null);
+		Membership.OnConnection(Socket, Logger);
 
-		AppServer.OnConnection(Membership, Socket, null);
+		// Connect the application functions.
+		AppServer.OnConnection(Membership);
 
+		return;
 	});
 
 

@@ -18,11 +18,11 @@
 	<table class="table">
 		<tr>
 			<th>Signup Time</th>
-			<td>{{ Member.member_data.signup_time }}</td>
+			<td>{{ Member.member_data.signup_time | date : 'medium' }}</td>
 		</tr>
 		<tr>
 			<th>Login Time</th>
-			<td>{{ Member.member_data.login_time }}</td>
+			<td>{{ Member.member_data.login_time | date : 'medium' }}</td>
 		</tr>
 		<tr>
 			<th>Member Name</th>
@@ -42,7 +42,7 @@
 		</tr>
 	</table>
 
-	<button class="btn btn-warning" type="button" ng-click="Member.MemberLogout()">
+	<button class="btn btn-warning" type="button" ng-click="ThisApp.DoMemberLogout()">
 			Logout
 			<i class="glyphicon glyphicon-log-out"></i>
 		</button>
