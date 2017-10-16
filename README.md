@@ -29,10 +29,11 @@ Getting Started
 The `liquicode_scaffolding` package
 
 
-
-
 Resources
 ------------------------------------------
 
-[https://www.tutorialrepublic.com/twitter-bootstrap-examples.php](https://www.tutorialrepublic.com/twitter-bootstrap-examples.php)
+- Samples and Examples:
+	[https://www.tutorialrepublic.com/twitter-bootstrap-examples.php](https://www.tutorialrepublic.com/twitter-bootstrap-examples.php)
 
+- AngulrJS directives for Bootstrap:
+	[https://angular-ui.github.io/bootstrap/](https://angular-ui.github.io/bootstrap/)

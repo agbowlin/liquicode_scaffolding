@@ -8,6 +8,7 @@
         "string": "",
         "sanitize-filename": "",
         "fs-extra": "",
+        "node-json-rpc": "",
         "liquicode_membership": ""
     },
     "devDependencies": {}

@@ -17,20 +17,23 @@
 
 // Standard Includes
 var npm_path = require('path');
-// var npm_fs = require('fs');
+var npm_fs = require('fs');
+var npm_fs_extra = require('fs-extra');
 var npm_http = require('http');
 
 // 3rd Party Includes
 var npm_express = require('express');
 var npm_socketio = require('socket.io');
 
+var ServerConfig = npm_fs_extra.readJsonSync('./app-server.config');
+
 // Include the membership module.
 var Membership = require('liquicode_membership');
 var Membership_SocketIO = require('liquicode_membership/Membership-SocketIO.js');
 // var Membership = require('../../../Membership.js');
 // var Membership_SocketIO = require('../../../Membership-SocketIO.js');
-Membership.RootFolder = npm_path.resolve(__dirname, '../members');
-Membership.ApplicationName = 'Application';
+Membership.RootFolder = npm_path.resolve(__dirname, ServerConfig.Membership.members_folder);
+Membership.ApplicationName = ServerConfig.Application.application_name;
 
 var AppServer = require('./app-server.js')(Membership);
 
@@ -48,7 +51,7 @@ var AppServer = require('./app-server.js')(Membership);
 var ExpressRouter = npm_express();
 
 // Define a static route for serving the client application files.
-var ClientFolder = npm_path.resolve(__dirname, '../client');
+var ClientFolder = npm_path.resolve(__dirname, ServerConfig.NodeServer.client_folder);
 ExpressRouter.use(npm_express.static(ClientFolder));
 
 // Create the HTTP server.
@@ -113,8 +116,8 @@ function broadcast(event, data) {
 
 
 // NodeJS startup settings.
-var NodeJS_Address = process.env.IP || "0.0.0.0";
-var NodeJS_Port = process.env.PORT || 3000;
+var NodeJS_Address = process.env.IP || ServerConfig.NodeServer.server_address || "0.0.0.0";
+var NodeJS_Port = process.env.PORT || ServerConfig.NodeServer.server_port || 3000;
 
 // Check override settings from command line parameters.
 if (process.argv.length > 2) {

@@ -9,8 +9,6 @@ var npm_http = require('http');
 
 //---------------------------------------------------------------------
 function AppServer(Membership) {
-	Membership.RootFolder = npm_path.resolve(__dirname, '../members');
-	Membership.ApplicationName = 'My-Application';
 	return AppServer;
 }
 
