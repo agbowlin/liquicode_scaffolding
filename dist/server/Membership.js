@@ -31,8 +31,8 @@ Membership.PASSWORDS_USE_SALTED_HASH = true;
 
 
 //---------------------------------------------------------------------
-var ERR_IllegalPathAccess = new Error("Illegal path access.");
-var ERR_CannotRemoveRootFolder = new Error("Cannot remove root folder.");
+var ERR_IllegalPathAccess = "Illegal path access.";
+var ERR_CannotRemoveRootFolder = "Cannot remove root folder.";
 
 
 //---------------------------------------------------------------------

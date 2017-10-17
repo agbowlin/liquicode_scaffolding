@@ -240,15 +240,7 @@ var TheController = TheApplication.controller('TheController',
 		//=====================================================================
 
 
-		// function intiialize_session() {
-		// 	// Initialize the application.
-		// 	AppClient.OnInitialize($scope);
-		// 	window.document.title = AppConfig.app_title;
-		// 	Framework.LoadPartial(AppConfig.initial_view);
-		// 	return;
-		// }
-
-
+		//==========================================
 		Framework.DoMemberSignup =
 			function() {
 				Member.MemberSignup(
@@ -268,6 +260,7 @@ var TheController = TheApplication.controller('TheController',
 			};
 
 
+		//==========================================
 		Framework.DoMemberLogin =
 			function() {
 				Member.MemberLogin(
@@ -287,6 +280,7 @@ var TheController = TheApplication.controller('TheController',
 			};
 
 
+		//==========================================
 		Framework.DoMemberReconnect =
 			function() {
 				Member.MemberReconnect(
@@ -304,6 +298,7 @@ var TheController = TheApplication.controller('TheController',
 			};
 
 
+		//==========================================
 		Framework.DoMemberLogout =
 			function() {
 				Member.MemberLogout(
