@@ -240,13 +240,13 @@ var TheController = TheApplication.controller('TheController',
 		//=====================================================================
 
 
-		function intiialize_session() {
-			// Initialize the application.
-			AppClient.OnInitialize($scope);
-			window.document.title = AppConfig.app_title;
-			Framework.LoadPartial(AppConfig.initial_view);
-			return;
-		}
+		// function intiialize_session() {
+		// 	// Initialize the application.
+		// 	AppClient.OnInitialize($scope);
+		// 	window.document.title = AppConfig.app_title;
+		// 	Framework.LoadPartial(AppConfig.initial_view);
+		// 	return;
+		// }
 
 
 		Framework.DoMemberSignup =
@@ -260,7 +260,7 @@ var TheController = TheApplication.controller('TheController',
 						}
 						Member.member_data.signup_time = Date.now();
 						Member.PutMemberData();
-						intiialize_session();
+						AppClient.OnLogin($scope);
 						Framework.LoadPartial(AppConfig.initial_view);
 						$scope.$apply();
 						return;
@@ -279,7 +279,7 @@ var TheController = TheApplication.controller('TheController',
 						}
 						Member.member_data.login_time = Date.now();
 						Member.PutMemberData();
-						intiialize_session();
+						AppClient.OnLogin($scope);
 						Framework.LoadPartial(AppConfig.initial_view);
 						$scope.$apply();
 						return;
@@ -296,7 +296,8 @@ var TheController = TheApplication.controller('TheController',
 							$scope.$apply();
 							return;
 						}
-						intiialize_session();
+						AppClient.OnLogin($scope);
+						Framework.LoadPartial(AppConfig.initial_view);
 						$scope.$apply();
 						return;
 					});
@@ -312,6 +313,8 @@ var TheController = TheApplication.controller('TheController',
 							$scope.$apply();
 							return;
 						}
+						AppClient.OnLogout($scope);
+						Framework.LoadPartial(AppConfig.initial_view);
 						$scope.$apply();
 						return;
 					});
