@@ -30,16 +30,19 @@ Membership.OnConnection =
 
 		function report_error(Err, EventName, CallbackID) {
 			// Construct the error object that we will be returning.
-			var error = {};
-			error.timestamp = Date.now();
-			error.message = '';
+			var error = {
+				event: EventName,
+				callback_id: CallbackID,
+				timestamp: Date.now(),
+				message: ''
+			};
 			if (!Err) { error.message = 'Unknown error.'; }
 			else if (Err.message) { error.message = Err.message; }
 			else { error.message = Err; }
 			// Output to the logger.
 			if (Logger) { Logger.LogError('Error in [' + EventName + ']: ', error); }
 			// Always send using the 'server_error' message.
-			Socket.emit('server_error', '[SERVER ERROR] ' + error);
+			Socket.emit('server_error', error);
 			// Propagate the error downstream to the caller.
 			if (CallbackID) { Socket.emit(EventName + '.' + CallbackID, error, null); }
 			// Return the error object.

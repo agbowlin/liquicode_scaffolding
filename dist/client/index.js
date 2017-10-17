@@ -37,7 +37,8 @@ var TheController = TheApplication.controller('TheController',
 			app_title: 'Application',
 			content_selector: '#content',
 			initial_view: 'app-home',
-			partials_path: '/partials'
+			partials_path: '/partials',
+			alert_on_server_error: false
 		};
 		$scope.AppConfig = AppConfig;
 
@@ -217,12 +218,17 @@ var TheController = TheApplication.controller('TheController',
 
 
 		//==========================================
-		Socket.on('server_error', function(server_error) {
-			console.log('> server_error', server_error);
-			$scope.errors.push(server_error);
-			$scope.$apply();
-			return;
-		});
+		Socket.on('server_error',
+			function(Err) {
+				console.log('> server_error', Err);
+				var message = 'Error in "' + Err.event + '": ' + Err.message;
+				$scope.errors.push(message);
+				if (AppConfig.alert_on_server_error) {
+					alert(message);
+				}
+				$scope.$apply();
+				return;
+			});
 
 
 		//=====================================================================
@@ -323,7 +329,7 @@ var TheController = TheApplication.controller('TheController',
 
 		// Initialize the application.
 		AppClient.OnInitialize($scope);
-		
+
 		// Set the window title.
 		window.document.title = AppConfig.app_title;
 

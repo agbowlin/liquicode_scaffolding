@@ -37,6 +37,7 @@ AppClient.OnInitialize =
 		// AppConfig.content_selector = '#content';
 		// AppConfig.intiial_view = 'app-home';
 		// AppConfig.partials_path = '/partials';
+		AppConfig.alert_on_server_error = true;
 
 
 		//=====================================================================

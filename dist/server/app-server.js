@@ -9,12 +9,6 @@ var npm_http = require('http');
 
 
 //---------------------------------------------------------------------
-function AppServer(Membership) {
-	return AppServer;
-}
-
-
-//---------------------------------------------------------------------
 var ERR_AppServerError = new Error("Application Server Error.");
 
 
