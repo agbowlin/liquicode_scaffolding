@@ -25,18 +25,80 @@ var npm_http = require('http');
 var npm_express = require('express');
 var npm_socketio = require('socket.io');
 
+//=====================================================================
+//=====================================================================
+//
+//		Server Configuration
+//
+//=====================================================================
+//=====================================================================
+
+// Load the server configuration from a file.
 var ServerConfig = npm_fs_extra.readJsonSync('./app-server.config');
 
-var Logger = null;
+
+//=====================================================================
+//=====================================================================
+//
+//		Logger
+//
+//=====================================================================
+//=====================================================================
+
+// Include the Logger module.
+// Use the application name as the log group.
+var Logger = require('./Logger.js').Logger(ServerConfig.Application.application_name);
+
+// Configure the logger with fields from the server configuration object.
+if (ServerConfig.Logger && ServerConfig.Logger.LogTargets) {
+	for (var index = 0; index < ServerConfig.Logger.LogTargets.length; index++) {
+		var log_definition = ServerConfig.Logger.LogTargets[index];
+		var log_target = Logger.AddLogTarget(log_definition.log_device, log_definition.log_levels);
+		// Options for all log targets.
+		if (typeof log_definition.output_group != 'undefined') { log_target.output_group = log_definition.output_group; }
+		if (typeof log_definition.output_date != 'undefined') { log_target.output_date = log_definition.output_date; }
+		if (typeof log_definition.output_time != 'undefined') { log_target.output_time = log_definition.output_time; }
+		if (typeof log_definition.output_milliseconds != 'undefined') { log_target.output_milliseconds = log_definition.output_milliseconds; }
+		if (typeof log_definition.output_timezone != 'undefined') { log_target.output_timezone = log_definition.output_timezone; }
+		if (typeof log_definition.output_severity != 'undefined') { log_target.output_severity = log_definition.output_severity; }
+		if (typeof log_definition.output_severity_words != 'undefined') { log_target.output_severity_words = log_definition.output_severity_words; }
+		// Options for 'file' log targets.
+		if (typeof log_definition.log_path != 'undefined') { log_target.log_path = log_definition.log_path; }
+		if (typeof log_definition.log_filename != 'undefined') { log_target.log_filename = log_definition.log_filename; }
+		if (typeof log_definition.log_extension != 'undefined') { log_target.log_extension = log_definition.log_extension; }
+		if (typeof log_definition.use_hourly_logfiles != 'undefined') { log_target.use_hourly_logfiles = log_definition.use_hourly_logfiles; }
+		if (typeof log_definition.use_daily_logfiles != 'undefined') { log_target.use_daily_logfiles = log_definition.use_daily_logfiles; }
+	}
+}
+
+
+//=====================================================================
+//=====================================================================
+//
+//		Membership
+//
+//=====================================================================
+//=====================================================================
 
 // Include the membership module.
-// var Membership = require('liquicode_membership');
-// var Membership_SocketIO = require('liquicode_membership/Membership-SocketIO.js');
-// var Membership = require('./Membership.js');
 var Membership = require('./MembershipSocketIO.js');
+
+// Configure Membership with fields from the server configuration object.
 Membership.RootFolder = npm_path.resolve(__dirname, ServerConfig.Membership.members_folder);
 Membership.ApplicationName = ServerConfig.Application.application_name;
+
+// Let the Membership module use the Logger.
+
 Membership.Logger = Logger;
+
+
+//=====================================================================
+//=====================================================================
+//
+//		Application Server
+//
+//=====================================================================
+//=====================================================================
 
 var AppServer = require('./app-server.js')(Membership);
 
@@ -48,7 +110,6 @@ var AppServer = require('./app-server.js')(Membership);
 //
 //=====================================================================
 //=====================================================================
-
 
 // Create an Express router.
 var ExpressRouter = npm_express();

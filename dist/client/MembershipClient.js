@@ -219,10 +219,10 @@ MembershipClient.GetMember =
 				// Set up the response handler.
 				Socket.once('Membership.MemberLogout.' + transaction_id,
 					function(Err, Response) {
-						if (Err) {
-							if (callback) { callback(Err, null); }
-							return;
-						}
+						// if (Err) {
+						// 	if (callback) { callback(Err, null); }
+						// 	return;
+						// }
 
 						Member.member_logged_in = false;
 						Member.session_id = '';

@@ -71,7 +71,8 @@ Membership.OnConnection =
 						});
 					}
 					else {
-						Socket.emit('Membership.MemberSignup.' + Request.control.transaction_id, 'MemberSignup failed.', null);
+						// Socket.emit('Membership.MemberSignup.' + Request.control.transaction_id, 'MemberSignup failed.', null);
+						report_error('MemberSignup failed.', 'Membership.MemberSignup', Request.control.transaction_id);
 					}
 					return;
 				}
@@ -100,7 +101,8 @@ Membership.OnConnection =
 						});
 					}
 					else {
-						Socket.emit('Membership.MemberLogin.' + Request.control.transaction_id, 'MemberLogin failed.', null);
+						// Socket.emit('Membership.MemberLogin.' + Request.control.transaction_id, 'MemberLogin failed.', null);
+						report_error('MemberLogin failed.', 'Membership.MemberLogin', Request.control.transaction_id);
 					}
 					return;
 				}
@@ -129,7 +131,8 @@ Membership.OnConnection =
 						});
 					}
 					else {
-						Socket.emit('Membership.MemberReconnect.' + Request.control.transaction_id, 'MemberReconnect failed.', null);
+						// Socket.emit('Membership.MemberReconnect.' + Request.control.transaction_id, 'MemberReconnect failed.', null);
+						report_error('MemberReconnect failed.', 'Membership.MemberReconnect', Request.control.transaction_id);
 					}
 					return;
 				}
@@ -161,7 +164,8 @@ Membership.OnConnection =
 						});
 					}
 					else {
-						Socket.emit('Membership.MemberLogout.' + Request.control.transaction_id, 'MemberLogout failed.', null);
+						// Socket.emit('Membership.MemberLogout.' + Request.control.transaction_id, 'MemberLogout failed.', null);
+						report_error('MemberLogout failed.', 'Membership.MemberLogout', Request.control.transaction_id);
 					}
 					return;
 				}
@@ -191,7 +195,8 @@ Membership.OnConnection =
 						});
 					}
 					else {
-						Socket.emit('Membership.GetMemberData.' + Request.control.transaction_id, 'GetMemberData failed.', null);
+						// Socket.emit('Membership.GetMemberData.' + Request.control.transaction_id, 'GetMemberData failed.', null);
+						report_error('GetMemberData failed.', 'Membership.GetMemberData', Request.control.transaction_id);
 					}
 					return;
 				}
@@ -221,7 +226,8 @@ Membership.OnConnection =
 						});
 					}
 					else {
-						Socket.emit('Membership.PutMemberData.' + Request.control.transaction_id, 'PutMemberData failed.', null);
+						// Socket.emit('Membership.PutMemberData.' + Request.control.transaction_id, 'PutMemberData failed.', null);
+						report_error('PutMemberData failed.', 'Membership.PutMemberData', Request.control.transaction_id);
 					}
 					return;
 				}
@@ -252,7 +258,8 @@ Membership.OnConnection =
 						});
 					}
 					else {
-						Socket.emit('Membership.PathList.' + Request.control.transaction_id, 'PathList failed.', null);
+						// Socket.emit('Membership.PathList.' + Request.control.transaction_id, 'PathList failed.', null);
+						report_error('PathList failed.', 'Membership.PathList', Request.control.transaction_id);
 					}
 					return;
 				}
@@ -283,7 +290,8 @@ Membership.OnConnection =
 						});
 					}
 					else {
-						Socket.emit('Membership.PathRead.' + Request.control.transaction_id, 'PathRead failed.', null);
+						// Socket.emit('Membership.PathRead.' + Request.control.transaction_id, 'PathRead failed.', null);
+						report_error('PathRead failed.', 'Membership.PathRead', Request.control.transaction_id);
 					}
 					return;
 				}
@@ -314,7 +322,8 @@ Membership.OnConnection =
 						});
 					}
 					else {
-						Socket.emit('Membership.PathWrite.' + Request.control.transaction_id, 'PathWrite failed.', null);
+						// Socket.emit('Membership.PathWrite.' + Request.control.transaction_id, 'PathWrite failed.', null);
+						report_error('PathWrite failed.', 'Membership.PathWrite', Request.control.transaction_id);
 					}
 					return;
 				}
@@ -345,7 +354,8 @@ Membership.OnConnection =
 						});
 					}
 					else {
-						Socket.emit('Membership.PathMake.' + Request.control.transaction_id, 'PathMake failed.', null);
+						// Socket.emit('Membership.PathMake.' + Request.control.transaction_id, 'PathMake failed.', null);
+						report_error('PathMake failed.', 'Membership.PathMake', Request.control.transaction_id);
 					}
 					return;
 				}
@@ -376,7 +386,8 @@ Membership.OnConnection =
 						});
 					}
 					else {
-						Socket.emit('Membership.PathClean.' + Request.control.transaction_id, 'PathClean failed.', null);
+						// Socket.emit('Membership.PathClean.' + Request.control.transaction_id, 'PathClean failed.', null);
+						report_error('PathClean failed.', 'Membership.PathClean', Request.control.transaction_id);
 					}
 					return;
 				}
@@ -407,7 +418,8 @@ Membership.OnConnection =
 						});
 					}
 					else {
-						Socket.emit('Membership.PathDelete.' + Request.control.transaction_id, 'PathDelete failed.', null);
+						// Socket.emit('Membership.PathDelete.' + Request.control.transaction_id, 'PathDelete failed.', null);
+						report_error('PathDelete failed.', 'Membership.PathDelete', Request.control.transaction_id);
 					}
 					return;
 				}

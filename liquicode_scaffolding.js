@@ -187,19 +187,37 @@ function copy_file(Source, Target, Overwrite) {
 	}
 }
 
+function make_folder(Target) {
+	if (npm_fs_extra.existsSync(Target)) {
+		console.log('[' + Target + '] folder already exists');
+	}
+	else {
+		console.log('[' + Target + '] creating folder');
+		npm_fs_extra.ensureDirSync(Target);
+	}
+}
+
 // npm_fs_extra.copySync(sourcepath, targetpath, { "preserveTimestamps": true });
 
 console.log('Copying Server Files');
 
+// Install the members directory
+make_folder(npm_path.join(targetpath, 'members'));
+
 // Files we always update
 copy_file(npm_path.join(sourcepath, 'server/server.js'), npm_path.join(targetpath, 'server/server.js'), true);
+copy_file(npm_path.join(sourcepath, 'server/Logger.js'), npm_path.join(targetpath, 'server/Logger.js'), true);
 copy_file(npm_path.join(sourcepath, 'server/Membership.js'), npm_path.join(targetpath, 'server/Membership.js'), true);
 copy_file(npm_path.join(sourcepath, 'server/MembershipSocketIO.js'), npm_path.join(targetpath, 'server/MembershipSocketIO.js'), true);
 
 // Files we only install, not update
+copy_file(npm_path.join(sourcepath, 'server/README.md'), npm_path.join(targetpath, 'server/README.md'), app_options.install);
 copy_file(npm_path.join(sourcepath, 'server/package.json'), npm_path.join(targetpath, 'server/package.json'), app_options.install);
 copy_file(npm_path.join(sourcepath, 'server/app-server.js'), npm_path.join(targetpath, 'server/app-server.js'), app_options.install);
 copy_file(npm_path.join(sourcepath, 'server/app-server.config'), npm_path.join(targetpath, 'server/app-server.config'), app_options.install);
+
+// Install the server/logs directory
+make_folder(npm_path.join(targetpath, 'server/logs'));
 
 console.log('Copying Client Files');
 
@@ -207,14 +225,17 @@ console.log('Copying Client Files');
 copy_file(npm_path.join(sourcepath, 'client/index.css'), npm_path.join(targetpath, 'client/index.css'), true);
 copy_file(npm_path.join(sourcepath, 'client/index.html'), npm_path.join(targetpath, 'client/index.html'), true);
 copy_file(npm_path.join(sourcepath, 'client/index.js'), npm_path.join(targetpath, 'client/index.js'), true);
+
 copy_file(npm_path.join(sourcepath, 'client/MembershipClient.js'), npm_path.join(targetpath, 'client/MembershipClient.js'), true);
 
 // Files we only install, not update
 copy_file(npm_path.join(sourcepath, 'client/bower.json'), npm_path.join(targetpath, 'client/bower.json'), app_options.install);
 copy_file(npm_path.join(sourcepath, 'client/package.json'), npm_path.join(targetpath, 'client/package.json'), app_options.install);
+
 copy_file(npm_path.join(sourcepath, 'client/app-client.css'), npm_path.join(targetpath, 'client/app-client.css'), app_options.install);
 copy_file(npm_path.join(sourcepath, 'client/app-client.html'), npm_path.join(targetpath, 'client/app-client.html'), app_options.install);
 copy_file(npm_path.join(sourcepath, 'client/app-client.js'), npm_path.join(targetpath, 'client/app-client.js'), app_options.install);
+
 copy_file(npm_path.join(sourcepath, 'client/partials/member-login.html'), npm_path.join(targetpath, 'client/partials/member-login.html'), app_options.install);
 copy_file(npm_path.join(sourcepath, 'client/partials/member-profile.html'), npm_path.join(targetpath, 'client/partials/member-profile.html'), app_options.install);
 copy_file(npm_path.join(sourcepath, 'client/partials/member-signup.html'), npm_path.join(targetpath, 'client/partials/member-signup.html'), app_options.install);
