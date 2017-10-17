@@ -36,6 +36,7 @@ var Logger = null;
 var Membership = require('./MembershipSocketIO.js');
 Membership.RootFolder = npm_path.resolve(__dirname, ServerConfig.Membership.members_folder);
 Membership.ApplicationName = ServerConfig.Application.application_name;
+Membership.Logger = Logger;
 
 var AppServer = require('./app-server.js')(Membership);
 

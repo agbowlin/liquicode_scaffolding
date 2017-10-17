@@ -11,19 +11,41 @@ var Membership = require('./Membership.js');
 
 
 //---------------------------------------------------------------------
-var ERR_AuthenticationRequired = new Error("Authentication required.");
-var ERR_SessionRequired = new Error("Session required.");
-var ERR_InvalidSession = new Error("Invalid session.");
+var ERR_AuthenticationRequired = "Authentication required.";
+var ERR_SessionRequired = "Session required.";
+var ERR_InvalidSession = "Invalid session.";
 
 
 //---------------------------------------------------------------------
 Membership.OnConnection =
-	function OnConnection(Socket, Logger) {
+	function OnConnection(Socket) {
 
 
-		Membership.Socket = Socket;
-		Membership.Logger = Logger;
-		
+		var Logger = Membership.Logger;
+
+
+		//=====================================================================
+		//	Common Error Reporting
+		//=====================================================================
+
+		function report_error(Err, EventName, CallbackID) {
+			// Construct the error object that we will be returning.
+			var error = {};
+			error.timestamp = Date.now();
+			error.message = '';
+			if (!Err) { error.message = 'Unknown error.'; }
+			else if (Err.message) { error.message = Err.message; }
+			else { error.message = Err; }
+			// Output to the logger.
+			if (Logger) { Logger.LogError('Error in [' + EventName + ']: ', error); }
+			// Always send using the 'server_error' message.
+			Socket.emit('server_error', '[SERVER ERROR] ' + error);
+			// Propagate the error downstream to the caller.
+			if (CallbackID) { Socket.emit(EventName + '.' + CallbackID, error, null); }
+			// Return the error object.
+			return error;
+		}
+
 
 		//=====================================================================
 		//	Member Signup
@@ -46,15 +68,11 @@ Membership.OnConnection =
 						});
 					}
 					else {
-						Socket.emit('Membership.MemberSignup.' + Request.control.transaction_id, new Error('MemberSignup failed.'), null);
+						Socket.emit('Membership.MemberSignup.' + Request.control.transaction_id, 'MemberSignup failed.', null);
 					}
 					return;
 				}
-				catch (err) {
-					if (Logger) { Logger.LogError('Error in [Membership.MemberSignup]: ', err); }
-					Socket.emit('server_error', '[SERVER ERROR] ' + err.message);
-					Socket.emit('Membership.MemberSignup.' + Request.control.transaction_id, err, null);
-				}
+				catch (err) { report_error(err, 'Membership.MemberSignup', Request.control.transaction_id); }
 			});
 
 
@@ -79,15 +97,11 @@ Membership.OnConnection =
 						});
 					}
 					else {
-						Socket.emit('Membership.MemberLogin.' + Request.control.transaction_id, new Error('MemberLogin failed.'), null);
+						Socket.emit('Membership.MemberLogin.' + Request.control.transaction_id, 'MemberLogin failed.', null);
 					}
 					return;
 				}
-				catch (err) {
-					if (Logger) { Logger.LogError('Error in [Membership.MemberLogin]: ', err); }
-					Socket.emit('server_error', '[SERVER ERROR] ' + err.message);
-					Socket.emit('Membership.MemberLogin.' + Request.control.transaction_id, err, null);
-				}
+				catch (err) { report_error(err, 'Membership.MemberLogin', Request.control.transaction_id); }
 			});
 
 
@@ -112,15 +126,11 @@ Membership.OnConnection =
 						});
 					}
 					else {
-						Socket.emit('Membership.MemberReconnect.' + Request.control.transaction_id, new Error('MemberReconnect failed.'), null);
+						Socket.emit('Membership.MemberReconnect.' + Request.control.transaction_id, 'MemberReconnect failed.', null);
 					}
 					return;
 				}
-				catch (err) {
-					if (Logger) { Logger.LogError('Error in [Membership.MemberReconnect]: ', err); }
-					Socket.emit('server_error', '[SERVER ERROR] ' + err.message);
-					Socket.emit('Membership.MemberReconnect.' + Request.control.transaction_id, err, null);
-				}
+				catch (err) { report_error(err, 'Membership.MemberReconnect', Request.control.transaction_id); }
 			});
 
 
@@ -148,15 +158,11 @@ Membership.OnConnection =
 						});
 					}
 					else {
-						Socket.emit('Membership.MemberLogout.' + Request.control.transaction_id, new Error('MemberLogout failed.'), null);
+						Socket.emit('Membership.MemberLogout.' + Request.control.transaction_id, 'MemberLogout failed.', null);
 					}
 					return;
 				}
-				catch (err) {
-					if (Logger) { Logger.LogError('Error in [Membership.MemberLogout]: ', err); }
-					Socket.emit('server_error', '[SERVER ERROR] ' + err.message);
-					Socket.emit('Membership.MemberLogout.' + Request.control.transaction_id, err, null);
-				}
+				catch (err) { report_error(err, 'Membership.MemberLogout', Request.control.transaction_id); }
 			});
 
 
@@ -182,15 +188,11 @@ Membership.OnConnection =
 						});
 					}
 					else {
-						Socket.emit('Membership.GetMemberData.' + Request.control.transaction_id, new Error('GetMemberData failed.'), null);
+						Socket.emit('Membership.GetMemberData.' + Request.control.transaction_id, 'GetMemberData failed.', null);
 					}
 					return;
 				}
-				catch (err) {
-					if (Logger) { Logger.LogError('Error in [Membership.GetMemberData]: ', err); }
-					Socket.emit('server_error', '[SERVER ERROR] ' + err.message);
-					Socket.emit('Membership.GetMemberData.' + Request.control.transaction_id, err, null);
-				}
+				catch (err) { report_error(err, 'Membership.GetMemberData', Request.control.transaction_id); }
 			});
 
 
@@ -216,15 +218,11 @@ Membership.OnConnection =
 						});
 					}
 					else {
-						Socket.emit('Membership.PutMemberData.' + Request.control.transaction_id, new Error('PutMemberData failed.'), null);
+						Socket.emit('Membership.PutMemberData.' + Request.control.transaction_id, 'PutMemberData failed.', null);
 					}
 					return;
 				}
-				catch (err) {
-					if (Logger) { Logger.LogError('Error in [Membership.PutMemberData]: ', err); }
-					Socket.emit('server_error', '[SERVER ERROR] ' + err.message);
-					Socket.emit('Membership.PutMemberData.' + Request.control.transaction_id, err, null);
-				}
+				catch (err) { report_error(err, 'Membership.PutMemberData', Request.control.transaction_id); }
 			});
 
 
@@ -251,15 +249,11 @@ Membership.OnConnection =
 						});
 					}
 					else {
-						Socket.emit('Membership.PathList.' + Request.control.transaction_id, new Error('PathList failed.'), null);
+						Socket.emit('Membership.PathList.' + Request.control.transaction_id, 'PathList failed.', null);
 					}
 					return;
 				}
-				catch (err) {
-					if (Logger) { Logger.LogError('Error in [Membership.PathList]: ', err); }
-					Socket.emit('server_error', '[SERVER ERROR] ' + err.message);
-					Socket.emit('Membership.PathList.' + Request.control.transaction_id, err, null);
-				}
+				catch (err) { report_error(err, 'Membership.PathList', Request.control.transaction_id); }
 			});
 
 
@@ -286,15 +280,11 @@ Membership.OnConnection =
 						});
 					}
 					else {
-						Socket.emit('Membership.PathRead.' + Request.control.transaction_id, new Error('PathRead failed.'), null);
+						Socket.emit('Membership.PathRead.' + Request.control.transaction_id, 'PathRead failed.', null);
 					}
 					return;
 				}
-				catch (err) {
-					if (Logger) { Logger.LogError('Error in [Membership.PathRead]: ', err); }
-					Socket.emit('server_error', '[SERVER ERROR] ' + err.message);
-					Socket.emit('Membership.PathRead.' + Request.control.transaction_id, err, null);
-				}
+				catch (err) { report_error(err, 'Membership.PathRead', Request.control.transaction_id); }
 			});
 
 
@@ -321,15 +311,11 @@ Membership.OnConnection =
 						});
 					}
 					else {
-						Socket.emit('Membership.PathWrite.' + Request.control.transaction_id, new Error('PathWrite failed.'), null);
+						Socket.emit('Membership.PathWrite.' + Request.control.transaction_id, 'PathWrite failed.', null);
 					}
 					return;
 				}
-				catch (err) {
-					if (Logger) { Logger.LogError('Error in [Membership.PathWrite]: ', err); }
-					Socket.emit('server_error', '[SERVER ERROR] ' + err.message);
-					Socket.emit('Membership.PathWrite.' + Request.control.transaction_id, err, null);
-				}
+				catch (err) { report_error(err, 'Membership.PathWrite', Request.control.transaction_id); }
 			});
 
 
@@ -356,15 +342,11 @@ Membership.OnConnection =
 						});
 					}
 					else {
-						Socket.emit('Membership.PathMake.' + Request.control.transaction_id, new Error('PathMake failed.'), null);
+						Socket.emit('Membership.PathMake.' + Request.control.transaction_id, 'PathMake failed.', null);
 					}
 					return;
 				}
-				catch (err) {
-					if (Logger) { Logger.LogError('Error in [Membership.PathMake]: ', err); }
-					Socket.emit('server_error', '[SERVER ERROR] ' + err.message);
-					Socket.emit('Membership.PathMake.' + Request.control.transaction_id, err, null);
-				}
+				catch (err) { report_error(err, 'Membership.PathMake', Request.control.transaction_id); }
 			});
 
 
@@ -391,15 +373,11 @@ Membership.OnConnection =
 						});
 					}
 					else {
-						Socket.emit('Membership.PathClean.' + Request.control.transaction_id, new Error('PathClean failed.'), null);
+						Socket.emit('Membership.PathClean.' + Request.control.transaction_id, 'PathClean failed.', null);
 					}
 					return;
 				}
-				catch (err) {
-					if (Logger) { Logger.LogError('Error in [Membership.PathClean]: ', err); }
-					Socket.emit('server_error', '[SERVER ERROR] ' + err.message);
-					Socket.emit('Membership.PathClean.' + Request.control.transaction_id, err, null);
-				}
+				catch (err) { report_error(err, 'Membership.PathClean', Request.control.transaction_id); }
 			});
 
 
@@ -426,15 +404,11 @@ Membership.OnConnection =
 						});
 					}
 					else {
-						Socket.emit('Membership.PathDelete.' + Request.control.transaction_id, new Error('PathDelete failed.'), null);
+						Socket.emit('Membership.PathDelete.' + Request.control.transaction_id, 'PathDelete failed.', null);
 					}
 					return;
 				}
-				catch (err) {
-					if (Logger) { Logger.LogError('Error in [Membership.PathDelete]: ', err); }
-					Socket.emit('server_error', '[SERVER ERROR] ' + err.message);
-					Socket.emit('Membership.PathDelete.' + Request.control.transaction_id, err, null);
-				}
+				catch (err) { report_error(err, 'Membership.PathDelete', Request.control.transaction_id); }
 			});
 
 

@@ -74,7 +74,7 @@ MembershipClient.GetMember =
 							Cookies.put(ScopeName + '.session_id', Member.session_id);
 						}
 
-						if (callback) { callback(Err, Response); }
+						if (callback) { callback(null, Response); }
 						return;
 					});
 
@@ -101,7 +101,7 @@ MembershipClient.GetMember =
 
 				// Check for requirements.
 				if (!Member.member_name || !Member.member_password) {
-					if (callback) { callback(new Error('No membership credentials provided.'), null); }
+					if (callback) { callback('No membership credentials provided.', null); }
 					return;
 				}
 
@@ -396,7 +396,7 @@ MembershipClient.GetMember =
 							if (callback) { callback(Err, null); }
 							return;
 						}
-						if (callback) { callback(Err, Response); }
+						if (callback) { callback(null, Response); }
 						return;
 					});
 
@@ -436,7 +436,7 @@ MembershipClient.GetMember =
 							if (callback) { callback(Err, null); }
 							return;
 						}
-						if (callback) { callback(Err, Response); }
+						if (callback) { callback(null, Response); }
 						return;
 					});
 
@@ -477,7 +477,7 @@ MembershipClient.GetMember =
 							if (callback) { callback(Err, null); }
 							return;
 						}
-						if (callback) { callback(Err, Response); }
+						if (callback) { callback(null, Response); }
 						return;
 					});
 
@@ -517,7 +517,7 @@ MembershipClient.GetMember =
 							if (callback) { callback(Err, null); }
 							return;
 						}
-						if (callback) { callback(Err, Response); }
+						if (callback) { callback(null, Response); }
 						return;
 					});
 
@@ -557,7 +557,7 @@ MembershipClient.GetMember =
 							if (callback) { callback(Err, null); }
 							return;
 						}
-						if (callback) { callback(Err, Response); }
+						if (callback) { callback(null, Response); }
 						return;
 					});
 

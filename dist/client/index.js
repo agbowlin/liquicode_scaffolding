@@ -234,6 +234,13 @@ var TheController = TheApplication.controller('TheController',
 		//=====================================================================
 
 
+		function intiialize_session() {
+			// Initialize the application.
+			AppClient.OnInitialize($scope);
+			return;
+		}
+
+
 		Framework.DoMemberSignup =
 			function() {
 				Member.MemberSignup(
@@ -245,6 +252,7 @@ var TheController = TheApplication.controller('TheController',
 						}
 						Member.member_data.signup_time = Date.now();
 						Member.PutMemberData();
+						intiialize_session();
 						Framework.LoadPartial(AppConfig.intiial_view);
 						$scope.$apply();
 						return;
@@ -263,6 +271,7 @@ var TheController = TheApplication.controller('TheController',
 						}
 						Member.member_data.login_time = Date.now();
 						Member.PutMemberData();
+						intiialize_session();
 						Framework.LoadPartial(AppConfig.intiial_view);
 						$scope.$apply();
 						return;
@@ -279,6 +288,7 @@ var TheController = TheApplication.controller('TheController',
 							$scope.$apply();
 							return;
 						}
+						intiialize_session();
 						$scope.$apply();
 						return;
 					});
@@ -308,9 +318,6 @@ var TheController = TheApplication.controller('TheController',
 		//=====================================================================
 		//=====================================================================
 
-
-		// Initialize the application.
-		AppClient.OnInitialize($scope);
 
 		window.document.title = AppConfig.app_title;
 
