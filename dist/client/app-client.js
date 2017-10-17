@@ -54,7 +54,7 @@ AppClient.OnInitialize =
 		MyData.sample_data = 'Hello, World!';
 
 		// Add navigation items to the sidebar.
-
+		$('#app-sidebar-list').html('');
 		$('#app-sidebar-list').append(
 			Framework.NewSidebarItem({
 				item_name: 'app-hello-item',

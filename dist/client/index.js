@@ -36,7 +36,7 @@ var TheController = TheApplication.controller('TheController',
 		var AppConfig = {
 			app_title: 'Application',
 			content_selector: '#content',
-			intiial_view: 'app-home',
+			initial_view: 'app-home',
 			partials_path: '/partials'
 		};
 		$scope.AppConfig = AppConfig;
@@ -237,6 +237,8 @@ var TheController = TheApplication.controller('TheController',
 		function intiialize_session() {
 			// Initialize the application.
 			AppClient.OnInitialize($scope);
+			window.document.title = AppConfig.app_title;
+			Framework.LoadPartial(AppConfig.initial_view);
 			return;
 		}
 
@@ -253,7 +255,7 @@ var TheController = TheApplication.controller('TheController',
 						Member.member_data.signup_time = Date.now();
 						Member.PutMemberData();
 						intiialize_session();
-						Framework.LoadPartial(AppConfig.intiial_view);
+						Framework.LoadPartial(AppConfig.initial_view);
 						$scope.$apply();
 						return;
 					});
@@ -272,7 +274,7 @@ var TheController = TheApplication.controller('TheController',
 						Member.member_data.login_time = Date.now();
 						Member.PutMemberData();
 						intiialize_session();
-						Framework.LoadPartial(AppConfig.intiial_view);
+						Framework.LoadPartial(AppConfig.initial_view);
 						$scope.$apply();
 						return;
 					});
@@ -319,13 +321,20 @@ var TheController = TheApplication.controller('TheController',
 		//=====================================================================
 
 
+		// Initialize the application.
+		AppClient.OnInitialize($scope);
+		
+		// Set the window title.
 		window.document.title = AppConfig.app_title;
 
 		// Get the user data if our login is cached.
 		if (Member.member_logged_in) {
 			Framework.DoMemberReconnect();
 		}
-		Framework.LoadPartial(AppConfig.intiial_view);
+
+		// Display the initial view.
+		Framework.LoadPartial(AppConfig.initial_view);
+
 
 		// Return
 		return;

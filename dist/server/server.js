@@ -93,10 +93,10 @@ SocketIo.on('connection',
 			});
 
 		// Add the membership functions.
-		Membership.OnConnection(Socket, Logger);
+		Membership.OnConnection(Socket);
 
 		// Connect the application functions.
-		AppServer.OnConnection(Membership);
+		AppServer.OnConnection(Socket);
 
 		return;
 	});
