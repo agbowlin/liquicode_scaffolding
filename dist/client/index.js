@@ -61,10 +61,10 @@ var TheController = TheApplication.controller('TheController',
 
 		//==========================================
 		// Database functions.
-		var SharedDatabase = DocDatabaseClient.GetSharedDatabase(Socket);
-		$scope.SharedDatabase = SharedDatabase;
-		var MemberDatabase = DocDatabaseClient.GetMemberDatabase(Socket, Member);
-		$scope.MemberDatabase = MemberDatabase;
+		var SharedDocDatabase = DocDatabaseClient.GetSharedDatabase(Socket);
+		$scope.SharedDocDatabase = SharedDocDatabase;
+		var MemberDocDatabase = DocDatabaseClient.GetMemberDatabase(Socket, Member);
+		$scope.MemberDocDatabase = MemberDocDatabase;
 
 		// // === BEGIN TEST ===
 		// {

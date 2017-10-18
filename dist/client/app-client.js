@@ -39,6 +39,8 @@ AppClient.OnInitialize =
 		var Logger = Scope.Logger;
 		var Socket = Scope.Socket;
 		var Member = Scope.Member;
+		var SharedDocDatabase = Scope.SharedDocDatabase;
+		var MemberDocDatabase = Scope.MemberDocDatabase;
 
 
 		AppConfig.app_title = 'Scaffolding';

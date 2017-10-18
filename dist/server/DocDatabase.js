@@ -321,8 +321,13 @@ DocDatabase.OnConnection =
 		Socket.on('DocDatabase.Shared.SubmitQuery',
 			function(Request) {
 				var event_name = 'DocDatabase.Shared.SubmitQuery';
-				var collection_name = "system.shared";
-				submit_query(event_name, collection_name, Request);
+				try {
+					var collection_name = "system.shared";
+					submit_query(event_name, collection_name, Request);
+				}
+				catch (err) {
+					report_error(err, Request.operation, event_name, Request.control.transaction_id);
+				}
 				return;
 			});
 
@@ -330,12 +335,17 @@ DocDatabase.OnConnection =
 		Socket.on('DocDatabase.Member.SubmitQuery',
 			function(Request) {
 				var event_name = 'DocDatabase.Member.SubmitQuery';
-				if (!Socket.MemberName) { 
+				if (!Socket.MemberName) {
 					report_error('Authentication Required', Request.operation, event_name, Request.control.transaction_id);
 					return;
 				}
-				var collection_name = 'member.' + npm_sanitize(Socket.MemberName.toLowerCase());
-				submit_query(event_name, collection_name, Request);
+				try {
+					var collection_name = 'member.' + npm_sanitize(Socket.MemberName.toLowerCase());
+					submit_query(event_name, collection_name, Request);
+				}
+				catch (err) {
+					report_error(err, Request.operation, event_name, Request.control.transaction_id);
+				}
 				return;
 			});
 
