@@ -2,6 +2,7 @@
 /* global io */
 /* global angular */
 /* global MembershipClient */
+/* global DocDatabaseClient */
 /* global AppClient */
 
 'use strict';
@@ -57,6 +58,127 @@ var TheController = TheApplication.controller('TheController',
 		var Member = MembershipClient.GetMember('work-time', Socket, $cookies);
 		$scope.Member = Member;
 		$rootScope.Member = Member; // Do we need this ???
+
+		//==========================================
+		// Database functions.
+		var SharedDatabase = DocDatabaseClient.GetSharedDatabase(Socket);
+		$scope.SharedDatabase = SharedDatabase;
+		var MemberDatabase = DocDatabaseClient.GetMemberDatabase(Socket, Member);
+		$scope.MemberDatabase = MemberDatabase;
+
+		// // === BEGIN TEST ===
+		// {
+		// 	if (Member.member_name && Member.member_logged_in) {
+		// 		MemberDatabase.SubmitQuery(
+		// 			'insert', [{
+		// 					name: "Alice",
+		// 					age: 25,
+		// 					is_married: true,
+		// 					favorites: [
+		// 						"Apple Pie",
+		// 						"Hairless Cats",
+		// 						"Spy Novels"
+		// 					]
+		// 				},
+		// 				{
+		// 					name: "Bob",
+		// 					age: 28,
+		// 					is_married: false,
+		// 					favorites: [
+		// 						"Purple",
+		// 						"Apple Pie",
+		// 						"Action Movies"
+		// 					]
+		// 				},
+		// 				{
+		// 					name: "Eve",
+		// 					age: 23,
+		// 					is_married: false,
+		// 					favorites: [
+		// 						"Action Movies",
+		// 						"Pilates",
+		// 						"Painting"
+		// 					]
+		// 				}
+		// 			],
+		// 			function(Err, Response) {
+		// 				if (Err) { return; }
+
+		// 				console.log(Response);
+
+		// 				MemberDatabase.SubmitQuery(
+		// 					'Count', {},
+		// 					function(Err, Response) {
+		// 						if (Err) { return; }
+
+		// 						console.log(Response);
+
+		// 						return;
+		// 					});
+
+		// 				MemberDatabase.SubmitQuery(
+		// 					'Count', {
+		// 						age: { $gte: 25 }
+		// 					},
+		// 					function(Err, Response) {
+		// 						if (Err) { return; }
+
+		// 						console.log(Response);
+
+		// 						return;
+		// 					});
+
+		// 				MemberDatabase.SubmitQuery(
+		// 					'Find', {
+		// 						age: { $gte: 25 }
+		// 					},
+		// 					function(Err, Response) {
+		// 						if (Err) { return; }
+
+		// 						console.log(Response);
+
+		// 						return;
+		// 					});
+
+		// 				MemberDatabase.SubmitQuery(
+		// 					'FindOne', {
+		// 						age: { $gte: 25 }
+		// 					},
+		// 					function(Err, Response) {
+		// 						if (Err) { return; }
+
+		// 						console.log(Response);
+
+		// 						return;
+		// 					});
+
+		// 				MemberDatabase.SubmitQuery(
+		// 					'Remove', {
+		// 						age: { $gte: 25 }
+		// 					},
+		// 					function(Err, Response) {
+		// 						if (Err) { return; }
+
+		// 						console.log(Response);
+
+		// 						return;
+		// 					});
+
+		// 				MemberDatabase.SubmitQuery(
+		// 					'RemoveAll', {},
+		// 					function(Err, Response) {
+		// 						if (Err) { return; }
+
+		// 						console.log(Response);
+
+		// 						return;
+		// 					});
+
+		// 				return;
+		// 			});
+		// 	}
+		// }
+		// // === END TEST ===
 
 
 		//=====================================================================

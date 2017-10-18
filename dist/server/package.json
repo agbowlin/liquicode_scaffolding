@@ -9,8 +9,7 @@
         "sanitize-filename": "",
         "fs-extra": "",
         "klaw-sync": "",
-        "tingodb": "",
-        "liquicode_membership": ""
+        "tingodb": ""
     },
     "devDependencies": {}
     }

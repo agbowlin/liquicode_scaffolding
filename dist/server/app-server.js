@@ -1,5 +1,3 @@
-/* global Membership */
-
 "use strict";
 
 var npm_path = require('path');
@@ -9,13 +7,12 @@ var npm_http = require('http');
 
 
 //---------------------------------------------------------------------
-var ERR_AppServerError = new Error("Application Server Error.");
+var ERR_AppServerError = "Application Server Error.";
 
 
 //---------------------------------------------------------------------
-function AppServer(Membership, ServerConfig) {
-	AppServer.Membership = Membership;
-	AppServer.ServerConfig = ServerConfig;
+function AppServer(Services) {
+	AppServer.Services = Services;
 	return AppServer;
 }
 

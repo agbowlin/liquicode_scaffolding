@@ -351,10 +351,6 @@ MembershipClient.GetMember =
 				// Set up the response handler.
 				Socket.once('Membership.PathList.' + transaction_id,
 					function(Err, Response) {
-						if (Err) {
-							if (callback) { callback(Err, null); }
-							return;
-						}
 						if (callback) { callback(Err, Response); }
 						return;
 					});
@@ -392,11 +388,7 @@ MembershipClient.GetMember =
 				// Set up the response handler.
 				Socket.once('Membership.PathRead.' + transaction_id,
 					function(Err, Response) {
-						if (Err) {
-							if (callback) { callback(Err, null); }
-							return;
-						}
-						if (callback) { callback(null, Response); }
+						if (callback) { callback(Err, Response); }
 						return;
 					});
 
@@ -432,11 +424,7 @@ MembershipClient.GetMember =
 				// Set up the response handler.
 				Socket.once('Membership.PathWrite.' + transaction_id,
 					function(Err, Response) {
-						if (Err) {
-							if (callback) { callback(Err, null); }
-							return;
-						}
-						if (callback) { callback(null, Response); }
+						if (callback) { callback(Err, Response); }
 						return;
 					});
 
@@ -473,11 +461,7 @@ MembershipClient.GetMember =
 				// Set up the response handler.
 				Socket.once('Membership.PathMake.' + transaction_id,
 					function(Err, Response) {
-						if (Err) {
-							if (callback) { callback(Err, null); }
-							return;
-						}
-						if (callback) { callback(null, Response); }
+						if (callback) { callback(Err, Response); }
 						return;
 					});
 
@@ -513,11 +497,7 @@ MembershipClient.GetMember =
 				// Set up the response handler.
 				Socket.once('Membership.PathClean.' + transaction_id,
 					function(Err, Response) {
-						if (Err) {
-							if (callback) { callback(Err, null); }
-							return;
-						}
-						if (callback) { callback(null, Response); }
+						if (callback) { callback(Err, Response); }
 						return;
 					});
 
@@ -553,11 +533,7 @@ MembershipClient.GetMember =
 				// Set up the response handler.
 				Socket.once('Membership.PathDelete.' + transaction_id,
 					function(Err, Response) {
-						if (Err) {
-							if (callback) { callback(Err, null); }
-							return;
-						}
-						if (callback) { callback(null, Response); }
+						if (callback) { callback(Err, Response); }
 						return;
 					});
 

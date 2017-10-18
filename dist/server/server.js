@@ -25,6 +25,7 @@ var npm_http = require('http');
 var npm_express = require('express');
 var npm_socketio = require('socket.io');
 
+
 //=====================================================================
 //=====================================================================
 //
@@ -33,8 +34,15 @@ var npm_socketio = require('socket.io');
 //=====================================================================
 //=====================================================================
 
+var Services = {
+	ServerConfig: null,
+	Logger: null,
+	Membership: null,
+	DocDatabase: null
+};
+
 // Load the server configuration from a file.
-var ServerConfig = npm_fs_extra.readJsonSync('./app-server.config');
+Services.ServerConfig = npm_fs_extra.readJsonSync('./app-server.config');
 
 
 //=====================================================================
@@ -47,13 +55,13 @@ var ServerConfig = npm_fs_extra.readJsonSync('./app-server.config');
 
 // Include the Logger module.
 // Use the application name as the log group.
-var Logger = require('./Logger.js').Logger(ServerConfig.Application.application_name);
+Services.Logger = require('./Logger.js').Logger(Services.ServerConfig.Application.application_name);
 
 // Configure the logger with fields from the server configuration object.
-if (ServerConfig.Logger && ServerConfig.Logger.LogTargets) {
-	for (var index = 0; index < ServerConfig.Logger.LogTargets.length; index++) {
-		var log_definition = ServerConfig.Logger.LogTargets[index];
-		var log_target = Logger.AddLogTarget(log_definition.log_device, log_definition.log_levels);
+if (Services.ServerConfig.Logger && Services.ServerConfig.Logger.LogTargets) {
+	for (var index = 0; index < Services.ServerConfig.Logger.LogTargets.length; index++) {
+		var log_definition = Services.ServerConfig.Logger.LogTargets[index];
+		var log_target = Services.Logger.AddLogTarget(log_definition.log_device, log_definition.log_levels);
 		// Options for all log targets.
 		if (typeof log_definition.output_group != 'undefined') { log_target.output_group = log_definition.output_group; }
 		if (typeof log_definition.output_date != 'undefined') { log_target.output_date = log_definition.output_date; }
@@ -81,15 +89,22 @@ if (ServerConfig.Logger && ServerConfig.Logger.LogTargets) {
 //=====================================================================
 
 // Include the membership module.
-var Membership = require('./MembershipSocketIO.js');
+Services.Membership = require('./MembershipSocketIO.js');
 
 // Configure Membership with fields from the server configuration object.
-Membership.RootFolder = npm_path.resolve(__dirname, ServerConfig.Membership.members_folder);
-Membership.ApplicationName = ServerConfig.Application.application_name;
+Services.Membership.ApplicationName = Services.ServerConfig.Application.application_name;
+Services.Membership.RootFolder = npm_path.resolve(__dirname, Services.ServerConfig.Membership.members_folder);
 
-// Let the Membership module use the Logger.
 
-Membership.Logger = Logger;
+//=====================================================================
+//=====================================================================
+//
+//		Document Database
+//
+//=====================================================================
+//=====================================================================
+
+Services.DocDatabase = require('./DocDatabase.js')(Services);
 
 
 //=====================================================================
@@ -100,7 +115,7 @@ Membership.Logger = Logger;
 //=====================================================================
 //=====================================================================
 
-var AppServer = require('./app-server.js')(Membership);
+Services.AppServer = require('./app-server.js')(Services);
 
 
 //=====================================================================
@@ -115,7 +130,7 @@ var AppServer = require('./app-server.js')(Membership);
 var ExpressRouter = npm_express();
 
 // Define a static route for serving the client application files.
-var ClientFolder = npm_path.resolve(__dirname, ServerConfig.NodeServer.client_folder);
+var ClientFolder = npm_path.resolve(__dirname, Services.ServerConfig.NodeServer.client_folder);
 ExpressRouter.use(npm_express.static(ClientFolder));
 
 // Create the HTTP server.
@@ -153,11 +168,10 @@ SocketIo.on('connection',
 				HttpSockets.splice(HttpSockets.indexOf(Socket), 1);
 			});
 
-		// Add the membership functions.
-		Membership.OnConnection(Socket);
-
-		// Connect the application functions.
-		AppServer.OnConnection(Socket);
+		// Connect the services.
+		Services.Membership.OnConnection(Socket);
+		Services.DocDatabase.OnConnection(Socket);
+		Services.AppServer.OnConnection(Socket);
 
 		return;
 	});
@@ -183,8 +197,8 @@ function broadcast(event, data) {
 
 
 // NodeJS startup settings.
-var NodeJS_Address = process.env.IP || ServerConfig.NodeServer.server_address || "0.0.0.0";
-var NodeJS_Port = process.env.PORT || ServerConfig.NodeServer.server_port || 3000;
+var NodeJS_Address = process.env.IP ||Services. ServerConfig.NodeServer.server_address || "0.0.0.0";
+var NodeJS_Port = process.env.PORT || Services.ServerConfig.NodeServer.server_port || 3000;
 
 // Check override settings from command line parameters.
 if (process.argv.length > 2) {

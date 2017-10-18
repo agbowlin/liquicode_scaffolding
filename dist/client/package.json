@@ -2,8 +2,7 @@
 	"name": "application-client",
 	"private": true,
 	"dependencies": {
-		"socket.io-client": "",
-		"liquicode_membership": ""
+		"socket.io-client": ""
 	},
 	"devDependencies": {}
 
