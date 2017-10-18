@@ -265,7 +265,7 @@ DocDatabase.OnConnection =
 								}
 
 								else if (operation_name == 'save') {
-									collection.update(Request.document,
+									collection.update(Request.query,
 										function(err, results) {
 											if (err) {
 												report_error(err, Request.operation, EventName, Request.control.transaction_id);
