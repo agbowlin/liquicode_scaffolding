@@ -46,10 +46,11 @@ function get_database(Socket, DatabaseType) {
 				callback);
 			return;
 		},
-		Count: function(Query, callback) {
+		Count: function(Query, Options, callback) {
 			do_database_call(Socket, DatabaseType, {
 					operation: 'Count',
-					query: Query
+					query: Query,
+					options: Options
 				},
 				callback);
 			return;
@@ -62,10 +63,13 @@ function get_database(Socket, DatabaseType) {
 				callback);
 			return;
 		},
-		FindAndModify: function(Query, callback) {
+		FindAndModify: function(Query, Sort, Update, Options, callback) {
 			do_database_call(Socket, DatabaseType, {
 					operation: 'FindAndModify',
-					query: Query
+					query: Query,
+					sort: Sort,
+					update: Update,
+					options: Options
 				},
 				callback);
 			return;
@@ -78,42 +82,47 @@ function get_database(Socket, DatabaseType) {
 				callback);
 			return;
 		},
-		Insert: function(Query, callback) {
+		Insert: function(Query, Options, callback) {
 			do_database_call(Socket, DatabaseType, {
 					operation: 'Insert',
-					query: Query
+					query: Query,
+					options: Options
 				},
 				callback);
 			return;
 		},
-		Remove: function(Query, callback) {
+		Remove: function(Query, Options, callback) {
 			do_database_call(Socket, DatabaseType, {
 					operation: 'Remove',
-					query: Query
+					query: Query,
+					options: Options
 				},
 				callback);
 			return;
 		},
-		RemoveAll: function(callback) {
+		RemoveAll: function(Options, callback) {
 			do_database_call(Socket, DatabaseType, {
-					operation: 'RemoveAll'
+					operation: 'RemoveAll',
+					options: Options
 				},
 				callback);
 			return;
 		},
-		Save: function(Query, callback) {
-			do_database_call(Socket, DatabaseType, {
-					operation: 'Save',
-					query: Query
-				},
-				callback);
-			return;
-		},
-		Update: function(Query, Updates, callback) {
+		Save: function(Query, Options, callback) {
 			do_database_call(Socket, DatabaseType, {
 					operation: 'Save',
 					query: Query,
-					update: Updates
+					options: Options
+				},
+				callback);
+			return;
+		},
+		Update: function(Query, Update, Options, callback) {
+			do_database_call(Socket, DatabaseType, {
+					operation: 'Update',
+					query: Query,
+					update: Update,
+					options: Options
 				},
 				callback);
 			return;

@@ -144,7 +144,7 @@ DocDatabase.OnConnection =
 								var operation_name = Request.operation.toLowerCase();
 
 								if (operation_name == 'count') {
-									collection.count(Request.query,
+									collection.count(Request.query, Request.options,
 										function(err, response) {
 											if (err) {
 												report_error(err, Request.operation, EventName, Request.control.transaction_id);
@@ -154,6 +154,7 @@ DocDatabase.OnConnection =
 												control: Request.control,
 												operation: Request.operation,
 												query: Request.query,
+												options: Request.options,
 												results: response
 											});
 											return;
@@ -186,7 +187,31 @@ DocDatabase.OnConnection =
 								}
 
 								else if (operation_name == 'findandmodify') {
-									report_error('Function not implemented!', Request.operation, EventName, Request.control.transaction_id);
+									collection.findAndModify(Request.query, Request.sort, Request.update, Request.options,
+										function(err, cursor) {
+											if (err) {
+												report_error(err, Request.operation, EventName, Request.control.transaction_id);
+												return;
+											}
+											cursor.toArray(
+												function(err, documents) {
+													if (err) {
+														report_error(err, Request.operation, EventName, Request.control.transaction_id);
+														return;
+													}
+													Socket.emit(EventName + '.' + Request.control.transaction_id, null, {
+														control: Request.control,
+														operation: Request.operation,
+														query: Request.query,
+														sort: Request.sort,
+														update: Request.update,
+														options: Request.options,
+														results: documents
+													});
+													return;
+												});
+											return;
+										});
 								}
 
 								else if (operation_name == 'findone') {
@@ -207,7 +232,7 @@ DocDatabase.OnConnection =
 								}
 
 								else if (operation_name == 'insert') {
-									collection.insert(Request.query,
+									collection.insert(Request.query, Request.options,
 										function(err, results) {
 											if (err) {
 												report_error(err, Request.operation, EventName, Request.control.transaction_id);
@@ -217,6 +242,7 @@ DocDatabase.OnConnection =
 												control: Request.control,
 												operation: Request.operation,
 												query: Request.query,
+												options: Request.options,
 												results: results
 											});
 											return;
@@ -232,7 +258,7 @@ DocDatabase.OnConnection =
 										report_error('Using Remove with an empty query is forbidden. Use RemoveAll instead.', Request.operation, EventName, Request.control.transaction_id);
 										return;
 									}
-									collection.remove(Request.query,
+									collection.remove(Request.query, Request.options,
 										function(err, results) {
 											if (err) {
 												report_error(err, Request.operation, EventName, Request.control.transaction_id);
@@ -242,6 +268,7 @@ DocDatabase.OnConnection =
 												control: Request.control,
 												operation: Request.operation,
 												query: Request.query,
+												options: Request.options,
 												results: results
 											});
 											return;
@@ -249,7 +276,7 @@ DocDatabase.OnConnection =
 								}
 
 								else if (operation_name == 'removeall') {
-									collection.remove({},
+									collection.remove({}, Request.options,
 										function(err, results) {
 											if (err) {
 												report_error(err, Request.operation, EventName, Request.control.transaction_id);
@@ -258,6 +285,7 @@ DocDatabase.OnConnection =
 											Socket.emit(EventName + '.' + Request.control.transaction_id, null, {
 												control: Request.control,
 												operation: Request.operation,
+												options: Request.options,
 												results: results
 											});
 											return;
@@ -265,7 +293,7 @@ DocDatabase.OnConnection =
 								}
 
 								else if (operation_name == 'save') {
-									collection.update(Request.query,
+									collection.save(Request.query, Request.options,
 										function(err, results) {
 											if (err) {
 												report_error(err, Request.operation, EventName, Request.control.transaction_id);
@@ -274,7 +302,8 @@ DocDatabase.OnConnection =
 											Socket.emit(EventName + '.' + Request.control.transaction_id, null, {
 												control: Request.control,
 												operation: Request.operation,
-												document: Request.document,
+												query: Request.query,
+												options: Request.options,
 												results: results
 											});
 											return;
@@ -282,7 +311,7 @@ DocDatabase.OnConnection =
 								}
 
 								else if (operation_name == 'update') {
-									collection.update(Request.query, Request.update,
+									collection.update(Request.query, Request.update, Request.options,
 										function(err, results) {
 											if (err) {
 												report_error(err, Request.operation, EventName, Request.control.transaction_id);
@@ -293,6 +322,7 @@ DocDatabase.OnConnection =
 												operation: Request.operation,
 												query: Request.query,
 												update: Request.update,
+												options: Request.options,
 												results: results
 											});
 											return;
