@@ -7,6 +7,7 @@ var npm_fs_extra = require('fs-extra');
 var npm_sanitize = require('sanitize-filename');
 
 var npm_tingodb = require('tingodb')();
+var npm_nedb = require('nedb');
 
 
 //---------------------------------------------------------------------
@@ -71,7 +72,9 @@ DocDatabase.OnConnection =
 			if (DocDatabase.Database) {
 				return DocDatabase.Database;
 			}
+
 			if (DocDatabase.Services.ServerConfig.database_engine == 'mongodb') {
+				if (DocDatabase.Services.Logger) { DocDatabase.Services.Logger.LogTrace('Initializing database engine: MongoDB'); }
 				DocDatabase.DatabaseEngine = require('mongodb');
 				var engine_config = DocDatabase.Services.ServerConfig.database_engines.mongodb;
 				DocDatabase.Database =
@@ -88,7 +91,22 @@ DocDatabase.OnConnection =
 					);
 				return DocDatabase.Database;
 			}
+
+			else if (DocDatabase.Services.ServerConfig.database_engine == 'nedb') {
+				if (DocDatabase.Services.Logger) { DocDatabase.Services.Logger.LogTrace('Initializing database engine: NeDB'); }
+				DocDatabase.DatabaseEngine = require('nedb');
+				var engine_config = DocDatabase.Services.ServerConfig.database_engines.nedb;
+				DocDatabase.Database =
+					new DocDatabase.DatabaseEngine.Db(
+						engine_config.path,
+						engine_config.options
+					);
+				npm_fs_extra.ensureDirSync(engine_config.path);
+				return DocDatabase.Database;
+			}
+
 			else if (DocDatabase.Services.ServerConfig.database_engine == 'tingodb') {
+				if (DocDatabase.Services.Logger) { DocDatabase.Services.Logger.LogTrace('Initializing database engine: TingoDB'); }
 				DocDatabase.DatabaseEngine = require('tingodb')({});
 				var engine_config = DocDatabase.Services.ServerConfig.database_engines.tingodb;
 				DocDatabase.Database =
@@ -99,8 +117,100 @@ DocDatabase.OnConnection =
 				npm_fs_extra.ensureDirSync(engine_config.path);
 				return DocDatabase.Database;
 			}
+
 			else {
 				return null;
+			}
+		}
+
+
+		//=====================================================================
+		//	Get Collection
+		//=====================================================================
+
+		function get_collection(CollectionName, callback) {
+			var logger = DocDatabase.Services.Logger;
+			if (logger) { logger.LogTrace('Opening database collection [' + CollectionName + ']'); }
+
+			if (DocDatabase.Services.ServerConfig.database_engine == 'mongodb') {
+				if (logger) { logger.LogTrace('Database engine = MongoDB'); }
+				try {
+					// Ready the database engine.
+					var engine_config = DocDatabase.Services.ServerConfig.database_engines.mongodb;
+					DocDatabase.DatabaseEngine = require('mongodb');
+					// Get the database server.
+					var database_server = new DocDatabase.DatabaseEngine.Db(
+						engine_config.db,
+						new DocDatabase.DatabaseEngine.Server(
+							engine_config.host,
+							engine_config.port,
+							engine_config.opts
+						), {
+							native_parser: false,
+							safe: true
+						}
+					);
+					// Open the database.
+					database_server.open(
+						function(err, database) {
+							if (err) {
+								callback(err, null);
+								return;
+							}
+							// Open the collection
+							database.collection(CollectionName,
+								function(err, collection) {
+									if (err) {
+										callback(err, null);
+										return;
+									}
+									// Return the collection.
+									callback(null, collection);
+								});
+						});
+				}
+				catch (err) {
+					callback(err, null);
+				}
+			}
+
+			else if (DocDatabase.Services.ServerConfig.database_engine == 'nedb') {
+				if (logger) { logger.LogTrace('Database engine = NeDB'); }
+				try {
+					// Ready the database engine.
+					var engine_config = DocDatabase.Services.ServerConfig.database_engines.nedb;
+					var engine = require('nedb');
+					// Get the collection.
+					var collection_path = npm_path.join(engine_config.path, CollectionName);
+					npm_fs_extra.ensureDirSync(collection_path);
+					var collection = new DocDatabase.DatabaseEngine({
+						filename: collection_path,
+						autoload: true
+					});
+					//***NOTE: We dont do anything with options for nedb at this point.
+					// Return the collection.
+					callback(null, collection);
+				}
+				catch (Err) {
+					callback(Err, null);
+				}
+			}
+
+			// else if (DocDatabase.Services.ServerConfig.database_engine == 'tingodb') {
+			// 	if (logger) { logger.LogTrace('Initializing database engine: TingoDB'); }
+			// 	DocDatabase.DatabaseEngine = require('tingodb')({});
+			// 	var engine_config = DocDatabase.Services.ServerConfig.database_engines.tingodb;
+			// 	DocDatabase.Database =
+			// 		new DocDatabase.DatabaseEngine.Db(
+			// 			engine_config.path,
+			// 			engine_config.options
+			// 		);
+			// 	npm_fs_extra.ensureDirSync(engine_config.path);
+			// 	return DocDatabase.Database;
+			// }
+
+			else {
+				callback(new Error('Unknown database engine: [' + DocDatabase.Services.ServerConfig.database_engine + '].'), null);
 			}
 		}
 
@@ -123,6 +233,10 @@ DocDatabase.OnConnection =
 		function submit_query(EventName, CollectionName, Request) {
 			try {
 				get_database();
+
+				if (DocDatabase.Services.Logger) {
+					DocDatabase.Services.Logger.LogDebug('Performing database operation in collection [' + CollectionName + ']:', Request);
+				}
 
 				// Open Database
 				DocDatabase.Database.open(
@@ -344,6 +458,17 @@ DocDatabase.OnConnection =
 		}
 
 
+		function get_collection_path(ApplicationName, MemberName, CollectionName) {
+			var collection_path = '';
+			collection_path = npm_sanitize(ApplicationName.toLowerCase());
+			collection_path += '.' + npm_sanitize(MemberName.toLowerCase());
+			if (CollectionName) {
+				collection_path += '.' + npm_sanitize(CollectionName);
+			}
+			return collection_path;
+		}
+
+
 		//=====================================================================
 		//	Database Functions
 		//=====================================================================
@@ -352,8 +477,12 @@ DocDatabase.OnConnection =
 			function(Request) {
 				var event_name = 'DocDatabase.Shared.SubmitQuery';
 				try {
-					var collection_name = "system.shared";
-					submit_query(event_name, collection_name, Request);
+					var collection_path = get_collection_path(
+						DocDatabase.Services.ServerConfig.Application.application_name,
+						'_shared',
+						Request.collection
+					);
+					submit_query(event_name, collection_path, Request);
 				}
 				catch (err) {
 					report_error(err, Request.operation, event_name, Request.control.transaction_id);
@@ -370,8 +499,12 @@ DocDatabase.OnConnection =
 					return;
 				}
 				try {
-					var collection_name = 'member.' + npm_sanitize(Socket.MemberName.toLowerCase());
-					submit_query(event_name, collection_name, Request);
+					var collection_path = get_collection_path(
+						DocDatabase.Services.ServerConfig.application_name,
+						Socket.MemberName,
+						Request.collection
+					);
+					submit_query(event_name, collection_path, Request);
 				}
 				catch (err) {
 					report_error(err, Request.operation, event_name, Request.control.transaction_id);

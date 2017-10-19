@@ -8,10 +8,42 @@
 'use strict';
 
 
+//=====================================================================
 // Define the main AngularJS module.
 var TheApplication = angular.module('TheApplication', ['ngCookies']);
 
 
+//=====================================================================
+// Define a directive to load and run javascript contained in partials.
+// FROM: https://gist.github.com/subudeepak/9617483#file-angular-loadscript-js
+(function(ng) {
+	var app = ng.module('ngLoadScript', []);
+	app.directive('script', function() {
+		return {
+			restrict: 'E',
+			scope: false,
+			link: function(scope, elem, attr) {
+				if (attr.type === 'text/javascript-lazy') {
+					var s = document.createElement("script");
+					s.type = "text/javascript";
+					var src = elem.attr('src');
+					if (src !== undefined) {
+						s.src = src;
+					}
+					else {
+						var code = elem.text();
+						s.text = code;
+					}
+					document.head.appendChild(s);
+					elem.remove();
+				}
+			}
+		};
+	});
+}(angular));
+
+
+//=====================================================================
 // Define the main AngularJS controller.
 var TheController = TheApplication.controller('TheController',
 	function($rootScope, $scope, $http, $compile, $injector, $sce, $cookies) {

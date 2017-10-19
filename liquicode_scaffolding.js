@@ -242,6 +242,8 @@ copy_file(npm_path.join(sourcepath, 'client/app-client.js'), npm_path.join(targe
 copy_file(npm_path.join(sourcepath, 'client/partials/member-login.html'), npm_path.join(targetpath, 'client/partials/member-login.html'), app_options.install);
 copy_file(npm_path.join(sourcepath, 'client/partials/member-profile.html'), npm_path.join(targetpath, 'client/partials/member-profile.html'), app_options.install);
 copy_file(npm_path.join(sourcepath, 'client/partials/member-signup.html'), npm_path.join(targetpath, 'client/partials/member-signup.html'), app_options.install);
+copy_file(npm_path.join(sourcepath, 'client/partials/test-docdatabase.html'), npm_path.join(targetpath, 'client/partials/test-docdatabase.html'), app_options.install);
+copy_file(npm_path.join(sourcepath, 'client/partials/test-docdatabase.js'), npm_path.join(targetpath, 'client/partials/test-docdatabase.js'), app_options.install);
 copy_file(npm_path.join(sourcepath, 'client/partials/app-home.html'), npm_path.join(targetpath, 'client/partials/app-home.html'), app_options.install);
 
 

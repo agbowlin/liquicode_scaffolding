@@ -65,7 +65,9 @@ AppClient.OnInitialize =
 		MyData.sample_data = 'Hello, World!';
 
 		// Add navigation items to the sidebar.
+
 		$('#app-sidebar-list').html('');
+
 		$('#app-sidebar-list').append(
 			Framework.NewSidebarItem({
 				item_name: 'app-hello-item',
@@ -76,6 +78,32 @@ AppClient.OnInitialize =
 				on_click: function(Item) {
 					Framework.LoadPartial(Item.partial_name);
 					alert(MyData.sample_data);
+				}
+			})
+		);
+
+		var testing_group_id = 'app-test-group';
+		$('#app-sidebar-list').append(
+			Framework.NewSidebarItem({
+				item_name: testing_group_id,
+				caption: 'Tests',
+				is_group: true,
+				is_collapsable: false,
+				requires_login: false,
+				icon_class: 'glyphicon glyphicon-th',
+				on_click: function(Item) {}
+			})
+		);
+
+		$('#' + testing_group_id + '_items').append(
+			Framework.NewSidebarItem({
+				item_name: 'app-test-docdatabase',
+				caption: 'DocDatabase',
+				partial_name: 'test-docdatabase',
+				requires_login: false,
+				icon_class: 'glyphicon glyphicon-expand',
+				on_click: function(Item) {
+					Framework.LoadPartial(Item.partial_name);
 				}
 			})
 		);
@@ -95,7 +123,7 @@ AppClient.OnInitialize =
 //---------------------------------------------------------------------
 AppClient.OnLogin =
 	function OnLogin(Scope) {
-		alert('Welcome ' + Scope.Member.member_name + '!');
+		// alert('Welcome ' + Scope.Member.member_name + '!');
 		return;
 	};
 

@@ -37,8 +37,9 @@ function do_database_call(Socket, DatabaseType, Request, callback) {
 //------------------------------------------
 function get_database(Socket, DatabaseType) {
 	return {
-		SubmitQuery: function(Operation, Query, Update, callback) {
+		SubmitQuery: function(Collection, Operation, Query, Update, callback) {
 			do_database_call(Socket, DatabaseType, {
+					collection: Collection,
 					operation: Operation,
 					query: Query,
 					update: Update
@@ -46,8 +47,9 @@ function get_database(Socket, DatabaseType) {
 				callback);
 			return;
 		},
-		Count: function(Query, Options, callback) {
+		Count: function(Collection, Query, Options, callback) {
 			do_database_call(Socket, DatabaseType, {
+					collection: Collection,
 					operation: 'Count',
 					query: Query,
 					options: Options
@@ -55,16 +57,18 @@ function get_database(Socket, DatabaseType) {
 				callback);
 			return;
 		},
-		Find: function(Query, callback) {
+		Find: function(Collection, Query, callback) {
 			do_database_call(Socket, DatabaseType, {
+					collection: Collection,
 					operation: 'Find',
 					query: Query
 				},
 				callback);
 			return;
 		},
-		FindAndModify: function(Query, Sort, Update, Options, callback) {
+		FindAndModify: function(Collection, Query, Sort, Update, Options, callback) {
 			do_database_call(Socket, DatabaseType, {
+					collection: Collection,
 					operation: 'FindAndModify',
 					query: Query,
 					sort: Sort,
@@ -74,16 +78,18 @@ function get_database(Socket, DatabaseType) {
 				callback);
 			return;
 		},
-		FindOne: function(Query, callback) {
+		FindOne: function(Collection, Query, callback) {
 			do_database_call(Socket, DatabaseType, {
+					collection: Collection,
 					operation: 'FindOne',
 					query: Query
 				},
 				callback);
 			return;
 		},
-		Insert: function(Query, Options, callback) {
+		Insert: function(Collection, Query, Options, callback) {
 			do_database_call(Socket, DatabaseType, {
+					collection: Collection,
 					operation: 'Insert',
 					query: Query,
 					options: Options
@@ -91,8 +97,9 @@ function get_database(Socket, DatabaseType) {
 				callback);
 			return;
 		},
-		Remove: function(Query, Options, callback) {
+		Remove: function(Collection, Query, Options, callback) {
 			do_database_call(Socket, DatabaseType, {
+					collection: Collection,
 					operation: 'Remove',
 					query: Query,
 					options: Options
@@ -100,16 +107,18 @@ function get_database(Socket, DatabaseType) {
 				callback);
 			return;
 		},
-		RemoveAll: function(Options, callback) {
+		RemoveAll: function(Collection, Options, callback) {
 			do_database_call(Socket, DatabaseType, {
+					collection: Collection,
 					operation: 'RemoveAll',
 					options: Options
 				},
 				callback);
 			return;
 		},
-		Save: function(Query, Options, callback) {
+		Save: function(Collection, Query, Options, callback) {
 			do_database_call(Socket, DatabaseType, {
+					collection: Collection,
 					operation: 'Save',
 					query: Query,
 					options: Options
@@ -117,8 +126,9 @@ function get_database(Socket, DatabaseType) {
 				callback);
 			return;
 		},
-		Update: function(Query, Update, Options, callback) {
+		Update: function(Collection, Query, Update, Options, callback) {
 			do_database_call(Socket, DatabaseType, {
+					collection: Collection,
 					operation: 'Update',
 					query: Query,
 					update: Update,

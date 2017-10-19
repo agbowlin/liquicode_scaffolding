@@ -87,3 +87,27 @@ i.glyphicon {
 	margin-left: 2px;
 	margin-right: 2px;
 }
+
+
+/*
+---------------------------------------------------
+    SIDEBAR STYLES
+-----------------------------------------------------
+*/
+
+#sidebar {}
+
+#sidebar .sidebar-header {}
+
+#sidebar .sidebar-item {
+	border: 2px solid transparent;
+}
+
+#sidebar .sidebar-item a:hover {
+	border: 2px solid;
+}
+
+#sidebar .sidebar-item.active>a,
+a[aria-expanded="true"] {}
+
+
