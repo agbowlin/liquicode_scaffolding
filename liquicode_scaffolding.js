@@ -211,6 +211,8 @@ copy_file(npm_path.join(sourcepath, 'server/Logger.js'), npm_path.join(targetpat
 copy_file(npm_path.join(sourcepath, 'server/Membership.js'), npm_path.join(targetpath, 'server/Membership.js'), true);
 copy_file(npm_path.join(sourcepath, 'server/MembershipSocketIO.js'), npm_path.join(targetpath, 'server/MembershipSocketIO.js'), true);
 copy_file(npm_path.join(sourcepath, 'server/DocDatabase.js'), npm_path.join(targetpath, 'server/DocDatabase.js'), true);
+copy_file(npm_path.join(sourcepath, 'server/DocDatabaseEngine-MongoDB.js'), npm_path.join(targetpath, 'server/DocDatabaseEngine-MongoDB.js'), true);
+copy_file(npm_path.join(sourcepath, 'server/DocDatabaseEngine-NeDB.js'), npm_path.join(targetpath, 'server/DocDatabaseEngine-NeDB.js'), true);
 
 // Files we only install, not update
 copy_file(npm_path.join(sourcepath, 'server/README.md'), npm_path.join(targetpath, 'server/README.md'), app_options.install);
