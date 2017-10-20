@@ -262,6 +262,7 @@ var Logger = function(Group, LogDevice, LogLevels)
 
 
 	//=====================================================================
+	// Some sugar for declarative functions.
 	Logger.LogTrace =
 		function LogTrace(Message, ExtraData)
 		{
@@ -294,6 +295,50 @@ var Logger = function(Group, LogDevice, LogLevels)
 		};
 	Logger.LogFatal =
 		function LogError(Message, ExtraData)
+		{
+			Logger.LogMessage(Message, 'FATAL', ExtraData);
+		};
+
+
+	//=====================================================================
+	// More sugar for common logger interoperability (e.g. MongoDB.logger)
+	Logger.trace =
+		function trace(Message, ExtraData)
+		{
+			Logger.LogMessage(Message, 'TRACE', ExtraData);
+		};
+	Logger.debug =
+		function debug(Message, ExtraData)
+		{
+			Logger.LogMessage(Message, 'DEBUG', ExtraData);
+		};
+	Logger.info =
+		function info(Message, ExtraData)
+		{
+			Logger.LogMessage(Message, 'INFO', ExtraData);
+		};
+	Logger.log =
+		function log(Message, ExtraData)
+		{
+			Logger.LogMessage(Message, 'INFO', ExtraData);
+		};
+	Logger.warn =
+		function warn(Message, ExtraData)
+		{
+			Logger.LogMessage(Message, 'WARN', ExtraData);
+		};
+	Logger.warning =
+		function warning(Message, ExtraData)
+		{
+			Logger.LogMessage(Message, 'WARN', ExtraData);
+		};
+	Logger.error =
+		function error(Message, ExtraData)
+		{
+			Logger.LogMessage(Message, 'ERROR', ExtraData);
+		};
+	Logger.fatal =
+		function fatal(Message, ExtraData)
 		{
 			Logger.LogMessage(Message, 'FATAL', ExtraData);
 		};

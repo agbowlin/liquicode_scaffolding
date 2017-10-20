@@ -235,6 +235,7 @@ copy_file(npm_path.join(sourcepath, 'client/MembershipClient.js'), npm_path.join
 copy_file(npm_path.join(sourcepath, 'client/DocDatabaseClient.js'), npm_path.join(targetpath, 'client/DocDatabaseClient.js'), true);
 
 // Files we only install, not update
+copy_file(npm_path.join(sourcepath, 'client/README.md'), npm_path.join(targetpath, 'client/README.md'), app_options.install);
 copy_file(npm_path.join(sourcepath, 'client/bower.json'), npm_path.join(targetpath, 'client/bower.json'), app_options.install);
 copy_file(npm_path.join(sourcepath, 'client/package.json'), npm_path.join(targetpath, 'client/package.json'), app_options.install);
 
