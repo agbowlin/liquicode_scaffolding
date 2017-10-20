@@ -187,6 +187,7 @@ TheApplication.controller(
 																		$scope.log('Removed ' + Response.results + ' documents.');
 																		$scope.log_object(Response.results);
 
+																		$scope.log('==========================================');
 																		$scope.log('Testing completed.');
 
 																		return;
@@ -222,7 +223,7 @@ TheApplication.controller(
 				var database = Promise.promisifyAll($scope.SharedDocDatabase);
 
 				$scope.log('==========================================');
-				$scope.log('Inserting 3 documents ...');
+				$scope.log('Inserting ' + test_data.length + ' documents ...');
 				database.InsertAsync('test', test_data, NoOptions)
 					.then(function(Response) {
 						$scope.log('Inserted ' + Response.results.length + ' documents.');
@@ -253,14 +254,14 @@ TheApplication.controller(
 						return database.FindOneAsync('test', { age: { $gte: 25 } }, NoProjection);
 					})
 					.then(function(Response) {
-						$scope.log('Found 1 document.');
+						$scope.log('Found one document.');
 						$scope.log_object(Response.results);
 						$scope.log('==========================================');
 						$scope.log('Updating documents (age >= 20) set (age = 25) ...');
 						return database.UpdateAsync('test', { age: { $gte: 20 } }, { $set: { age: 25 } }, { multi: true, upsert: false });
 					})
 					.then(function(Response) {
-						$scope.log('Updated ' + Response.results.length + ' documents.');
+						$scope.log('Updated ' + Response.results.nModified + ' documents.');
 						$scope.log_object(Response.results);
 						$scope.log('==========================================');
 						$scope.log('Finding documents (age >= 25) ...');
@@ -274,14 +275,21 @@ TheApplication.controller(
 						return database.RemoveAsync('test', { age: { $gte: 25 } }, NoOptions);
 					})
 					.then(function(Response) {
-						$scope.log('Removed ' + Response.results + ' documents.');
+						$scope.log('Removed ' + Response.results.n + ' documents.');
 						$scope.log_object(Response.results);
 						$scope.log('==========================================');
 						$scope.log('Removing all documents ...');
 						return database.RemoveAllAsync('test', NoOptions);
 					})
 					.then(function(Response) {
-						$scope.log('Removed ' + Response.results + ' documents.');
+						$scope.log('Removed ' + Response.results.n + ' documents.');
+						$scope.log_object(Response.results);
+						$scope.log('==========================================');
+						$scope.log('Counting all documents ...');
+						return database.CountAsync('test', NoQuery);
+					})
+					.then(function(Response) {
+						$scope.log('Counted ' + Response.results + ' documents.');
 						$scope.log_object(Response.results);
 					})
 					.catch(function(Err) {
@@ -289,6 +297,7 @@ TheApplication.controller(
 						$scope.log_object(Err);
 					})
 					.finally(function() {
+						$scope.log('==========================================');
 						$scope.log('Testing completed.');
 					});
 				return;

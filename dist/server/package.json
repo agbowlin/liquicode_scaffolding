@@ -9,6 +9,7 @@
         "sanitize-filename": "",
         "fs-extra": "",
         "klaw-sync": "",
+        "mongodb": "",
         "nedb": ""
     },
     "devDependencies": {}

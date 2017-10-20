@@ -3,8 +3,6 @@
 /*
 	server.js
 
-	A simple example of how to use the liquicode_membership module.
-	
 	Run with: nodejs server.js {port}
 */
 //=====================================================================
@@ -105,7 +103,7 @@ Services.Membership.RootFolder = npm_path.resolve(__dirname, Services.ServerConf
 //=====================================================================
 
 Services.DocDatabase = require('./DocDatabase.js')(Services);
-
+Services.DocDatabase.OnInitialize();
 
 //=====================================================================
 //=====================================================================
