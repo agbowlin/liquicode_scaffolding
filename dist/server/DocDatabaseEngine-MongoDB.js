@@ -80,8 +80,8 @@ DocDatabaseEngine.Query =
 				database.collection(CollectionName,
 					function(err, collection) {
 						if (err) {
-							database.close();
 							callback(err, null);
+							database.close();
 							return;
 						}
 
@@ -94,8 +94,15 @@ DocDatabaseEngine.Query =
 							collection.count(
 								Request.query,
 								function(err, response) {
-									database.close();
-									callback(err, response);
+									if (err) {
+										database.close();
+										callback(err, null);
+									}
+									else {
+										callback(null, response);
+										database.close();
+									}
+									return;
 								});
 						}
 
@@ -108,13 +115,15 @@ DocDatabaseEngine.Query =
 									if (err) {
 										database.close();
 										callback(err, null);
-										return;
 									}
-									response.toArray(
-										function(err, response) {
-											database.close();
-											callback(err, response);
-										});
+									else {
+										response.toArray(
+											function(err, response) {
+												callback(err, response);
+												database.close();
+											});
+									}
+									return;
 								});
 						}
 
@@ -124,8 +133,15 @@ DocDatabaseEngine.Query =
 								Request.query,
 								Request.projection,
 								function(err, response) {
-									database.close();
-									callback(err, response);
+									if (err) {
+										database.close();
+										callback(err, null);
+									}
+									else {
+										callback(null, response);
+										database.close();
+									}
+									return;
 								});
 						}
 
@@ -134,8 +150,15 @@ DocDatabaseEngine.Query =
 							collection.insert(
 								Request.query,
 								function(err, response) {
-									database.close();
-									callback(err, response);
+									if (err) {
+										database.close();
+										callback(err, null);
+									}
+									else {
+										callback(null, response);
+										database.close();
+									}
+									return;
 								});
 						}
 
@@ -153,8 +176,15 @@ DocDatabaseEngine.Query =
 							collection.remove(
 								Request.query, { multi: true },
 								function(err, response) {
-									database.close();
-									callback(err, response.result);
+									if (err) {
+										database.close();
+										callback(err, null);
+									}
+									else {
+										callback(null, response.result);
+										database.close();
+									}
+									return;
 								});
 						}
 
@@ -162,8 +192,15 @@ DocDatabaseEngine.Query =
 						else if (operation_name == 'removeall') {
 							collection.remove({}, { multi: true },
 								function(err, response) {
-									database.close();
-									callback(err, response.result);
+									if (err) {
+										database.close();
+										callback(err, null);
+									}
+									else {
+										callback(null, response.result);
+										database.close();
+									}
+									return;
 								});
 						}
 
@@ -174,8 +211,15 @@ DocDatabaseEngine.Query =
 								Request.update,
 								Request.options,
 								function(err, response) {
-									database.close();
-									callback(err, response.result);
+									if (err) {
+										database.close();
+										callback(err, null);
+									}
+									else {
+										callback(null, response.result);
+										database.close();
+									}
+									return;
 								});
 						}
 

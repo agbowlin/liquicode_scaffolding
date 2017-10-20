@@ -36,6 +36,8 @@ Document Database (NoSql)
 	- `Collection`: The name of the collection to use.
 	- `Query`: The query defining which documents to find.
 		Pass an empty `{}` object to find all documents in the collection.
+	- `Projection`: The document fields to be returned.
+		Pass an empty `{}` object to return all fields of a document.
 	- `callback`: A function taking the prarameters `( err, response )`
 		to be called when the database operation has completed.
 
