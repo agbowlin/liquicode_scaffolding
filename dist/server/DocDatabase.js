@@ -189,57 +189,66 @@ DocDatabase.OnConnection =
 						var operation_name = Request.operation.toLowerCase();
 
 						if (operation_name == 'count') {
-							collection.count(Request.query,
-								function(err, response) {
-									if (err) {
-										report_error(err, Request.operation, EventName, Request.control.transaction_id);
+							try {
+								collection.count(Request.query,
+									function(err, response) {
+										if (err) { throw err; }
+										Socket.emit(EventName + '.' + Request.control.transaction_id, null, {
+											control: Request.control,
+											operation: Request.operation,
+											query: Request.query,
+											options: Request.options,
+											results: response
+										});
 										return;
-									}
-									Socket.emit(EventName + '.' + Request.control.transaction_id, null, {
-										control: Request.control,
-										operation: Request.operation,
-										query: Request.query,
-										options: Request.options,
-										results: response
 									});
-									return;
-								});
+							}
+							catch (err) {
+								report_error(err, Request.operation, EventName, Request.control.transaction_id);
+								return;
+							}
 						}
 
 						else if (operation_name == 'find') {
-							collection.find(Request.query, Request.projection,
-								function(err, documents) {
-									if (err) {
-										report_error(err, Request.operation, EventName, Request.control.transaction_id);
+							try {
+								collection.find(Request.query, Request.projection,
+									function(err, documents) {
+										if (err) { throw err; }
+										Socket.emit(EventName + '.' + Request.control.transaction_id, null, {
+											control: Request.control,
+											operation: Request.operation,
+											query: Request.query,
+											projection: Request.projection,
+											results: documents
+										});
 										return;
-									}
-									Socket.emit(EventName + '.' + Request.control.transaction_id, null, {
-										control: Request.control,
-										operation: Request.operation,
-										query: Request.query,
-										projection: Request.projection,
-										results: documents
 									});
-									return;
-								});
+							}
+							catch (err) {
+								report_error(err, Request.operation, EventName, Request.control.transaction_id);
+								return;
+							}
 						}
 
 						else if (operation_name == 'findone') {
-							collection.findOne(Request.query, Request.projection,
-								function(err, results) {
-									if (err) {
-										report_error(err, Request.operation, EventName, Request.control.transaction_id);
+							try {
+								collection.findOne(Request.query, Request.projection,
+									function(err, results) {
+										if (err) { throw err; }
+										Socket.emit(EventName + '.' + Request.control.transaction_id, null, {
+											control: Request.control,
+											operation: Request.operation,
+											query: Request.query,
+											projection: Request.projection,
+											results: results
+										});
 										return;
-									}
-									Socket.emit(EventName + '.' + Request.control.transaction_id, null, {
-										control: Request.control,
-										operation: Request.operation,
-										query: Request.query,
-										projection: Request.projection,
-										results: results
 									});
-									return;
-								});
+							}
+							catch (err) {
+								report_error(err, Request.operation, EventName, Request.control.transaction_id);
+								return;
+							}
 						}
 
 						else if (operation_name == 'findandmodify') {
@@ -273,101 +282,119 @@ DocDatabase.OnConnection =
 						}
 
 						else if (operation_name == 'insert') {
-							collection.insert(Request.query,
-								function(err, results) {
-									if (err) {
-										report_error(err, Request.operation, EventName, Request.control.transaction_id);
+							try {
+								collection.insert(Request.query,
+									function(err, results) {
+										if (err) { throw err; }
+										Socket.emit(EventName + '.' + Request.control.transaction_id, null, {
+											control: Request.control,
+											operation: Request.operation,
+											query: Request.query,
+											options: Request.options,
+											results: results
+										});
 										return;
-									}
-									Socket.emit(EventName + '.' + Request.control.transaction_id, null, {
-										control: Request.control,
-										operation: Request.operation,
-										query: Request.query,
-										options: Request.options,
-										results: results
 									});
-									return;
-								});
+							}
+							catch (err) {
+								report_error(err, Request.operation, EventName, Request.control.transaction_id);
+								return;
+							}
 						}
 
 						else if (operation_name == 'remove') {
-							if (!Request.query ||
-								((Object.keys(Request.query).length == 0) &&
-									(Request.query.constructor == Object)
-								)
-							) {
-								report_error('Using Remove with an empty query is forbidden. Use RemoveAll instead.', Request.operation, EventName, Request.control.transaction_id);
+							try {
+								if (!Request.query ||
+									((Object.keys(Request.query).length == 0) &&
+										(Request.query.constructor == Object)
+									)
+								) {
+									report_error('Using Remove with an empty query is forbidden. Use RemoveAll instead.', Request.operation, EventName, Request.control.transaction_id);
+									return;
+								}
+								collection.remove(Request.query, { multi: true },
+									function(err, results) {
+										if (err) { throw err; }
+										Socket.emit(EventName + '.' + Request.control.transaction_id, null, {
+											control: Request.control,
+											operation: Request.operation,
+											query: Request.query,
+											options: Request.options,
+											results: results
+										});
+										return;
+									});
+							}
+							catch (err) {
+								report_error(err, Request.operation, EventName, Request.control.transaction_id);
 								return;
 							}
-							collection.remove(Request.query, { multi: true },
-								function(err, results) {
-									if (err) {
-										report_error(err, Request.operation, EventName, Request.control.transaction_id);
-										return;
-									}
-									Socket.emit(EventName + '.' + Request.control.transaction_id, null, {
-										control: Request.control,
-										operation: Request.operation,
-										query: Request.query,
-										options: Request.options,
-										results: results
-									});
-									return;
-								});
 						}
 
 						else if (operation_name == 'removeall') {
-							collection.remove({}, { multi: true },
-								function(err, results) {
-									if (err) {
-										report_error(err, Request.operation, EventName, Request.control.transaction_id);
+							try {
+								collection.remove({}, { multi: true },
+									function(err, results) {
+										if (err) { throw err; }
+										Socket.emit(EventName + '.' + Request.control.transaction_id, null, {
+											control: Request.control,
+											operation: Request.operation,
+											options: Request.options,
+											results: results
+										});
 										return;
-									}
-									Socket.emit(EventName + '.' + Request.control.transaction_id, null, {
-										control: Request.control,
-										operation: Request.operation,
-										options: Request.options,
-										results: results
 									});
-									return;
-								});
+							}
+							catch (err) {
+								report_error(err, Request.operation, EventName, Request.control.transaction_id);
+								return;
+							}
 						}
 
 						else if (operation_name == 'save') {
-							collection.save(Request.query, Request.options,
-								function(err, results) {
-									if (err) {
-										report_error(err, Request.operation, EventName, Request.control.transaction_id);
+							try {
+								collection.save(Request.query, Request.options,
+									function(err, results) {
+										if (err) { throw err; }
+										Socket.emit(EventName + '.' + Request.control.transaction_id, null, {
+											control: Request.control,
+											operation: Request.operation,
+											query: Request.query,
+											options: Request.options,
+											results: results
+										});
 										return;
-									}
-									Socket.emit(EventName + '.' + Request.control.transaction_id, null, {
-										control: Request.control,
-										operation: Request.operation,
-										query: Request.query,
-										options: Request.options,
-										results: results
 									});
-									return;
-								});
+							}
+							catch (err) {
+								report_error(err, Request.operation, EventName, Request.control.transaction_id);
+								return;
+							}
 						}
 
 						else if (operation_name == 'update') {
-							collection.update(Request.query, Request.update, Request.options,
-								function(err, results) {
-									if (err) {
-										report_error(err, Request.operation, EventName, Request.control.transaction_id);
+							try {
+								collection.update(Request.query, Request.update, Request.options,
+									function(err, results) {
+										if (err) {
+											report_error(err, Request.operation, EventName, Request.control.transaction_id);
+											return;
+										}
+										Socket.emit(EventName + '.' + Request.control.transaction_id, null, {
+											control: Request.control,
+											operation: Request.operation,
+											query: Request.query,
+											update: Request.update,
+											options: Request.options,
+											results: results
+										});
 										return;
-									}
-									Socket.emit(EventName + '.' + Request.control.transaction_id, null, {
-										control: Request.control,
-										operation: Request.operation,
-										query: Request.query,
-										update: Request.update,
-										options: Request.options,
-										results: results
 									});
-									return;
-								});
+							}
+							catch (err) {
+								report_error(err, Request.operation, EventName, Request.control.transaction_id);
+								return;
+							}
 						}
 
 						else {
