@@ -37,31 +37,44 @@ function do_database_call(Socket, DatabaseType, Request, callback) {
 //------------------------------------------
 function get_database(Socket, DatabaseType) {
 	return {
-		SubmitQuery: function(Collection, Operation, Query, Update, callback) {
+		SubmitQuery: function(Collection, Operation, Query, Sort, Projection, Update, Options, callback) {
 			do_database_call(Socket, DatabaseType, {
 					collection: Collection,
 					operation: Operation,
 					query: Query,
-					update: Update
-				},
-				callback);
-			return;
-		},
-		Count: function(Collection, Query, Options, callback) {
-			do_database_call(Socket, DatabaseType, {
-					collection: Collection,
-					operation: 'Count',
-					query: Query,
+					sort: Sort,
+					projection: Projection,
+					update: Update,
 					options: Options
 				},
 				callback);
 			return;
 		},
-		Find: function(Collection, Query, callback) {
+		Count: function(Collection, Query, callback) {
+			do_database_call(Socket, DatabaseType, {
+					collection: Collection,
+					operation: 'Count',
+					query: Query
+				},
+				callback);
+			return;
+		},
+		Find: function(Collection, Query, Projection, callback) {
 			do_database_call(Socket, DatabaseType, {
 					collection: Collection,
 					operation: 'Find',
-					query: Query
+					query: Query,
+					projection: Projection
+				},
+				callback);
+			return;
+		},
+		FindOne: function(Collection, Query, Projection, callback) {
+			do_database_call(Socket, DatabaseType, {
+					collection: Collection,
+					operation: 'FindOne',
+					query: Query,
+					projection: Projection
 				},
 				callback);
 			return;
@@ -74,15 +87,6 @@ function get_database(Socket, DatabaseType) {
 					sort: Sort,
 					update: Update,
 					options: Options
-				},
-				callback);
-			return;
-		},
-		FindOne: function(Collection, Query, callback) {
-			do_database_call(Socket, DatabaseType, {
-					collection: Collection,
-					operation: 'FindOne',
-					query: Query
 				},
 				callback);
 			return;

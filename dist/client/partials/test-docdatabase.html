@@ -1,3 +1,4 @@
+<script src="https://cdn.jsdelivr.net/bluebird/latest/bluebird.min.js"></script>
 <div ng-controller="test-docdatabase">
 
 	<h3>
@@ -10,6 +11,10 @@
 
 	<button class="btn btn-primary" ng-click="RunTests()">
 		Run Tests
+	</button>
+
+	<button class="btn btn-primary" ng-click="RunTestsPromises()">
+		Run Tests with Promises
 	</button>
 
 	<ul id="log">

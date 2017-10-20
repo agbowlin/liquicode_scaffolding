@@ -9,7 +9,6 @@
         "sanitize-filename": "",
         "fs-extra": "",
         "klaw-sync": "",
-        "tingodb": "",
         "nedb": ""
     },
     "devDependencies": {}
