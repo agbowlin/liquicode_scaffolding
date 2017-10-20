@@ -217,6 +217,7 @@ copy_file(npm_path.join(sourcepath, 'server/DocDatabaseEngine-NeDB.js'), npm_pat
 // Files we only install, not update
 copy_file(npm_path.join(sourcepath, 'server/README.md'), npm_path.join(targetpath, 'server/README.md'), app_options.install);
 copy_file(npm_path.join(sourcepath, 'server/package.json'), npm_path.join(targetpath, 'server/package.json'), app_options.install);
+copy_file(npm_path.join(sourcepath, 'server/run-mongo.sh'), npm_path.join(targetpath, 'server/run-mongo.sh'), app_options.install);
 copy_file(npm_path.join(sourcepath, 'server/app-server.js'), npm_path.join(targetpath, 'server/app-server.js'), app_options.install);
 copy_file(npm_path.join(sourcepath, 'server/app-server.config'), npm_path.join(targetpath, 'server/app-server.config'), app_options.install);
 
