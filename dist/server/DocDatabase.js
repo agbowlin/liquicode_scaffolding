@@ -487,7 +487,7 @@ DocDatabase.OnConnection =
 				if (!Request.operation) { throw Error('Operation is missing.'); }
 				if (typeof Request.operation != 'string') { throw Error('Operation must be provided as a string.'); }
 				Request.query = Request.query || {};
-				Request.projection = Request.projection || null;
+				Request.projection = Request.projection || {};
 				Request.update = Request.update || null;
 				Request.options = Request.options || null;
 

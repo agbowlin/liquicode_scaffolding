@@ -37,7 +37,10 @@ function do_database_call(Socket, DatabaseType, Request, callback) {
 //------------------------------------------
 function get_database(Socket, DatabaseType) {
 	return {
+
+		//------------------------------------------
 		Count: function(Collection, Query, callback) {
+			if (typeof callback !== 'function') { throw Error('The callback function is a required parameter for Count.'); }
 			do_database_call(Socket, DatabaseType, {
 					collection: Collection,
 					operation: 'Count',
@@ -46,7 +49,10 @@ function get_database(Socket, DatabaseType) {
 				callback);
 			return;
 		},
+
+		//------------------------------------------
 		Find: function(Collection, Query, Projection, callback) {
+			if (typeof callback !== 'function') { throw Error('The callback function is a required parameter for Find.'); }
 			do_database_call(Socket, DatabaseType, {
 					collection: Collection,
 					operation: 'Find',
@@ -56,7 +62,10 @@ function get_database(Socket, DatabaseType) {
 				callback);
 			return;
 		},
+
+		//------------------------------------------
 		FindOne: function(Collection, Query, Projection, callback) {
+			if (typeof callback !== 'function') { throw Error('The callback function is a required parameter for FindOne.'); }
 			do_database_call(Socket, DatabaseType, {
 					collection: Collection,
 					operation: 'FindOne',
@@ -66,7 +75,10 @@ function get_database(Socket, DatabaseType) {
 				callback);
 			return;
 		},
+
+		//------------------------------------------
 		Insert: function(Collection, Query, Options, callback) {
+			if (typeof callback !== 'function') { throw Error('The callback function is a required parameter Insert.'); }
 			do_database_call(Socket, DatabaseType, {
 					collection: Collection,
 					operation: 'Insert',
@@ -76,7 +88,10 @@ function get_database(Socket, DatabaseType) {
 				callback);
 			return;
 		},
+
+		//------------------------------------------
 		Remove: function(Collection, Query, Options, callback) {
+			if (typeof callback !== 'function') { throw Error('The callback function is a required parameter Remove.'); }
 			do_database_call(Socket, DatabaseType, {
 					collection: Collection,
 					operation: 'Remove',
@@ -86,7 +101,10 @@ function get_database(Socket, DatabaseType) {
 				callback);
 			return;
 		},
+
+		//------------------------------------------
 		RemoveAll: function(Collection, Options, callback) {
+			if (typeof callback !== 'function') { throw Error('The callback function is a required parameter for RemoveAll.'); }
 			do_database_call(Socket, DatabaseType, {
 					collection: Collection,
 					operation: 'RemoveAll',
@@ -95,7 +113,10 @@ function get_database(Socket, DatabaseType) {
 				callback);
 			return;
 		},
+
+		//------------------------------------------
 		Update: function(Collection, Query, Update, Options, callback) {
+			if (typeof callback !== 'function') { throw Error('The callback function is a required parameter for Update.'); }
 			do_database_call(Socket, DatabaseType, {
 					collection: Collection,
 					operation: 'Update',
@@ -105,8 +126,7 @@ function get_database(Socket, DatabaseType) {
 				},
 				callback);
 			return;
-		},
-		_end_of_list_: true
+		}
 	};
 }
 
@@ -115,64 +135,14 @@ function get_database(Socket, DatabaseType) {
 DocDatabaseClient.GetSharedDatabase =
 	function GetSharedDatabase(Socket) {
 		return get_database(Socket, 'Shared');
-		// return {
-		// 	SubmitQuery: function SubmitQuery(Operation, Query, callback) {
-
-		// 		// Start a new transaction.
-		// 		var transaction_id = 'TX-' + unique_id();
-
-		// 		// Set up the response handler.
-		// 		Socket.once('DocDatabase.Shared.SubmitQuery.' + transaction_id,
-		// 			function(Err, Response) {
-		// 				if (callback) { callback(Err, Response); }
-		// 				return;
-		// 			});
-
-		// 		// Invoke the function.
-		// 		Socket.emit('DocDatabase.Shared.SubmitQuery', {
-		// 			control: {
-		// 				transaction_id: transaction_id,
-		// 			},
-		// 			operation: Operation,
-		// 			query: Query
-		// 		});
-
-		// 		return;
-		// 	}
-		// }
-	}
+	};
 
 
 //------------------------------------------
 DocDatabaseClient.GetMemberDatabase =
 	function GetMemberDatabase(Socket) {
 		return get_database(Socket, 'Member');
-		// return {
-		// 	SubmitQuery: function SubmitQuery(Operation, Query, callback) {
-
-		// 		// Start a new transaction.
-		// 		var transaction_id = 'TX-' + unique_id();
-
-		// 		// Set up the response handler.
-		// 		Socket.once('DocDatabase.Member.SubmitQuery.' + transaction_id,
-		// 			function(Err, Response) {
-		// 				if (callback) { callback(Err, Response); }
-		// 				return;
-		// 			});
-
-		// 		// Invoke the function.
-		// 		Socket.emit('DocDatabase.Member.SubmitQuery', {
-		// 			control: {
-		// 				transaction_id: transaction_id,
-		// 			},
-		// 			operation: Operation,
-		// 			query: Query
-		// 		});
-
-		// 		return;
-		// 	}
-		// }
-	}
+	};
 
 
 //=====================================================================
