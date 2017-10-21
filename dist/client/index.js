@@ -383,7 +383,7 @@ var TheController = TheApplication.controller('TheController',
 		window.document.title = Svcs.AppConfig.app_title;
 
 		// Get the user data if our login is cached.
-		if (Svcs.Member.member_logged_in) {
+		if (Svcs.Member.member_name && Svcs.Member.session_id && !Svcs.Member.member_logged_in) {
 			Svcs.Framework.DoMemberReconnect();
 		}
 

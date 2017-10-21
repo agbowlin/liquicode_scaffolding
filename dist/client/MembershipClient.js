@@ -16,14 +16,14 @@ MembershipClient.GetMember =
 		//	Initialize
 		//=====================================================================
 
-		Member.member_logged_in = '';
+		Member.member_logged_in = false;
 		Member.member_name = '';
 		Member.session_id = '';
 		Member.member_password = '';
 		Member.member_data = null;
 
 		if (Cookies) {
-			Member.member_logged_in = Cookies.get(ScopeName + '.member_logged_in') || false;
+			// Member.member_logged_in = Cookies.get(ScopeName + '.member_logged_in') || false;
 			Member.member_name = Cookies.get(ScopeName + '.member_name') || '';
 			Member.session_id = Cookies.get(ScopeName + '.session_id') || '';
 		}
@@ -69,7 +69,7 @@ MembershipClient.GetMember =
 						Member.member_data = Response.member_data;
 
 						if (Cookies) {
-							Cookies.put(ScopeName + '.member_logged_in', Member.member_logged_in);
+							// Cookies.put(ScopeName + '.member_logged_in', Member.member_logged_in);
 							Cookies.put(ScopeName + '.member_name', Member.member_name);
 							Cookies.put(ScopeName + '.session_id', Member.session_id);
 						}
@@ -127,7 +127,7 @@ MembershipClient.GetMember =
 						Member.member_data = Response.member_data;
 
 						if (Cookies) {
-							Cookies.put(ScopeName + '.member_logged_in', Member.member_logged_in);
+							// Cookies.put(ScopeName + '.member_logged_in', Member.member_logged_in);
 							Cookies.put(ScopeName + '.member_name', Member.member_name);
 							Cookies.put(ScopeName + '.session_id', Member.session_id);
 						}
@@ -184,7 +184,7 @@ MembershipClient.GetMember =
 						Member.member_data = Response.member_data;
 
 						if (Cookies) {
-							Cookies.put(ScopeName + '.member_logged_in', Member.member_logged_in);
+							// Cookies.put(ScopeName + '.member_logged_in', Member.member_logged_in);
 							Cookies.put(ScopeName + '.member_name', Member.member_name);
 							Cookies.put(ScopeName + '.session_id', Member.session_id);
 						}
@@ -230,7 +230,7 @@ MembershipClient.GetMember =
 						Member.member_data = null;
 
 						if (Cookies) {
-							Cookies.remove(ScopeName + '.member_logged_in');
+							// Cookies.remove(ScopeName + '.member_logged_in');
 							Cookies.remove(ScopeName + '.session_id');
 						}
 
