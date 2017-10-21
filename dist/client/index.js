@@ -16,31 +16,31 @@ var TheApplication = angular.module('TheApplication', ['ngCookies']);
 //=====================================================================
 // Define a directive to load and run javascript contained in partials.
 // FROM: https://gist.github.com/subudeepak/9617483#file-angular-loadscript-js
-(function(ng) {
-	var app = ng.module('ngLoadScript', []);
-	app.directive('script', function() {
-		return {
-			restrict: 'E',
-			scope: false,
-			link: function(scope, elem, attr) {
-				if (attr.type === 'text/javascript-lazy') {
-					var s = document.createElement("script");
-					s.type = "text/javascript";
-					var src = elem.attr('src');
-					if (src !== undefined) {
-						s.src = src;
-					}
-					else {
-						var code = elem.text();
-						s.text = code;
-					}
-					document.head.appendChild(s);
-					elem.remove();
-				}
-			}
-		};
-	});
-}(angular));
+// (function(ng) {
+// 	var app = ng.module('ngLoadScript', []);
+// 	app.directive('script', function() {
+// 		return {
+// 			restrict: 'E',
+// 			scope: false,
+// 			link: function(scope, elem, attr) {
+// 				if (attr.type === 'text/javascript-lazy') {
+// 					var s = document.createElement("script");
+// 					s.type = "text/javascript";
+// 					var src = elem.attr('src');
+// 					if (src !== undefined) {
+// 						s.src = src;
+// 					}
+// 					else {
+// 						var code = elem.text();
+// 						s.text = code;
+// 					}
+// 					document.head.appendChild(s);
+// 					elem.remove();
+// 				}
+// 			}
+// 		};
+// 	});
+// }(angular));
 
 
 //=====================================================================
@@ -57,160 +57,39 @@ var TheController = TheApplication.controller('TheController',
 		//=====================================================================
 		//=====================================================================
 
-		//==========================================
-		// Main scaffolding framework functionality.
-		// Rename to 'Framework'
-		var Framework = {};
-		$scope.Framework = Framework;
+		var Svcs = {};
+		// $scope.Services = Svcs;
+		$scope.Svcs = Svcs;
 
 		//==========================================
 		// Application configuration.
 		// Values to be set in app-client.js
-		var AppConfig = {
+		Svcs.AppConfig = {
 			app_title: 'Application',
 			content_selector: '#content',
 			initial_view: 'app-home',
 			partials_path: '/partials',
 			alert_on_server_error: false
 		};
-		$scope.AppConfig = AppConfig;
 
 		//==========================================
 		// Logging functions.
-		var Logger = {};
-		$scope.Logger = Logger;
+		Svcs.Logger = null;
 
 		//==========================================
 		// Connect to the server with SocketIO.
-		var Socket = io.connect();
-		$scope.Socket = Socket;
+		Svcs.Socket = io.connect();
 
 		//==========================================
 		// Membership functions.
-		var Member = MembershipClient.GetMember('work-time', Socket, $cookies);
-		$scope.Member = Member;
-		$rootScope.Member = Member; // Do we need this ???
+		Svcs.Member = MembershipClient.GetMember('work-time', Svcs.Socket, $cookies);
+		$scope.Member = Svcs.Member;
+		$rootScope.Member = Svcs.Member; // Do we need this ???
 
 		//==========================================
 		// Database functions.
-		var SharedDocDatabase = DocDatabaseClient.GetSharedDatabase(Socket);
-		$scope.SharedDocDatabase = SharedDocDatabase;
-		var MemberDocDatabase = DocDatabaseClient.GetMemberDatabase(Socket, Member);
-		$scope.MemberDocDatabase = MemberDocDatabase;
-
-		// // === BEGIN TEST ===
-		// {
-		// 	if (Member.member_name && Member.member_logged_in) {
-		// 		MemberDatabase.SubmitQuery(
-		// 			'insert', [{
-		// 					name: "Alice",
-		// 					age: 25,
-		// 					is_married: true,
-		// 					favorites: [
-		// 						"Apple Pie",
-		// 						"Hairless Cats",
-		// 						"Spy Novels"
-		// 					]
-		// 				},
-		// 				{
-		// 					name: "Bob",
-		// 					age: 28,
-		// 					is_married: false,
-		// 					favorites: [
-		// 						"Purple",
-		// 						"Apple Pie",
-		// 						"Action Movies"
-		// 					]
-		// 				},
-		// 				{
-		// 					name: "Eve",
-		// 					age: 23,
-		// 					is_married: false,
-		// 					favorites: [
-		// 						"Action Movies",
-		// 						"Pilates",
-		// 						"Painting"
-		// 					]
-		// 				}
-		// 			],
-		// 			function(Err, Response) {
-		// 				if (Err) { return; }
-
-		// 				console.log(Response);
-
-		// 				MemberDatabase.SubmitQuery(
-		// 					'Count', {},
-		// 					function(Err, Response) {
-		// 						if (Err) { return; }
-
-		// 						console.log(Response);
-
-		// 						return;
-		// 					});
-
-		// 				MemberDatabase.SubmitQuery(
-		// 					'Count', {
-		// 						age: { $gte: 25 }
-		// 					},
-		// 					function(Err, Response) {
-		// 						if (Err) { return; }
-
-		// 						console.log(Response);
-
-		// 						return;
-		// 					});
-
-		// 				MemberDatabase.SubmitQuery(
-		// 					'Find', {
-		// 						age: { $gte: 25 }
-		// 					},
-		// 					function(Err, Response) {
-		// 						if (Err) { return; }
-
-		// 						console.log(Response);
-
-		// 						return;
-		// 					});
-
-		// 				MemberDatabase.SubmitQuery(
-		// 					'FindOne', {
-		// 						age: { $gte: 25 }
-		// 					},
-		// 					function(Err, Response) {
-		// 						if (Err) { return; }
-
-		// 						console.log(Response);
-
-		// 						return;
-		// 					});
-
-		// 				MemberDatabase.SubmitQuery(
-		// 					'Remove', {
-		// 						age: { $gte: 25 }
-		// 					},
-		// 					function(Err, Response) {
-		// 						if (Err) { return; }
-
-		// 						console.log(Response);
-
-		// 						return;
-		// 					});
-
-		// 				MemberDatabase.SubmitQuery(
-		// 					'RemoveAll', {},
-		// 					function(Err, Response) {
-		// 						if (Err) { return; }
-
-		// 						console.log(Response);
-
-		// 						return;
-		// 					});
-
-		// 				return;
-		// 			});
-		// 	}
-		// }
-		// // === END TEST ===
+		Svcs.SharedDocDatabase = DocDatabaseClient.GetSharedDatabase(Svcs.Socket);
+		Svcs.MemberDocDatabase = DocDatabaseClient.GetMemberDatabase(Svcs.Socket, Svcs.Member);
 
 
 		//=====================================================================
@@ -221,12 +100,32 @@ var TheController = TheApplication.controller('TheController',
 		//=====================================================================
 		//=====================================================================
 
+		//==========================================
+		// Main scaffolding framework functionality.
+		Svcs.Framework = {};
+		var Framework = Svcs.Framework;
+
+
+		//=====================================================================
+		//		Error Handling
+		//=====================================================================
+
+		Svcs.Framework.ReportError =
+			function ReportError(err) {
+				console.log('Error: ' + err.message, err);
+				if (Svcs.AppConfig.alert_on_server_error) {
+					alert('Error: ' + err.message);
+				}
+				return;
+			}
+
+
 		//=====================================================================
 		//		Content Injection
 		//=====================================================================
 
 		//==========================================
-		Framework.InjectContent =
+		Svcs.Framework.InjectContent =
 			function(ContentSelector, ContentUrl) {
 				$http.get(ContentUrl)
 					.then(
@@ -239,38 +138,34 @@ var TheController = TheApplication.controller('TheController',
 
 
 		//==========================================
-		Framework.LoadContent =
+		Svcs.Framework.LoadContent =
 			function(ContentUrl) {
-				Framework.InjectContent('#content-partial-container', ContentUrl);
+				Svcs.Framework.InjectContent('#content-partial-container', ContentUrl);
 			};
 
 
 		//==========================================
-		Framework.LoadPartial =
+		Svcs.Framework.LoadPartial =
 			function(PartialName) {
-				var url = AppConfig.partials_path + '/' + PartialName + '.html';
-				Framework.InjectContent('#content-partial-container', url);
+				var url = Svcs.AppConfig.partials_path + '/' + PartialName + '.html';
+				Svcs.Framework.InjectContent('#content-partial-container', url);
 			};
 
 
 		//=====================================================================
-		//=====================================================================
-		//
-		//		Sidebar
-		//
-		//=====================================================================
+		//		Sidebar Functions
 		//=====================================================================
 
 		//==========================================
-		Framework.SidebarItems = [];
+		Svcs.Framework.SidebarItems = [];
 
 
 		//==========================================
-		Framework.IsSidebarCollapsed = false;
-		Framework.ToggleSidebarCollapsed =
+		Svcs.Framework.IsSidebarCollapsed = false;
+		Svcs.Framework.ToggleSidebarCollapsed =
 			function() {
-				Framework.IsSidebarCollapsed = !Framework.IsSidebarCollapsed;
-				if (Framework.IsSidebarCollapsed) {
+				Svcs.Framework.IsSidebarCollapsed = !Svcs.Framework.IsSidebarCollapsed;
+				if (Svcs.Framework.IsSidebarCollapsed) {
 					$('#sidebar').addClass('collapsed');
 				}
 				else {
@@ -280,9 +175,9 @@ var TheController = TheApplication.controller('TheController',
 
 
 		//==========================================
-		Framework.OnSidebarItemClick =
+		Svcs.Framework.OnSidebarItemClick =
 			function(ItemName) {
-				var item = Framework.SidebarItems[ItemName];
+				var item = Svcs.Framework.SidebarItems[ItemName];
 				if (item) {
 					if (item.on_click) {
 						item.on_click(item);
@@ -292,9 +187,9 @@ var TheController = TheApplication.controller('TheController',
 
 
 		//==========================================
-		Framework.NewSidebarItem =
+		Svcs.Framework.NewSidebarItem =
 			function(Item) {
-				Framework.SidebarItems[Item.item_name] = Item;
+				Svcs.Framework.SidebarItems[Item.item_name] = Item;
 
 				var html = '<li';
 				html += ' id="' + Item.item_name + '"';
@@ -311,10 +206,10 @@ var TheController = TheApplication.controller('TheController',
 					}
 				}
 				if (Item.requires_login) {
-					html += ' ng-show="Member.member_logged_in"';
+					html += ' ng-show="Svcs.Member.member_logged_in"';
 				}
 				if (Item.on_click) {
-					html += ' ng-click="Framework.OnSidebarItemClick(\'' + Item.item_name + '\')"';
+					html += ' ng-click="Svcs.Framework.OnSidebarItemClick(\'' + Item.item_name + '\')"';
 				}
 				html += '>';
 
@@ -344,10 +239,10 @@ var TheController = TheApplication.controller('TheController',
 
 
 		//==========================================
-		Framework.AddSidebarItem =
+		Svcs.Framework.AddSidebarItem =
 			function(Item) {
 				$('#app-sidebar-list').append(
-					Framework.NewSidebarItem(Item)
+					Svcs.Framework.NewSidebarItem(Item)
 				);
 			};
 
@@ -362,7 +257,7 @@ var TheController = TheApplication.controller('TheController',
 
 
 		//==========================================
-		Socket.on('connect', function() {
+		Svcs.Socket.on('connect', function() {
 			$scope.notice = "... connected";
 			$scope.$apply();
 		});
@@ -372,12 +267,12 @@ var TheController = TheApplication.controller('TheController',
 
 
 		//==========================================
-		Socket.on('server_error',
+		Svcs.Socket.on('server_error',
 			function(Err) {
 				console.log('> server_error', Err);
 				var message = 'Error in "' + Err.event + '": ' + Err.message;
 				$scope.errors.push(message);
-				if (AppConfig.alert_on_server_error) {
+				if (Svcs.AppConfig.alert_on_server_error) {
 					alert(message);
 				}
 				$scope.$apply();
@@ -395,19 +290,19 @@ var TheController = TheApplication.controller('TheController',
 
 
 		//==========================================
-		Framework.DoMemberSignup =
+		Svcs.Framework.DoMemberSignup =
 			function() {
-				Member.MemberSignup(
+				Svcs.Member.MemberSignup(
 					function(Err, Response) {
 						if (Err) {
 							alert('ERROR: ' + Err.message);
 							$scope.$apply();
 							return;
 						}
-						Member.member_data.signup_time = Date.now();
-						Member.PutMemberData();
+						Svcs.Member.member_data.signup_time = Date.now();
+						Svcs.Member.PutMemberData();
 						AppClient.OnLogin($scope);
-						Framework.LoadPartial(AppConfig.initial_view);
+						Svcs.Framework.LoadPartial(Svcs.AppConfig.initial_view);
 						$scope.$apply();
 						return;
 					});
@@ -415,19 +310,19 @@ var TheController = TheApplication.controller('TheController',
 
 
 		//==========================================
-		Framework.DoMemberLogin =
+		Svcs.Framework.DoMemberLogin =
 			function() {
-				Member.MemberLogin(
+				Svcs.Member.MemberLogin(
 					function(Err, Response) {
 						if (Err) {
 							alert('ERROR: ' + Err.message);
 							$scope.$apply();
 							return;
 						}
-						Member.member_data.login_time = Date.now();
-						Member.PutMemberData();
+						Svcs.Member.member_data.login_time = Date.now();
+						Svcs.Member.PutMemberData();
 						AppClient.OnLogin($scope);
-						Framework.LoadPartial(AppConfig.initial_view);
+						Svcs.Framework.LoadPartial(Svcs.AppConfig.initial_view);
 						$scope.$apply();
 						return;
 					});
@@ -435,9 +330,9 @@ var TheController = TheApplication.controller('TheController',
 
 
 		//==========================================
-		Framework.DoMemberReconnect =
+		Svcs.Framework.DoMemberReconnect =
 			function() {
-				Member.MemberReconnect(
+				Svcs.Member.MemberReconnect(
 					function(Err, Response) {
 						if (Err) {
 							alert('ERROR: ' + Err.message);
@@ -445,7 +340,7 @@ var TheController = TheApplication.controller('TheController',
 							return;
 						}
 						AppClient.OnLogin($scope);
-						Framework.LoadPartial(AppConfig.initial_view);
+						Svcs.Framework.LoadPartial(Svcs.AppConfig.initial_view);
 						$scope.$apply();
 						return;
 					});
@@ -453,9 +348,9 @@ var TheController = TheApplication.controller('TheController',
 
 
 		//==========================================
-		Framework.DoMemberLogout =
+		Svcs.Framework.DoMemberLogout =
 			function() {
-				Member.MemberLogout(
+				Svcs.Member.MemberLogout(
 					function(Err, Response) {
 						if (Err) {
 							alert('ERROR: ' + Err.message);
@@ -463,7 +358,7 @@ var TheController = TheApplication.controller('TheController',
 							return;
 						}
 						AppClient.OnLogout($scope);
-						Framework.LoadPartial(AppConfig.initial_view);
+						Svcs.Framework.LoadPartial(Svcs.AppConfig.initial_view);
 						$scope.$apply();
 						return;
 					});
@@ -483,16 +378,15 @@ var TheController = TheApplication.controller('TheController',
 		AppClient.OnInitialize($scope);
 
 		// Set the window title.
-		window.document.title = AppConfig.app_title;
+		window.document.title = Svcs.AppConfig.app_title;
 
 		// Get the user data if our login is cached.
-		if (Member.member_logged_in) {
-			Framework.DoMemberReconnect();
+		if (Svcs.Member.member_logged_in) {
+			Svcs.Framework.DoMemberReconnect();
 		}
 
 		// Display the initial view.
-		Framework.LoadPartial(AppConfig.initial_view);
-
+		Svcs.Framework.LoadPartial(Svcs.AppConfig.initial_view);
 
 		// Return
 		return;

@@ -1,5 +1,5 @@
 <!--Show when the user IS NOT logged in-->
-<div ng-hide="Member.member_logged_in" ng-cloak>
+<div ng-hide="Svcs.Member.member_logged_in" ng-cloak>
 	<p class="bg-danger">
 		You are currently logged out
 	</p>
@@ -7,30 +7,30 @@
 </div>
 
 <!--Show when the user IS logged in-->
-<div ng-hide="!Member.member_logged_in" ng-cloak>
+<div ng-hide="!Svcs.Member.member_logged_in" ng-cloak>
 
-	<p>Hello {{ Member.member_name }}</p>
+	<p>Hello {{ Svcs.Member.member_name }}</p>
 
 	<p class="bg-success">
-		You are currently logged in as [{{ Member.member_name }}]
+		You are currently logged in as [{{ Svcs.Member.member_name }}]
 	</p>
 
 	<table class="table">
 		<tr>
 			<th>Signup Time</th>
-			<td>{{ Member.member_data.signup_time | date : 'medium' }}</td>
+			<td>{{ Svcs.Member.member_data.signup_time | date : 'medium' }}</td>
 		</tr>
 		<tr>
 			<th>Login Time</th>
-			<td>{{ Member.member_data.login_time | date : 'medium' }}</td>
+			<td>{{ Svcs.Member.member_data.login_time | date : 'medium' }}</td>
 		</tr>
 		<tr>
 			<th>Member Name</th>
-			<td>{{ Member.member_name }}</td>
+			<td>{{ Svcs.Member.member_name }}</td>
 		</tr>
 		<tr>
 			<th>Email Address</th>
-			<td>{{ Member.member_email }}</td>
+			<td>{{ Svcs.Member.member_email }}</td>
 		</tr>
 		<tr>
 			<th>Your Files</th>
@@ -42,7 +42,7 @@
 		</tr>
 	</table>
 
-	<button class="btn btn-warning" type="button" ng-click="Framework.DoMemberLogout()">
+	<button class="btn btn-warning" type="button" ng-click="Svcs.Framework.DoMemberLogout()">
 			Logout
 			<i class="glyphicon glyphicon-log-out"></i>
 		</button>

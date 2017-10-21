@@ -33,21 +33,14 @@ AppClient.OnInitialize =
 		//=====================================================================
 		//=====================================================================
 
-
-		var Framework = Scope.Framework;
-		var AppConfig = Scope.AppConfig;
-		var Logger = Scope.Logger;
-		var Socket = Scope.Socket;
-		var Member = Scope.Member;
-		var SharedDocDatabase = Scope.SharedDocDatabase;
-		var MemberDocDatabase = Scope.MemberDocDatabase;
+		var Svcs = Scope.Svcs;
 
 
-		AppConfig.app_title = 'Scaffolding';
-		// AppConfig.content_selector = '#content';
-		// AppConfig.intiial_view = 'app-home';
-		// AppConfig.partials_path = '/partials';
-		AppConfig.alert_on_server_error = true;
+		Svcs.AppConfig.app_title = 'Scaffolding';
+		// Svcs.AppConfig.content_selector = '#content';
+		// Svcs.AppConfig.intiial_view = 'app-home';
+		// Svcs.AppConfig.partials_path = '/partials';
+		Svcs.AppConfig.alert_on_server_error = true;
 
 
 		//=====================================================================
@@ -69,14 +62,14 @@ AppClient.OnInitialize =
 		$('#app-sidebar-list').html('');
 
 		$('#app-sidebar-list').append(
-			Framework.NewSidebarItem({
+			Svcs.Framework.NewSidebarItem({
 				item_name: 'app-hello-item',
 				caption: 'Hello',
-				partial_name: 'site-home',
+				partial_name: 'app-home',
 				requires_login: false,
 				icon_class: 'glyphicon glyphicon-expand',
 				on_click: function(Item) {
-					Framework.LoadPartial(Item.partial_name);
+					Svcs.Framework.LoadPartial(Item.partial_name);
 					alert(MyData.sample_data);
 				}
 			})
@@ -84,7 +77,7 @@ AppClient.OnInitialize =
 
 		var testing_group_id = 'app-test-group';
 		$('#app-sidebar-list').append(
-			Framework.NewSidebarItem({
+			Svcs.Framework.NewSidebarItem({
 				item_name: testing_group_id,
 				caption: 'Tests',
 				is_group: true,
@@ -96,14 +89,14 @@ AppClient.OnInitialize =
 		);
 
 		$('#' + testing_group_id + '_items').append(
-			Framework.NewSidebarItem({
+			Svcs.Framework.NewSidebarItem({
 				item_name: 'app-test-docdatabase',
 				caption: 'DocDatabase',
 				partial_name: 'test-docdatabase',
 				requires_login: false,
 				icon_class: 'glyphicon glyphicon-expand',
 				on_click: function(Item) {
-					Framework.LoadPartial(Item.partial_name);
+					Svcs.Framework.LoadPartial(Item.partial_name);
 				}
 			})
 		);
@@ -139,7 +132,7 @@ AppClient.OnLogin =
 //---------------------------------------------------------------------
 AppClient.OnLogout =
 	function OnLogout(Scope) {
-		alert('Goodbye ' + Scope.Member.member_name + '!');
+		// alert('Goodbye ' + Scope.Member.member_name + '!');
 		return;
 	};
 

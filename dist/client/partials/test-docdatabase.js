@@ -102,7 +102,7 @@ TheApplication.controller(
 				$('#log').empty();
 				$scope.log('Starting tests ...');
 
-				var database = $scope.SharedDocDatabase;
+				var database = $scope.Svcs.SharedDocDatabase;
 
 				$scope.log('==========================================');
 				$scope.log('Inserting 3 documents ...');
@@ -220,7 +220,7 @@ TheApplication.controller(
 				$('#log').empty();
 				$scope.log('Starting tests ...');
 
-				var database = Promise.promisifyAll($scope.SharedDocDatabase);
+				var database = Promise.promisifyAll($scope.Svcs.SharedDocDatabase);
 
 				$scope.log('==========================================');
 				$scope.log('Inserting ' + test_data.length + ' documents ...');
