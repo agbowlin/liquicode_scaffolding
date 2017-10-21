@@ -1,9 +1,11 @@
 {
-	"name": "application-client",
-	"private": true,
-	"dependencies": {
-		"socket.io-client": ""
-	},
-	"devDependencies": {}
+    "name": "application-client",
+    "private": true,
+    "dependencies": {
+        "socket.io-client": "^2.0.3"
+    },
+    "devDependencies": {
 
+    },
+    "version": "0.0.1"
 }

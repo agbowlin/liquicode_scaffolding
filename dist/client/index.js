@@ -61,6 +61,8 @@ var TheController = TheApplication.controller('TheController',
 		// $scope.Services = Svcs;
 		$scope.Svcs = Svcs;
 
+		Svcs.AppClient = AppClient;
+
 		//==========================================
 		// Application configuration.
 		// Values to be set in app-client.js
@@ -301,7 +303,7 @@ var TheController = TheApplication.controller('TheController',
 						}
 						Svcs.Member.member_data.signup_time = Date.now();
 						Svcs.Member.PutMemberData();
-						AppClient.OnLogin($scope);
+						Svcs.AppClient.OnLogin($scope);
 						Svcs.Framework.LoadPartial(Svcs.AppConfig.initial_view);
 						$scope.$apply();
 						return;
@@ -321,7 +323,7 @@ var TheController = TheApplication.controller('TheController',
 						}
 						Svcs.Member.member_data.login_time = Date.now();
 						Svcs.Member.PutMemberData();
-						AppClient.OnLogin($scope);
+						Svcs.AppClient.OnLogin($scope);
 						Svcs.Framework.LoadPartial(Svcs.AppConfig.initial_view);
 						$scope.$apply();
 						return;
@@ -339,7 +341,7 @@ var TheController = TheApplication.controller('TheController',
 							$scope.$apply();
 							return;
 						}
-						AppClient.OnLogin($scope);
+						Svcs.AppClient.OnLogin($scope);
 						Svcs.Framework.LoadPartial(Svcs.AppConfig.initial_view);
 						$scope.$apply();
 						return;
@@ -357,7 +359,7 @@ var TheController = TheApplication.controller('TheController',
 							$scope.$apply();
 							return;
 						}
-						AppClient.OnLogout($scope);
+						Svcs.AppClient.OnLogout($scope);
 						Svcs.Framework.LoadPartial(Svcs.AppConfig.initial_view);
 						$scope.$apply();
 						return;
@@ -375,7 +377,7 @@ var TheController = TheApplication.controller('TheController',
 
 
 		// Initialize the application.
-		AppClient.OnInitialize($scope);
+		Svcs.AppClient.OnInitialize($scope);
 
 		// Set the window title.
 		window.document.title = Svcs.AppConfig.app_title;

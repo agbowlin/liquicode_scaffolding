@@ -1,16 +1,15 @@
 {
-    "name": "application-server",
-    "private": true,
-    "dependencies":
-    {
-        "express": "",
-        "socket.io": "",
-        "string": "",
-        "sanitize-filename": "",
-        "fs-extra": "",
-        "klaw-sync": "",
-        "mongodb": "",
-        "nedb": ""
-    },
-    "devDependencies": {}
-    }
+	"name": "application-server",
+	"private": true,
+	"dependencies": {
+		"socket.io": "^2.0.3",
+		"express": "^4.16.2",
+		"sanitize-filename": "^1.6.1",
+		"string": "^3.3.3",
+		"fs-extra": "^4.0.2",
+		"klaw-sync": "^3.0.0",
+		"mongodb": "^2.2.33",
+		"nedb": "^1.8.0"
+	},
+	"devDependencies": {}
+}
