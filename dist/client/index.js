@@ -165,15 +165,15 @@ var TheController = TheApplication.controller('TheController',
 		];
 
 
-		Svcs.Framework.UserThemeUrl = $cookies.get('Framework.UserThemeUrl') || '';
-
+		Svcs.Framework.UserThemeUrl = '';
 
 		Svcs.Framework.ApplyUserTheme =
 			function ApplyUserTheme() {
+				if (Svcs.Framework.UserThemeUrl == null) { return; }
 				if ($('#user-theme').length) {
 					$('#user-theme').remove();
 				}
-				if (Svcs.Framework.UserThemeUrl) {
+				if (Svcs.Framework.UserThemeUrl != '') {
 					var elem = document.createElement("link");
 					elem.id = 'user-theme';
 					elem.rel = "stylesheet";
@@ -455,6 +455,7 @@ var TheController = TheApplication.controller('TheController',
 
 
 		// Apply the user theme.
+		Svcs.Framework.UserThemeUrl = $cookies.get('Framework.UserThemeUrl') || '';
 		Svcs.Framework.ApplyUserTheme();
 
 		// Initialize the application.
