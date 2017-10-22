@@ -32,127 +32,119 @@
 
 <body ng-app="TheApplication" ng-controller="TheController">
 
-	<!--<div ng-controller="TheController">-->
+	<div class="wrapper">
 
-		<div class="wrapper">
+		<!--
+		==========================================
+		==========================================
 
-			<!--
-			==========================================
-			==========================================
-	
-				Sidebar
-	
-			==========================================
-			==========================================
-			-->
+			Sidebar
 
-			<nav id="sidebar" class="navbar navbar-default" ng-cloak>
+		==========================================
+		==========================================
+		-->
 
-				<!-- Sidebar Header -->
-				<ul class="nav navbar-header sidebar-header">
+		<nav id="sidebar" class="navbar navbar-default" ng-cloak>
 
-					<li class="nav navbar-nav navbar-right">
-						<a href="#" id="collapser-button" class="btn btn-default" ng-click="Svcs.Framework.ToggleSidebarCollapsed()">
+			<!-- Sidebar Header -->
+			<ul class="nav navbar-header sidebar-header">
+
+				<li class="nav navbar-nav navbar-right">
+					<a id="collapser-button" class="btn btn-default" ng-click="Svcs.Framework.ToggleSidebarCollapsed()">
 						<!--<a href="#" id="collapser-button" class="btn btn-default" data-toggle="collapse" data-target="#sidebar">-->
-							<i class="glyphicon glyphicon-menu-hamburger"></i>
-						</a>
-					</li>
+						<i class="glyphicon glyphicon-menu-hamburger"></i>
+					</a>
+				</li>
 
-					<li class="navbar-brand" ng-show="!Svcs.Framework.IsSidebarCollapsed" ng-cloak>
-						{{ Svcs.AppConfig.app_title }}
-						<i class="glyphicon glyphicon-send"></i>
-					</li>
-					
-				</ul>
+				<li class="navbar-brand" ng-show="!Svcs.Framework.IsSidebarCollapsed" ng-cloak>
+					{{ Svcs.AppConfig.app_title }}
+					<i class="glyphicon glyphicon-send"></i>
+				</li>
 
-				<!-- Sidebar links, user is NOT logged in. -->
+			</ul>
 
-				<ul class="nav navbar-nav sidebar-item-list" ng-show="!Svcs.Framework.IsSidebarCollapsed">
+			<!-- Sidebar links, user is NOT logged in. -->
 
-					<!-- Login link, user is NOT logged in. -->
-					<li class="sidebar-item" ng-hide="Svcs.Member.member_logged_in" ng-cloak>
-						<a href="#" ng-click="Svcs.Framework.LoadPartial('member-login')">
-							<i class="glyphicon glyphicon-log-in"></i>
-							Login
-						</a>
-					</li>
+			<ul class="nav navbar-nav sidebar-item-list" ng-show="!Svcs.Framework.IsSidebarCollapsed">
 
-					<!-- Signup link, user is NOT logged in. -->
-					<li class="sidebar-item" ng-hide="Svcs.Member.member_logged_in" ng-cloak>
-						<a href="#" ng-click="Svcs.Framework.LoadPartial('member-signup')">
-							<i class="glyphicon glyphicon-user"></i>
-							Signup
-						</a>
-					</li>
+				<!-- Login link, user is NOT logged in. -->
+				<li class="sidebar-item" ng-hide="Svcs.Member.member_logged_in" ng-cloak>
+					<a class="sidebar-item" ng-click="Svcs.Framework.LoadPartial('member-login')">
+						<i class="glyphicon glyphicon-log-in"></i>
+						Login
+					</a>
+				</li>
 
-					<!-- Profile link, user IS logged in. -->
-					<li class="sidebar-item" ng-hide="!Svcs.Member.member_logged_in" ng-cloak>
-						<a href="#" ng-click="Svcs.Framework.LoadPartial('member-profile')">
-							<i class="glyphicon glyphicon-user"></i>
-							Profile: {{ Svcs.Member.member_name }}
-						</a>
-					</li>
+				<!-- Signup link, user is NOT logged in. -->
+				<li class="sidebar-item" ng-hide="Svcs.Member.member_logged_in" ng-cloak>
+					<a class="sidebar-item" ng-click="Svcs.Framework.LoadPartial('member-signup')">
+						<i class="glyphicon glyphicon-user"></i>
+						Signup
+					</a>
+				</li>
 
-					<!-- Home link, Always shown. -->
-					<li class="sidebar-item">
-						<a href="#" class="sidebar-item" ng-click="Svcs.Framework.LoadPartial('app-home')">
-							<i class="glyphicon glyphicon-home"></i>
-							Home
-						</a>
-					</li>
+				<!-- Profile link, user IS logged in. -->
+				<li class="sidebar-item" ng-hide="!Svcs.Member.member_logged_in" ng-cloak>
+					<a class="sidebar-item" ng-click="Svcs.Framework.LoadPartial('member-profile')">
+						<i class="glyphicon glyphicon-user"></i>
+						Profile: {{ Svcs.Member.member_name }}
+					</a>
+				</li>
 
-				</ul>
+				<!-- Home link, Always shown. -->
+				<li class="sidebar-item">
+					<a class="sidebar-item" ng-click="Svcs.Framework.LoadPartial('app-home')">
+						<i class="glyphicon glyphicon-home"></i>
+						Home
+					</a>
+				</li>
 
-				<ul id="app-sidebar-list" class="nav navbar-nav sidebar-item-list" ng-show="!Svcs.Framework.IsSidebarCollapsed">
-					<!-- App Content -->
-				</ul>
+			</ul>
 
-			</nav>
+			<ul id="app-sidebar-list" class="nav navbar-nav sidebar-item-list" ng-show="!Svcs.Framework.IsSidebarCollapsed">
+				<!-- App Content -->
+			</ul>
 
-
-			<!--
-			==========================================
-			==========================================
-	
-				Page Errors
-	
-			==========================================
-			==========================================
-			-->
-
-			<!--<hr ng-cloak>-->
-			<!--<h5 ng-cloak>{{ Member.status_message }}</h5>-->
-			<!--<ul ng-cloak>-->
-			<!--	<li ng-repeat="error in errors" ng-bind="error">-->
-			<!--	</li>-->
-			<!--</ul>-->
-			<!--<hr ng-cloak>-->
+		</nav>
 
 
-			<!--
-			==========================================
-			==========================================
-	
-				Page Content
-	
-			==========================================
-			==========================================
-			-->
+		<!--
+		==========================================
+		==========================================
 
-			<div id="content">
-				<div id="content-partial-container">
-				</div>
+			Page Errors
+
+		==========================================
+		==========================================
+		-->
+
+		<!--<hr ng-cloak>-->
+		<!--<h5 ng-cloak>{{ Member.status_message }}</h5>-->
+		<!--<ul ng-cloak>-->
+		<!--	<li ng-repeat="error in errors" ng-bind="error">-->
+		<!--	</li>-->
+		<!--</ul>-->
+		<!--<hr ng-cloak>-->
+
+
+		<!--
+		==========================================
+		==========================================
+
+			Page Content
+
+		==========================================
+		==========================================
+		-->
+
+		<div id="content">
+			<div id="content-partial-container">
 			</div>
+		</div>
 
-
-		<!--</div>-->
-		<!--container-->
 
 	</div>
 	<!--wrapper-->
-
-	<!--</div>-->
-	<!--TheController-->
 
 </body>
 

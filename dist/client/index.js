@@ -14,36 +14,6 @@ var TheApplication = angular.module('TheApplication', ['ngCookies']);
 
 
 //=====================================================================
-// Define a directive to load and run javascript contained in partials.
-// FROM: https://gist.github.com/subudeepak/9617483#file-angular-loadscript-js
-// (function(ng) {
-// 	var app = ng.module('ngLoadScript', []);
-// 	app.directive('script', function() {
-// 		return {
-// 			restrict: 'E',
-// 			scope: false,
-// 			link: function(scope, elem, attr) {
-// 				if (attr.type === 'text/javascript-lazy') {
-// 					var s = document.createElement("script");
-// 					s.type = "text/javascript";
-// 					var src = elem.attr('src');
-// 					if (src !== undefined) {
-// 						s.src = src;
-// 					}
-// 					else {
-// 						var code = elem.text();
-// 						s.text = code;
-// 					}
-// 					document.head.appendChild(s);
-// 					elem.remove();
-// 				}
-// 			}
-// 		};
-// 	});
-// }(angular));
-
-
-//=====================================================================
 // Define the main AngularJS controller.
 var TheController = TheApplication.controller('TheController',
 	function($rootScope, $scope, $http, $compile, $injector, $sce, $cookies) {
@@ -116,7 +86,6 @@ var TheController = TheApplication.controller('TheController',
 
 		Svcs.Framework.Themes = [
 			Svcs.Framework.ThemeNull,
-
 			// Bootswatch Themes
 			{ url: "https://bootswatch.com/cerulean/bootstrap.min.css", name: "cerulean" },
 			{ url: "https://bootswatch.com/cosmo/bootstrap.min.css", name: "cosmo" },
@@ -135,33 +104,6 @@ var TheController = TheApplication.controller('TheController',
 			{ url: "https://bootswatch.com/superhero/bootstrap.min.css", name: "superhero" },
 			{ url: "https://bootswatch.com/united/bootstrap.min.css", name: "united" },
 			{ url: "https://bootswatch.com/yeti/bootstrap.min.css", name: "yeti" }
-
-			// jQuery-UI Themes
-			// <option value="bower_components/jquery-ui/themes/base/jquery-ui.min.css">base</option>
-			// <option value="bower_components/jquery-ui/themes/black-tie/jquery-ui.min.css">black-tie</option>
-			// <option value="bower_components/jquery-ui/themes/blitzer/jquery-ui.min.css">blitzer</option>
-			// <option value="bower_components/jquery-ui/themes/cupertino/jquery-ui.min.css">cupertino</option>
-			// <option value="bower_components/jquery-ui/themes/dark-hive/jquery-ui.min.css">dark-hive</option>
-			// <option value="bower_components/jquery-ui/themes/dot-luv/jquery-ui.min.css">dot-luv</option>
-			// <option value="bower_components/jquery-ui/themes/eggplant/jquery-ui.min.css">eggplant</option>
-			// <option value="bower_components/jquery-ui/themes/excite-bike/jquery-ui.min.css">excite-bike</option>
-			// <option value="bower_components/jquery-ui/themes/flick/jquery-ui.min.css">flick</option>
-			// <option value="bower_components/jquery-ui/themes/hot-sneaks/jquery-ui.min.css">hot-sneaks</option>
-			// <option value="bower_components/jquery-ui/themes/humanity/jquery-ui.min.css">humanity</option>
-			// <option value="bower_components/jquery-ui/themes/le-frog/jquery-ui.min.css">le-frog</option>
-			// <option value="bower_components/jquery-ui/themes/mint-choc/jquery-ui.min.css">mint-choc</option>
-			// <option value="bower_components/jquery-ui/themes/overcast/jquery-ui.min.css">overcast</option>
-			// <option value="bower_components/jquery-ui/themes/pepper-grinder/jquery-ui.min.css">pepper-grinder</option>
-			// <option value="bower_components/jquery-ui/themes/redmond/jquery-ui.min.css">redmond</option>
-			// <option value="bower_components/jquery-ui/themes/smoothness/jquery-ui.min.css">smoothness</option>
-			// <option value="bower_components/jquery-ui/themes/south-street/jquery-ui.min.css">south-street</option>
-			// <option value="bower_components/jquery-ui/themes/start/jquery-ui.min.css">start</option>
-			// <option value="bower_components/jquery-ui/themes/sunny/jquery-ui.min.css">sunny</option>
-			// <option value="bower_components/jquery-ui/themes/swanky-purse/jquery-ui.min.css">swanky-purse</option>
-			// <option value="bower_components/jquery-ui/themes/trontastic/jquery-ui.min.css">trontastic</option>
-			// <option value="bower_components/jquery-ui/themes/ui-darkness/jquery-ui.min.css">ui-darkness</option>
-			// <option value="bower_components/jquery-ui/themes/ui-lightness/jquery-ui.min.css">ui-lightness</option>
-			// <option value="bower_components/jquery-ui/themes/vader/jquery-ui.min.css">vader</option>
 		];
 
 
@@ -205,22 +147,11 @@ var TheController = TheApplication.controller('TheController',
 		//=====================================================================
 
 		//==========================================
-		Svcs.Framework.InjectContent =
-			function(ContentSelector, ContentUrl) {
-				$http.get(ContentUrl)
-					.then(
-						function(http_get_result) {
-							var linker = $compile(http_get_result.data);
-							var linker_result = linker($scope);
-							$(ContentSelector).html(linker_result).show();
-						});
-			};
-
-
-		//==========================================
-		Svcs.Framework.LoadContent =
-			function(ContentUrl) {
-				Svcs.Framework.InjectContent('#content-partial-container', ContentUrl);
+		Svcs.Framework.CompileHtml =
+			function(Html) {
+				var linker = $compile(Html);
+				var linked_html = linker($scope);
+				return linked_html;
 			};
 
 
@@ -228,7 +159,13 @@ var TheController = TheApplication.controller('TheController',
 		Svcs.Framework.LoadPartial =
 			function(PartialName) {
 				var url = Svcs.AppConfig.partials_path + '/' + PartialName + '.html';
-				Svcs.Framework.InjectContent('#content-partial-container', url);
+				$http.get(url)
+					.then(
+						function(http_get_result) {
+							var html = Svcs.Framework.CompileHtml(http_get_result.data);
+							$('#content-partial-container').html(html).show();
+						});
+				return;
 			};
 
 
