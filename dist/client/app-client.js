@@ -24,7 +24,6 @@ var ERR_AppClientError = new Error("Application Client Error.");
 AppClient.OnInitialize =
 	function OnInitialize(Scope) {
 
-
 		//=====================================================================
 		//=====================================================================
 		//
@@ -69,7 +68,6 @@ AppClient.OnInitialize =
 				requires_login: false,
 				icon_class: 'glyphicon glyphicon-expand',
 				on_click: function(Item) {
-					Svcs.Framework.LoadPartial(Item.partial_name);
 					alert(MyData.sample_data);
 				}
 			})

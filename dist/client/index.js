@@ -109,6 +109,84 @@ var TheController = TheApplication.controller('TheController',
 
 
 		//=====================================================================
+		//		Theme
+		//=====================================================================
+
+		Svcs.Framework.ThemeNull = { url: "", name: "" };
+
+		Svcs.Framework.Themes = [
+			Svcs.Framework.ThemeNull,
+
+			// Bootswatch Themes
+			{ url: "https://bootswatch.com/cerulean/bootstrap.min.css", name: "cerulean" },
+			{ url: "https://bootswatch.com/cosmo/bootstrap.min.css", name: "cosmo" },
+			{ url: "https://bootswatch.com/cyborg/bootstrap.min.css", name: "cyborg" },
+			{ url: "https://bootswatch.com/darkly/bootstrap.min.css", name: "darkly" },
+			{ url: "https://bootswatch.com/flatly/bootstrap.min.css", name: "flatly" },
+			{ url: "https://bootswatch.com/journal/bootstrap.min.css", name: "journal" },
+			{ url: "https://bootswatch.com/lumen/bootstrap.min.css", name: "lumen" },
+			{ url: "https://bootswatch.com/paper/bootstrap.min.css", name: "paper" },
+			{ url: "https://bootswatch.com/readable/bootstrap.min.css", name: "readable" },
+			{ url: "https://bootswatch.com/sandstone/bootstrap.min.css", name: "sandstone" },
+			{ url: "https://bootswatch.com/simplex/bootstrap.min.css", name: "simplex" },
+			{ url: "https://bootswatch.com/slate/bootstrap.min.css", name: "slate" },
+			{ url: "https://bootswatch.com/solar/bootstrap.min.css", name: "solar" },
+			{ url: "https://bootswatch.com/spacelab/bootstrap.min.css", name: "spacelab" },
+			{ url: "https://bootswatch.com/superhero/bootstrap.min.css", name: "superhero" },
+			{ url: "https://bootswatch.com/united/bootstrap.min.css", name: "united" },
+			{ url: "https://bootswatch.com/yeti/bootstrap.min.css", name: "yeti" }
+
+			// jQuery-UI Themes
+			// <option value="bower_components/jquery-ui/themes/base/jquery-ui.min.css">base</option>
+			// <option value="bower_components/jquery-ui/themes/black-tie/jquery-ui.min.css">black-tie</option>
+			// <option value="bower_components/jquery-ui/themes/blitzer/jquery-ui.min.css">blitzer</option>
+			// <option value="bower_components/jquery-ui/themes/cupertino/jquery-ui.min.css">cupertino</option>
+			// <option value="bower_components/jquery-ui/themes/dark-hive/jquery-ui.min.css">dark-hive</option>
+			// <option value="bower_components/jquery-ui/themes/dot-luv/jquery-ui.min.css">dot-luv</option>
+			// <option value="bower_components/jquery-ui/themes/eggplant/jquery-ui.min.css">eggplant</option>
+			// <option value="bower_components/jquery-ui/themes/excite-bike/jquery-ui.min.css">excite-bike</option>
+			// <option value="bower_components/jquery-ui/themes/flick/jquery-ui.min.css">flick</option>
+			// <option value="bower_components/jquery-ui/themes/hot-sneaks/jquery-ui.min.css">hot-sneaks</option>
+			// <option value="bower_components/jquery-ui/themes/humanity/jquery-ui.min.css">humanity</option>
+			// <option value="bower_components/jquery-ui/themes/le-frog/jquery-ui.min.css">le-frog</option>
+			// <option value="bower_components/jquery-ui/themes/mint-choc/jquery-ui.min.css">mint-choc</option>
+			// <option value="bower_components/jquery-ui/themes/overcast/jquery-ui.min.css">overcast</option>
+			// <option value="bower_components/jquery-ui/themes/pepper-grinder/jquery-ui.min.css">pepper-grinder</option>
+			// <option value="bower_components/jquery-ui/themes/redmond/jquery-ui.min.css">redmond</option>
+			// <option value="bower_components/jquery-ui/themes/smoothness/jquery-ui.min.css">smoothness</option>
+			// <option value="bower_components/jquery-ui/themes/south-street/jquery-ui.min.css">south-street</option>
+			// <option value="bower_components/jquery-ui/themes/start/jquery-ui.min.css">start</option>
+			// <option value="bower_components/jquery-ui/themes/sunny/jquery-ui.min.css">sunny</option>
+			// <option value="bower_components/jquery-ui/themes/swanky-purse/jquery-ui.min.css">swanky-purse</option>
+			// <option value="bower_components/jquery-ui/themes/trontastic/jquery-ui.min.css">trontastic</option>
+			// <option value="bower_components/jquery-ui/themes/ui-darkness/jquery-ui.min.css">ui-darkness</option>
+			// <option value="bower_components/jquery-ui/themes/ui-lightness/jquery-ui.min.css">ui-lightness</option>
+			// <option value="bower_components/jquery-ui/themes/vader/jquery-ui.min.css">vader</option>
+		];
+
+
+		Svcs.Framework.UserThemeUrl = $cookies.get('Framework.UserThemeUrl') || '';
+
+
+		Svcs.Framework.ApplyUserTheme =
+			function ApplyUserTheme() {
+				if ($('#user-theme').length) {
+					$('#user-theme').remove();
+				}
+				if (Svcs.Framework.UserThemeUrl) {
+					var elem = document.createElement("link");
+					elem.id = 'user-theme';
+					elem.rel = "stylesheet";
+					elem.type = "text/css";
+					elem.href = Svcs.Framework.UserThemeUrl;
+					document.getElementsByTagName("head")[0].appendChild(elem);
+				}
+				$cookies.put('Framework.UserThemeUrl', Svcs.Framework.UserThemeUrl);
+				return;
+			};
+
+
+		//=====================================================================
 		//		Error Handling
 		//=====================================================================
 
@@ -375,6 +453,9 @@ var TheController = TheApplication.controller('TheController',
 		//=====================================================================
 		//=====================================================================
 
+
+		// Apply the user theme.
+		Svcs.Framework.ApplyUserTheme();
 
 		// Initialize the application.
 		Svcs.AppClient.OnInitialize($scope);

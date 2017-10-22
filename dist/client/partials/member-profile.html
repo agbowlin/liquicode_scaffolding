@@ -43,8 +43,15 @@
 	</table>
 
 	<button class="btn btn-warning" type="button" ng-click="Svcs.Framework.DoMemberLogout()">
-			Logout
-			<i class="glyphicon glyphicon-log-out"></i>
-		</button>
+		Logout
+		<i class="glyphicon glyphicon-log-out"></i>
+	</button>
+
+	<h5>
+		Theme
+	</h5>
+	<select ng-model="Svcs.Framework.UserThemeUrl" ng-change="Svcs.Framework.ApplyUserTheme()">
+		<option ng-repeat="theme in Svcs.Framework.Themes" value="{{theme.url}}">{{ theme.name }}</option>
+	</select>
 
 </div>
