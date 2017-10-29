@@ -28,16 +28,17 @@ var TheController = TheApplication.controller('TheController',
 		//=====================================================================
 
 		var Svcs = {};
-		// $scope.Services = Svcs;
 		$scope.Svcs = Svcs;
-
+		
+		Svcs.Http = $http;
+		Svcs.Cookies = $cookies;
 		Svcs.AppClient = AppClient;
 
 		//==========================================
 		// Application configuration.
 		// Values to be set in app-client.js
 		Svcs.AppConfig = {
-			app_title: 'Application',
+			app_title: 'application',
 			content_selector: '#content',
 			initial_view: 'app-home',
 			partials_path: '/partials',

@@ -1,3 +1,5 @@
+/* global Membership */
+
 "use strict";
 
 var npm_path = require('path');
@@ -5,14 +7,17 @@ var npm_fs = require('fs');
 var npm_fs_extra = require('fs-extra');
 var npm_http = require('http');
 
-
-//---------------------------------------------------------------------
-var ERR_AppServerError = "Application Server Error.";
+var npm_sanitize = require('sanitize-filename');
 
 
 //---------------------------------------------------------------------
-function AppServer(Services) {
-	AppServer.Services = Services;
+var ERR_AppServerError = Error("Application Server Error.");
+
+
+//---------------------------------------------------------------------
+function AppServer(Membership, ServerConfig) {
+	AppServer.Membership = Membership;
+	AppServer.ServerConfig = ServerConfig;
 	return AppServer;
 }
 

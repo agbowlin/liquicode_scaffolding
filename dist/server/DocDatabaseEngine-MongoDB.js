@@ -48,30 +48,43 @@ function DocDatabaseEngine(Services, EngineConfig) {
 DocDatabaseEngine.Query =
 	function Query(CollectionName, Request, callback) {
 
-		//------------------------------------------
-		// Define the database server.
-		var mongo_server = npm_mongodb.Server(
-			DocDatabaseEngine.EngineConfig.host,
-			DocDatabaseEngine.EngineConfig.port,
-			DocDatabaseEngine.EngineConfig.opts
-		);
+		var url = 'mongodb://';
+		if (DocDatabaseEngine.EngineConfig.username) {
+			url += DocDatabaseEngine.EngineConfig.username;
+			if (DocDatabaseEngine.EngineConfig.password) {
+				url += ':' + DocDatabaseEngine.EngineConfig.password;
+			}
+			url += '@';
+		}
+		url += DocDatabaseEngine.EngineConfig.host;
+		url += ':' + DocDatabaseEngine.EngineConfig.port;
+		url += '/' + DocDatabaseEngine.EngineConfig.database;
 
-		//------------------------------------------
-		// Get a database instance.
-		var database_name = DocDatabaseEngine.Services.ServerConfig.Application.application_name;
-		database_name = database_name.toLowerCase();
-		database_name = database_name.replace('.', "_");
-		database_name = npm_sanitize(database_name);
-		var database = npm_mongodb.Db(
-			database_name,
-			mongo_server, {
-				native_parser: false,
-				safe: true
-			});
+		// //------------------------------------------
+		// // Define the database server.
+		// var mongo_server = npm_mongodb.Server(
+		// 	DocDatabaseEngine.EngineConfig.host,
+		// 	DocDatabaseEngine.EngineConfig.port,
+		// 	DocDatabaseEngine.EngineConfig.opts
+		// );
 
-		//------------------------------------------
-		// Open the database.
-		database.open(
+		// //------------------------------------------
+		// // Get a database instance.
+		// // var database_name = DocDatabaseEngine.Services.ServerConfig.Application.application_name;
+		// // database_name = database_name.toLowerCase();
+		// // database_name = database_name.replace('.', "_");
+		// // database_name = npm_sanitize(database_name);
+		// var database = npm_mongodb.Db(
+		// 	database_name,
+		// 	mongo_server, {
+		// 		native_parser: false,
+		// 		safe: true
+		// 	});
+
+		// //------------------------------------------
+		// // Open the database.
+		// database.open(
+		npm_mongodb.connect(url,
 			function(err, database) {
 				if (err) { callback(err, null); return; }
 

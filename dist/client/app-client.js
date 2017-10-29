@@ -1,4 +1,5 @@
 /* global $ */
+/* global Promise */
 
 "use strict";
 
@@ -9,7 +10,7 @@ function AppClient() {
 
 
 //---------------------------------------------------------------------
-var ERR_AppClientError = new Error("Application Client Error.");
+var ERR_AppClientError = Error("Application Client Error.");
 
 
 //=====================================================================
@@ -32,14 +33,28 @@ AppClient.OnInitialize =
 		//=====================================================================
 		//=====================================================================
 
+		//TODO: Make Services object to hold all these.
 		var Svcs = Scope.Svcs;
 
+		// Promisify working objects,
+		Svcs.Member = Promise.promisifyAll(Svcs.Member);
+		Svcs.SharedDocDatabase = Promise.promisifyAll(Svcs.SharedDocDatabase);
+		Svcs.MemberDocDatabase = Promise.promisifyAll(Svcs.MemberDocDatabase);
 
 		Svcs.AppConfig.app_title = 'Scaffolding';
 		// Svcs.AppConfig.content_selector = '#content';
 		// Svcs.AppConfig.intiial_view = 'app-home';
 		// Svcs.AppConfig.partials_path = '/partials';
 		Svcs.AppConfig.alert_on_server_error = true;
+
+
+		//------------------------------------------
+		Svcs.Framework.ScopeApplyCallback =
+			function(err, response) {
+				if (err) { Svcs.Framework.ReportError(err); }
+				Scope.$apply();
+				return;
+			};
 
 
 		//=====================================================================

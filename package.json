@@ -1,6 +1,6 @@
 {
     "name": "liquicode_scaffolding",
-    "version": "0.0.42",
+    "version": "0.0.43",
     "homepage": "https://github.com/agbowlin/liquicode_scaffolding",
     "description": "Lightweight scaffolding for NodeJS/SocketIO/AngularJS",
     "authors": [

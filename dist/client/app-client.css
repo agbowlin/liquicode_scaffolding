@@ -22,7 +22,7 @@
 @import "https://bootswatch.com/yeti/bootstrap.min.css";
 */
 
-/*@import "https://bootswatch.com/darkly/bootstrap.min.css";*/
+/*@import "https://bootswatch.com/slate/bootstrap.min.css";*/
 
 
 /*
@@ -101,13 +101,90 @@ i.glyphicon {
 
 #sidebar .sidebar-item {
 	border: 2px solid transparent;
+	border-radius: 10px;
 }
 
 #sidebar .sidebar-item a:hover {
 	border: 2px solid;
+	border-radius: 10px;
 }
 
 #sidebar .sidebar-item.active>a,
 a[aria-expanded="true"] {}
 
+
+/*
+---------------------------------------------------
+    CONTENT STYLES
+---------------------------------------------------
+*/
+
+#content {}
+
+
+.emphasis-text {
+	font-weight: bold;
+	font-size: 115%;
+}
+
+
+.flat-table,
+.flat-table th,
+.flat-table td {
+	border-collapse: collapse;
+	border: none !important;
+	padding: none !important;
+	margin: none !important;
+	background: none !important;
+}
+
+
+/*
+---------------------------------------------------
+    HOVER LINKS
+---------------------------------------------------
+*/
+
+.hover-link {
+	border: 2px solid transparent;
+	border-radius: 10px;
+}
+
+.hover-link:hover {
+	border: 2px solid;
+	border-radius: 10px;
+}
+
+
+/*
+---------------------------------------------------
+    WORK ITEMS
+---------------------------------------------------
+*/
+
+.workitem-card {
+	padding: 10px;
+	border-left: solid;
+	border-right: solid;
+	border-radius: 12px;
+}
+
+.workitem-card card-title {}
+
+.workitem-card card-subtitle {}
+
+.workitem-card-content {}
+
+.workitem-card-workarea {}
+
+.workitem-card .workstep {
+	margin: 1px !important;
+	padding: 3px !important;
+}
+
+/*
+.workitem-card-content-detail-row{
+	transition: all linear 0.5s;
+}
+*/
 
