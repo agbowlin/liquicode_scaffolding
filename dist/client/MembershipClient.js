@@ -7,8 +7,8 @@ function MembershipClient() {
 
 
 //---------------------------------------------------------------------
-MembershipClient.GetMember =
-	function GetMember(ScopeName, Socket, Cookies, MaxSessionLifetime) {
+MembershipClient.OnInitialize =
+	function OnInitialize(ApplicationName, Socket, Cookies, MaxSessionLifetime) {
 
 		var Member = {};
 
@@ -24,8 +24,8 @@ MembershipClient.GetMember =
 
 		if (Cookies) {
 			// Member.member_logged_in = Cookies.get(ScopeName + '.member_logged_in') || false;
-			Member.member_name = Cookies.get(ScopeName + '.member_name') || '';
-			Member.session_id = Cookies.get(ScopeName + '.session_id') || '';
+			Member.member_name = Cookies.get(ApplicationName + '.member_name') || '';
+			Member.session_id = Cookies.get(ApplicationName + '.session_id') || '';
 		}
 
 
@@ -70,8 +70,8 @@ MembershipClient.GetMember =
 
 						if (Cookies) {
 							// Cookies.put(ScopeName + '.member_logged_in', Member.member_logged_in);
-							Cookies.put(ScopeName + '.member_name', Member.member_name);
-							Cookies.put(ScopeName + '.session_id', Member.session_id);
+							Cookies.put(ApplicationName + '.member_name', Member.member_name);
+							Cookies.put(ApplicationName + '.session_id', Member.session_id);
 						}
 
 						if (callback) { callback(null, Response); }
@@ -128,8 +128,8 @@ MembershipClient.GetMember =
 
 						if (Cookies) {
 							// Cookies.put(ScopeName + '.member_logged_in', Member.member_logged_in);
-							Cookies.put(ScopeName + '.member_name', Member.member_name);
-							Cookies.put(ScopeName + '.session_id', Member.session_id);
+							Cookies.put(ApplicationName + '.member_name', Member.member_name);
+							Cookies.put(ApplicationName + '.session_id', Member.session_id);
 						}
 
 						if (callback) { callback(Err, Response); }
@@ -185,8 +185,8 @@ MembershipClient.GetMember =
 
 						if (Cookies) {
 							// Cookies.put(ScopeName + '.member_logged_in', Member.member_logged_in);
-							Cookies.put(ScopeName + '.member_name', Member.member_name);
-							Cookies.put(ScopeName + '.session_id', Member.session_id);
+							Cookies.put(ApplicationName + '.member_name', Member.member_name);
+							Cookies.put(ApplicationName + '.session_id', Member.session_id);
 						}
 
 						if (callback) { callback(Err, Response); }
@@ -231,7 +231,7 @@ MembershipClient.GetMember =
 
 						if (Cookies) {
 							// Cookies.remove(ScopeName + '.member_logged_in');
-							Cookies.remove(ScopeName + '.session_id');
+							Cookies.remove(ApplicationName + '.session_id');
 						}
 
 						if (callback) { callback(Err, Response); }

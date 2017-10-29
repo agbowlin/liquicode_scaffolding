@@ -29,14 +29,20 @@ var TheController = TheApplication.controller('TheController',
 
 		var Svcs = {};
 		$scope.Svcs = Svcs;
-		
+
 		Svcs.Http = $http;
 		Svcs.Cookies = $cookies;
-		Svcs.AppClient = AppClient;
+		Svcs.AppClient = AppClient; // Initialized in 'Application Initialization' section below.
+		Svcs.AppConfig = null; // Initialized in 'Application Initialization' section below.
+		Svcs.Logger = null;
+		Svcs.Socket = null; // Initialized in 'Socket' section below.
+		Svcs.Member = null; // Initialized in 'Socket' section below.
+		Svcs.SharedDocDatabase = null; // Initialized in 'Socket' section below.
+		Svcs.MemberDocDatabase = null; // Initialized in 'Membership' section below.
 
 		//==========================================
 		// Application configuration.
-		// Values to be set in app-client.js
+		// Values are overriden in app-client.js during AppClient.OnInitialize
 		Svcs.AppConfig = {
 			app_title: 'application',
 			content_selector: '#content',
@@ -45,24 +51,53 @@ var TheController = TheApplication.controller('TheController',
 			alert_on_server_error: false
 		};
 
-		//==========================================
-		// Logging functions.
-		Svcs.Logger = null;
+
+		//=====================================================================
+		//=====================================================================
+		//
+		//		Socket
+		//
+		//=====================================================================
+		//=====================================================================
+
 
 		//==========================================
 		// Connect to the server with SocketIO.
 		Svcs.Socket = io.connect();
 
-		//==========================================
-		// Membership functions.
-		Svcs.Member = MembershipClient.GetMember('work-time', Svcs.Socket, $cookies);
-		$scope.Member = Svcs.Member;
-		$rootScope.Member = Svcs.Member; // Do we need this ???
 
 		//==========================================
-		// Database functions.
-		Svcs.SharedDocDatabase = DocDatabaseClient.GetSharedDatabase(Svcs.Socket);
-		Svcs.MemberDocDatabase = DocDatabaseClient.GetMemberDatabase(Svcs.Socket, Svcs.Member);
+		Svcs.Socket.on('connect', function() {
+			$scope.notice = "... connected";
+			// Database functions.
+			Svcs.SharedDocDatabase = DocDatabaseClient.GetSharedDatabase(Svcs.Socket);
+			// Membership functions.
+			Svcs.Member = MembershipClient.OnInitialize(Svcs.AppConfig.app_title, Svcs.Socket, Svcs.Cookies);
+			$scope.Member = Svcs.Member;
+			$rootScope.Member = Svcs.Member; // Do we need this ???
+			// Automatically reconnect if our session is cached.
+			if (Svcs.Member.member_name && Svcs.Member.session_id && !Svcs.Member.member_logged_in) {
+				Svcs.Framework.DoMemberReconnect();
+			}
+			$scope.$apply();
+		});
+
+
+		$scope.errors = [];
+
+
+		//==========================================
+		Svcs.Socket.on('server_error',
+			function(Err) {
+				console.log('> server_error', Err);
+				var message = 'Error in "' + Err.event + '": ' + Err.message;
+				$scope.errors.push(message);
+				if (Svcs.AppConfig.alert_on_server_error) {
+					alert(message);
+				}
+				$scope.$apply();
+				return;
+			});
 
 
 		//=====================================================================
@@ -76,7 +111,6 @@ var TheController = TheApplication.controller('TheController',
 		//==========================================
 		// Main scaffolding framework functionality.
 		Svcs.Framework = {};
-		var Framework = Svcs.Framework;
 
 
 		//=====================================================================
@@ -140,7 +174,7 @@ var TheController = TheApplication.controller('TheController',
 					alert('Error: ' + err.message);
 				}
 				return;
-			}
+			};
 
 
 		//=====================================================================
@@ -268,43 +302,24 @@ var TheController = TheApplication.controller('TheController',
 		//=====================================================================
 		//=====================================================================
 		//
-		//		Socket.IO Messages
+		//		Membership
 		//
 		//=====================================================================
 		//=====================================================================
 
-
 		//==========================================
-		Svcs.Socket.on('connect', function() {
-			$scope.notice = "... connected";
-			$scope.$apply();
-		});
-
-
-		$scope.errors = [];
-
-
-		//==========================================
-		Svcs.Socket.on('server_error',
-			function(Err) {
-				console.log('> server_error', Err);
-				var message = 'Error in "' + Err.event + '": ' + Err.message;
-				$scope.errors.push(message);
-				if (Svcs.AppConfig.alert_on_server_error) {
-					alert(message);
-				}
+		Svcs.Framework.OnMemberConnect =
+			function() {
+				// Database functions.
+				Svcs.MemberDocDatabase = DocDatabaseClient.GetMemberDatabase(Svcs.Socket, Svcs.Member);
+				Svcs.MemberDocDatabase = Promise.promisifyAll(Svcs.MemberDocDatabase);
+				// Initialize the application.
+				Svcs.AppClient.OnLogin($scope);
+				// Load the initial view.
+				Svcs.Framework.LoadPartial(Svcs.AppConfig.initial_view);
 				$scope.$apply();
 				return;
-			});
-
-
-		//=====================================================================
-		//=====================================================================
-		//
-		//		Membership Messages
-		//
-		//=====================================================================
-		//=====================================================================
+			};
 
 
 		//==========================================
@@ -319,9 +334,7 @@ var TheController = TheApplication.controller('TheController',
 						}
 						Svcs.Member.member_data.signup_time = Date.now();
 						Svcs.Member.PutMemberData();
-						Svcs.AppClient.OnLogin($scope);
-						Svcs.Framework.LoadPartial(Svcs.AppConfig.initial_view);
-						$scope.$apply();
+						Svcs.Framework.OnMemberConnect();
 						return;
 					});
 			};
@@ -339,9 +352,7 @@ var TheController = TheApplication.controller('TheController',
 						}
 						Svcs.Member.member_data.login_time = Date.now();
 						Svcs.Member.PutMemberData();
-						Svcs.AppClient.OnLogin($scope);
-						Svcs.Framework.LoadPartial(Svcs.AppConfig.initial_view);
-						$scope.$apply();
+						Svcs.Framework.OnMemberConnect();
 						return;
 					});
 			};
@@ -357,9 +368,7 @@ var TheController = TheApplication.controller('TheController',
 							$scope.$apply();
 							return;
 						}
-						Svcs.AppClient.OnLogin($scope);
-						Svcs.Framework.LoadPartial(Svcs.AppConfig.initial_view);
-						$scope.$apply();
+						Svcs.Framework.OnMemberConnect();
 						return;
 					});
 			};
@@ -376,6 +385,7 @@ var TheController = TheApplication.controller('TheController',
 							return;
 						}
 						Svcs.AppClient.OnLogout($scope);
+						Svcs.MemberDocDatabase = null;
 						Svcs.Framework.LoadPartial(Svcs.AppConfig.initial_view);
 						$scope.$apply();
 						return;
@@ -392,24 +402,20 @@ var TheController = TheApplication.controller('TheController',
 		//=====================================================================
 
 
-		// Apply the user theme.
-		Svcs.Framework.UserThemeUrl = $cookies.get('Framework.UserThemeUrl') || '';
-		Svcs.Framework.ApplyUserTheme();
-
 		// Initialize the application.
 		Svcs.AppClient.OnInitialize($scope);
+
+		// Apply the user theme.
+		if (Svcs.Cookies) {
+			Svcs.Framework.UserThemeUrl = Svcs.Cookies.get('Framework.UserThemeUrl') || '';
+			Svcs.Framework.ApplyUserTheme();
+		}
 
 		// Set the window title.
 		window.document.title = Svcs.AppConfig.app_title;
 
-		// Get the user data if our login is cached.
-		if (Svcs.Member.member_name && Svcs.Member.session_id && !Svcs.Member.member_logged_in) {
-			Svcs.Framework.DoMemberReconnect();
-		}
-
 		// Display the initial view.
 		Svcs.Framework.LoadPartial(Svcs.AppConfig.initial_view);
 
-		// Return
-		return;
+
 	});
