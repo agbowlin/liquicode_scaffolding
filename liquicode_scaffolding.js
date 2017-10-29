@@ -244,11 +244,11 @@ copy_file(npm_path.join(sourcepath, 'client/app-client.css'), npm_path.join(targ
 copy_file(npm_path.join(sourcepath, 'client/app-client.html'), npm_path.join(targetpath, 'client/app-client.html'), app_options.install);
 copy_file(npm_path.join(sourcepath, 'client/app-client.js'), npm_path.join(targetpath, 'client/app-client.js'), app_options.install);
 
-copy_file(npm_path.join(sourcepath, 'client/partials/member-login.html'), npm_path.join(targetpath, 'client/partials/member-login.html'), app_options.install);
-copy_file(npm_path.join(sourcepath, 'client/partials/member-profile.html'), npm_path.join(targetpath, 'client/partials/member-profile.html'), app_options.install);
-copy_file(npm_path.join(sourcepath, 'client/partials/member-signup.html'), npm_path.join(targetpath, 'client/partials/member-signup.html'), app_options.install);
-copy_file(npm_path.join(sourcepath, 'client/partials/test-docdatabase.html'), npm_path.join(targetpath, 'client/partials/test-docdatabase.html'), app_options.install);
-copy_file(npm_path.join(sourcepath, 'client/partials/test-docdatabase.js'), npm_path.join(targetpath, 'client/partials/test-docdatabase.js'), app_options.install);
+copy_file(npm_path.join(sourcepath, 'client/partials/membership/member-login.html'), npm_path.join(targetpath, 'client/partials/membership/member-login.html'), app_options.install);
+copy_file(npm_path.join(sourcepath, 'client/partials/membership/member-profile.html'), npm_path.join(targetpath, 'client/partials/membership/member-profile.html'), app_options.install);
+copy_file(npm_path.join(sourcepath, 'client/partials/membership/member-signup.html'), npm_path.join(targetpath, 'client/partials/membership/member-signup.html'), app_options.install);
+copy_file(npm_path.join(sourcepath, 'client/partials/tests/test-docdatabase.html'), npm_path.join(targetpath, 'client/partials/tests/test-docdatabase.html'), app_options.install);
+copy_file(npm_path.join(sourcepath, 'client/partials/tests/test-docdatabase.js'), npm_path.join(targetpath, 'client/partials/tests/test-docdatabase.js'), app_options.install);
 copy_file(npm_path.join(sourcepath, 'client/partials/app-home.html'), npm_path.join(targetpath, 'client/partials/app-home.html'), app_options.install);
 
 

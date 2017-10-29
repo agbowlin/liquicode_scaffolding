@@ -68,7 +68,7 @@
 
 				<!-- Login link, user is NOT logged in. -->
 				<li class="sidebar-item" ng-hide="Svcs.Member.member_logged_in" ng-cloak>
-					<a class="sidebar-item" ng-click="Svcs.Framework.LoadPartial('member-login')">
+					<a class="sidebar-item" ng-click="Svcs.Framework.LoadPartial('membership/member-login')">
 						<i class="glyphicon glyphicon-log-in"></i>
 						Login
 					</a>
@@ -76,7 +76,7 @@
 
 				<!-- Signup link, user is NOT logged in. -->
 				<li class="sidebar-item" ng-hide="Svcs.Member.member_logged_in" ng-cloak>
-					<a class="sidebar-item" ng-click="Svcs.Framework.LoadPartial('member-signup')">
+					<a class="sidebar-item" ng-click="Svcs.Framework.LoadPartial('membership/member-signup')">
 						<i class="glyphicon glyphicon-user"></i>
 						Signup
 					</a>
@@ -84,7 +84,7 @@
 
 				<!-- Profile link, user IS logged in. -->
 				<li class="sidebar-item" ng-hide="!Svcs.Member.member_logged_in" ng-cloak>
-					<a class="sidebar-item" ng-click="Svcs.Framework.LoadPartial('member-profile')">
+					<a class="sidebar-item" ng-click="Svcs.Framework.LoadPartial('membership/member-profile')">
 						<i class="glyphicon glyphicon-user"></i>
 						Profile: {{ Svcs.Member.member_name }}
 					</a>

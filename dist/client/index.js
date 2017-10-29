@@ -73,8 +73,6 @@ var TheController = TheApplication.controller('TheController',
 			Svcs.SharedDocDatabase = DocDatabaseClient.GetSharedDatabase(Svcs.Socket);
 			// Membership functions.
 			Svcs.Member = MembershipClient.OnInitialize(Svcs.AppConfig.app_title, Svcs.Socket, Svcs.Cookies);
-			$scope.Member = Svcs.Member;
-			$rootScope.Member = Svcs.Member; // Do we need this ???
 			// Automatically reconnect if our session is cached.
 			if (Svcs.Member.member_name && Svcs.Member.session_id && !Svcs.Member.member_logged_in) {
 				Svcs.Framework.DoMemberReconnect();
@@ -159,6 +157,18 @@ var TheController = TheApplication.controller('TheController',
 					document.getElementsByTagName("head")[0].appendChild(elem);
 				}
 				$cookies.put('Framework.UserThemeUrl', Svcs.Framework.UserThemeUrl);
+				return;
+			};
+
+
+		//=====================================================================
+		//		Predefined Callbacks
+		//=====================================================================
+
+		Svcs.Framework.ScopeApplyCallback =
+			function(err, response) {
+				if (err) { Svcs.Framework.ReportError(err); }
+				$scope.$apply();
 				return;
 			};
 

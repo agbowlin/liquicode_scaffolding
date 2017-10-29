@@ -48,15 +48,6 @@ AppClient.OnInitialize =
 		Svcs.AppConfig.alert_on_server_error = true;
 
 
-		//------------------------------------------
-		Svcs.Framework.ScopeApplyCallback =
-			function(err, response) {
-				if (err) { Svcs.Framework.ReportError(err); }
-				Scope.$apply();
-				return;
-			};
-
-
 		//=====================================================================
 		//=====================================================================
 		//
@@ -79,7 +70,6 @@ AppClient.OnInitialize =
 			Svcs.Framework.NewSidebarItem({
 				item_name: 'app-hello-item',
 				caption: 'Hello',
-				partial_name: 'app-home',
 				requires_login: false,
 				icon_class: 'glyphicon glyphicon-expand',
 				on_click: function(Item) {
@@ -96,7 +86,7 @@ AppClient.OnInitialize =
 				is_group: true,
 				is_collapsable: false,
 				requires_login: false,
-				icon_class: 'glyphicon glyphicon-th',
+				icon_class: 'glyphicon glyphicon-folder-open',
 				on_click: function(Item) {}
 			})
 		);
@@ -105,7 +95,7 @@ AppClient.OnInitialize =
 			Svcs.Framework.NewSidebarItem({
 				item_name: 'app-test-docdatabase',
 				caption: 'DocDatabase',
-				partial_name: 'test-docdatabase',
+				partial_name: 'tests/test-docdatabase',
 				requires_login: false,
 				icon_class: 'glyphicon glyphicon-expand',
 				on_click: function(Item) {
