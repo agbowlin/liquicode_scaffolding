@@ -6,6 +6,12 @@ liquicode_scaffolding
 Lightweight scaffolding for NodeJS/SocketIO/AngularJS
 
 
+TODO
+------------------------------------------
+
+- Implement a patch mode for liquicode_scaffolding.js
+
+
 Installation
 ------------------------------------------
 
@@ -17,7 +23,7 @@ or: Clone the source code
 ```
 git clone https://github.com/agbowlin/liquicode_scaffolding.git
 ```
-or: Download the source code
+or: Download the latest source code
 ```
 https://github.com/agbowlin/liquicode_scaffolding/archive/master.zip
 ```

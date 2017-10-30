@@ -228,20 +228,19 @@ console.log('Copying Client Files');
 
 // Files we always update
 copy_file(npm_path.join(sourcepath, 'client/index.css'), npm_path.join(targetpath, 'client/index.css'), true);
-copy_file(npm_path.join(sourcepath, 'client/index.html'), npm_path.join(targetpath, 'client/index.html'), true);
 copy_file(npm_path.join(sourcepath, 'client/index.js'), npm_path.join(targetpath, 'client/index.js'), true);
 
 copy_file(npm_path.join(sourcepath, 'client/MembershipClient.js'), npm_path.join(targetpath, 'client/MembershipClient.js'), true);
 copy_file(npm_path.join(sourcepath, 'client/DocDatabaseClient.js'), npm_path.join(targetpath, 'client/DocDatabaseClient.js'), true);
 
 // Files we only install, not update
+copy_file(npm_path.join(sourcepath, 'client/index.html'), npm_path.join(targetpath, 'client/index.html'), app_options.install);
 copy_file(npm_path.join(sourcepath, 'client/README.md'), npm_path.join(targetpath, 'client/README.md'), app_options.install);
 copy_file(npm_path.join(sourcepath, 'client/bower.json'), npm_path.join(targetpath, 'client/bower.json'), app_options.install);
 copy_file(npm_path.join(sourcepath, 'client/package.json'), npm_path.join(targetpath, 'client/package.json'), app_options.install);
 copy_file(npm_path.join(sourcepath, 'client/favicon.ico'), npm_path.join(targetpath, 'client/favicon.ico'), app_options.install);
 
 copy_file(npm_path.join(sourcepath, 'client/app-client.css'), npm_path.join(targetpath, 'client/app-client.css'), app_options.install);
-copy_file(npm_path.join(sourcepath, 'client/app-client.html'), npm_path.join(targetpath, 'client/app-client.html'), app_options.install);
 copy_file(npm_path.join(sourcepath, 'client/app-client.js'), npm_path.join(targetpath, 'client/app-client.js'), app_options.install);
 
 copy_file(npm_path.join(sourcepath, 'client/partials/membership/member-login.html'), npm_path.join(targetpath, 'client/partials/membership/member-login.html'), app_options.install);
