@@ -101,7 +101,7 @@ var TheController = TheApplication.controller('TheController',
 				var message = 'Error in "' + Err.event + '": ' + Err.message;
 				$scope.errors.push(message);
 				if (Svcs.AppConfig.alert_on_server_error) {
-					alert(message);
+					Svcs.Framework.ReportError(Error(message));
 				}
 				$scope.$apply();
 				return;
