@@ -10,13 +10,23 @@
 
 //=====================================================================
 // Define the main AngularJS module.
-var TheApplication = angular.module('TheApplication', ['ngCookies']);
+var TheApplication = angular.module('TheApplication', [
+	'ngCookies',
+	'ngAnimate',
+	'mgcrea.ngStrap'
+]);
 
 
 //=====================================================================
 // Define the main AngularJS controller.
 var TheController = TheApplication.controller('TheController',
-	function($rootScope, $scope, $http, $compile, $injector, $sce, $cookies) {
+	function(
+		$rootScope, $scope,
+		$http,
+		$compile, $injector, $sce,
+		$cookies,
+		$alert
+	) {
 
 
 		//=====================================================================
@@ -174,6 +184,25 @@ var TheController = TheApplication.controller('TheController',
 
 
 		//=====================================================================
+		//		Alerts
+		//=====================================================================
+
+		Svcs.Framework.Alert =
+			function Alert(Message) {
+				console.log('Alert: ' + Message);
+				var alert_window = $alert({
+					content: Message,
+					container: Svcs.AppConfig.content_selector,
+					placement: 'top',
+					type: 'info',
+					duration: 2,
+					show: true
+				});
+				return;
+			};
+
+
+		//=====================================================================
 		//		Error Handling
 		//=====================================================================
 
@@ -181,7 +210,15 @@ var TheController = TheApplication.controller('TheController',
 			function ReportError(err) {
 				console.log('Error: ' + err.message, err);
 				if (Svcs.AppConfig.alert_on_server_error) {
-					alert('Error: ' + err.message);
+					// alert('Error: ' + err.message);
+					var alert_window = $alert({
+						title: 'Error',
+						content: err.message,
+						placement: 'top',
+						type: 'error',
+						show: true
+					});
+
 				}
 				return;
 			};
@@ -336,10 +373,9 @@ var TheController = TheApplication.controller('TheController',
 		Svcs.Framework.DoMemberSignup =
 			function() {
 				Svcs.Member.MemberSignup(
-					function(Err, Response) {
-						if (Err) {
-							alert('ERROR: ' + Err.message);
-							$scope.$apply();
+					function(err, Response) {
+						if (err) {
+							Svcs.Framework.ReportError(err)
 							return;
 						}
 						Svcs.Member.member_data.signup_time = Date.now();
@@ -354,10 +390,9 @@ var TheController = TheApplication.controller('TheController',
 		Svcs.Framework.DoMemberLogin =
 			function() {
 				Svcs.Member.MemberLogin(
-					function(Err, Response) {
-						if (Err) {
-							alert('ERROR: ' + Err.message);
-							$scope.$apply();
+					function(err, Response) {
+						if (err) {
+							Svcs.Framework.ReportError(err)
 							return;
 						}
 						Svcs.Member.member_data.login_time = Date.now();
@@ -372,10 +407,9 @@ var TheController = TheApplication.controller('TheController',
 		Svcs.Framework.DoMemberReconnect =
 			function() {
 				Svcs.Member.MemberReconnect(
-					function(Err, Response) {
-						if (Err) {
-							alert('ERROR: ' + Err.message);
-							$scope.$apply();
+					function(err, Response) {
+						if (err) {
+							Svcs.Framework.ReportError(err)
 							return;
 						}
 						Svcs.Framework.OnMemberConnect();
@@ -388,10 +422,9 @@ var TheController = TheApplication.controller('TheController',
 		Svcs.Framework.DoMemberLogout =
 			function() {
 				Svcs.Member.MemberLogout(
-					function(Err, Response) {
-						if (Err) {
-							alert('ERROR: ' + Err.message);
-							$scope.$apply();
+					function(err, Response) {
+						if (err) {
+							Svcs.Framework.ReportError(err)
 							return;
 						}
 						Svcs.AppClient.OnLogout($scope);

@@ -73,7 +73,7 @@ AppClient.OnInitialize =
 				requires_login: false,
 				icon_class: 'glyphicon glyphicon-expand',
 				on_click: function(Item) {
-					alert(MyData.sample_data);
+					Svcs.Framework.Alert(MyData.sample_data);
 				}
 			})
 		);
@@ -119,7 +119,7 @@ AppClient.OnInitialize =
 //---------------------------------------------------------------------
 AppClient.OnLogin =
 	function OnLogin(Scope) {
-		// alert('Welcome ' + Scope.Member.member_name + '!');
+		// Svcs.Framework.Alert('Welcome ' + Scope.Member.member_name + '!');
 		return;
 	};
 
@@ -135,7 +135,7 @@ AppClient.OnLogin =
 //---------------------------------------------------------------------
 AppClient.OnLogout =
 	function OnLogout(Scope) {
-		// alert('Goodbye ' + Scope.Member.member_name + '!');
+		// Svcs.Framework.Alert('Goodbye ' + Scope.Member.member_name + '!');
 		return;
 	};
 
