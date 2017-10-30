@@ -46,9 +46,9 @@ var TheController = TheApplication.controller('TheController',
 		Svcs.AppConfig = null; // Initialized in 'Application Initialization' section below.
 		Svcs.Logger = null;
 		Svcs.Socket = null; // Initialized in 'Socket' section below.
-		Svcs.Member = null; // Initialized in 'Socket' section below.
-		Svcs.SharedDocDatabase = null; // Initialized in 'Socket' section below.
-		Svcs.MemberDocDatabase = null; // Initialized in 'Membership' section below.
+		Svcs.Member = null; // Initialized during Svcs.Socket.on('connect') below.
+		Svcs.SharedDocDatabase = null; // Initialized during Svcs.Socket.on('connect') below.
+		Svcs.MemberDocDatabase = null; // Initialized during Svcs.Framework.OnMemberConnect() below.
 
 		//==========================================
 		// Application configuration.
@@ -79,10 +79,14 @@ var TheController = TheApplication.controller('TheController',
 		//==========================================
 		Svcs.Socket.on('connect', function() {
 			$scope.notice = "... connected";
-			// Database functions.
-			Svcs.SharedDocDatabase = DocDatabaseClient.GetSharedDatabase(Svcs.Socket);
 			// Membership functions.
 			Svcs.Member = MembershipClient.OnInitialize(Svcs.AppConfig.app_title, Svcs.Socket, Svcs.Cookies);
+			Svcs.Member = Promise.promisifyAll(Svcs.Member);
+			// Database functions.
+			Svcs.SharedDocDatabase = DocDatabaseClient.GetSharedDatabase(Svcs.Socket);
+			Svcs.SharedDocDatabase = Promise.promisifyAll(Svcs.SharedDocDatabase);
+			// Ready the application.
+			Svcs.AppClient.OnConnect($scope);
 			// Automatically reconnect if our session is cached.
 			if (Svcs.Member.member_name && Svcs.Member.session_id && !Svcs.Member.member_logged_in) {
 				Svcs.Framework.DoMemberReconnect();
@@ -195,7 +199,7 @@ var TheController = TheApplication.controller('TheController',
 					container: Svcs.AppConfig.content_selector,
 					placement: 'top',
 					type: 'info',
-					duration: 2,
+					duration: 3,
 					show: true
 				});
 				return;
@@ -212,10 +216,12 @@ var TheController = TheApplication.controller('TheController',
 				if (Svcs.AppConfig.alert_on_server_error) {
 					// alert('Error: ' + err.message);
 					var alert_window = $alert({
-						title: 'Error',
+						// title: 'Error',
 						content: err.message,
+						container: Svcs.AppConfig.content_selector,
 						placement: 'top',
-						type: 'error',
+						type: 'info',
+						duration: 5,
 						show: true
 					});
 

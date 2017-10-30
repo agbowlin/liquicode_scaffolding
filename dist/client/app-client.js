@@ -33,13 +33,7 @@ AppClient.OnInitialize =
 		//=====================================================================
 		//=====================================================================
 
-		//TODO: Make Services object to hold all these.
 		var Svcs = Scope.Svcs;
-
-		// Promisify working objects,
-		Svcs.Member = Promise.promisifyAll(Svcs.Member);
-		Svcs.SharedDocDatabase = Promise.promisifyAll(Svcs.SharedDocDatabase);
-		Svcs.MemberDocDatabase = Promise.promisifyAll(Svcs.MemberDocDatabase);
 
 		Svcs.AppConfig.app_title = 'Scaffolding';
 		// Svcs.AppConfig.content_selector = '#content';
@@ -60,7 +54,7 @@ AppClient.OnInitialize =
 		//==========================================
 		Scope.MyData = {};
 		var MyData = Scope.MyData;
-		MyData.sample_data = 'Hello, World!';
+		MyData.sample_data = 'Hello!';
 
 		// Add navigation items to the sidebar.
 
@@ -111,6 +105,22 @@ AppClient.OnInitialize =
 //=====================================================================
 //=====================================================================
 //
+//		AppClient.OnConnect
+//
+//=====================================================================
+//=====================================================================
+
+//---------------------------------------------------------------------
+AppClient.OnConnect =
+	function OnConnect(Scope) {
+		Scope.MyData.sample_data = 'Hello, World!';
+		return;
+	};
+
+
+//=====================================================================
+//=====================================================================
+//
 //		AppClient.OnLogin
 //
 //=====================================================================
@@ -119,6 +129,7 @@ AppClient.OnInitialize =
 //---------------------------------------------------------------------
 AppClient.OnLogin =
 	function OnLogin(Scope) {
+		Scope.MyData.sample_data = 'Hello, ' + Scope.Svcs.Member.member_name + '!';
 		// Svcs.Framework.Alert('Welcome ' + Scope.Member.member_name + '!');
 		return;
 	};
