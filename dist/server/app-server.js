@@ -15,11 +15,13 @@ var ERR_AppServerError = Error("Application Server Error.");
 
 
 //---------------------------------------------------------------------
-function AppServer(Membership, ServerConfig) {
-	AppServer.Membership = Membership;
-	AppServer.ServerConfig = ServerConfig;
+function AppServer(Services) {
+	AppServer.Services = Services;
 	return AppServer;
 }
+
+
+AppServer.Routers = [];
 
 
 //=====================================================================

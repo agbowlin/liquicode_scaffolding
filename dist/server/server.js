@@ -127,6 +127,19 @@ Services.AppServer = require('./app-server.js')(Services);
 // Create an Express router.
 var ExpressRouter = npm_express();
 
+// Get custom routes for application.
+if (Services.AppServer.Routers) {
+	for (var index = 0; index < Services.AppServer.Routers.length; index++) {
+		var router = Services.AppServer.Routers[index];
+		if (router.on_get) {
+			ExpressRouter.get(router.path, router.on_get);
+		}
+		if (router.on_post) {
+			ExpressRouter.post(router.path, router.on_post);
+		}
+	}
+}
+
 // Define a static route for serving the client application files.
 var ClientFolder = npm_path.resolve(__dirname, Services.ServerConfig.NodeServer.client_folder);
 ExpressRouter.use(npm_express.static(ClientFolder));
