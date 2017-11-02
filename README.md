@@ -6,10 +6,23 @@ liquicode_scaffolding
 Lightweight scaffolding for NodeJS/SocketIO/AngularJS
 
 
+Main Features
+------------------------------------------
+
+- Membership Engine
+	- Authentication
+	- File System
+- NoSql Database engines (mongodb)
+	- Shared application database
+	- Member individual database
+- Prebuilt working client application.
+
+
 TODO
 ------------------------------------------
 
 - Implement a patch mode for liquicode_scaffolding.js
+- User RequireJS (or similar) to allow truly modular development.
 
 
 Installation

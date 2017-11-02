@@ -333,38 +333,72 @@ MembershipClient.OnInitialize =
 
 
 		//=====================================================================
+		//	Send Command
+		//=====================================================================
+
+		function send_command(RequiresSession, Command, Parameters, callback) {
+
+			// Check for requirements.
+			if (RequiresSession && !Member.session_id) {
+				if (callback) { callback(Error('No existing session found. Login required.'), null); }
+				return;
+			}
+
+			// Start a new transaction.
+			var transaction_id = 'TX-' + unique_id();
+
+			// Set up the one time response handler.
+			Socket.once(Command + '.' + transaction_id,
+				function(Err, Response) {
+					if (callback) { callback(Err, Response); }
+					return;
+				});
+
+			// Clone the command parameters and mark it with our control structure.
+			var parameters = JSON.parse(JSON.stringify(Parameters));
+			parameters.control = {
+				transaction_id: transaction_id,
+				session_id: Member.session_id
+			};
+
+			// Invoke the function.
+			Socket.emit(Command, parameters);
+
+			return;
+		}
+
+
+		//=====================================================================
 		//	Path List
 		//=====================================================================
 
+		//---------------------------------------------------------------------
 		Member.PathList =
 			function PathList(Path, Recurse, callback) {
-
-				// Check for requirements.
-				if (!Member.session_id) {
-					if (callback) { callback(new Error('No existing session found. Login required.'), null); }
-					return;
-				}
-
-				// Start a new transaction.
-				var transaction_id = 'TX-' + unique_id();
-
-				// Set up the response handler.
-				Socket.once('Membership.PathList.' + transaction_id,
-					function(Err, Response) {
-						if (callback) { callback(Err, Response); }
-						return;
-					});
-
-				// Invoke the function.
-				Socket.emit('Membership.PathList', {
-					control: {
-						transaction_id: transaction_id,
-						session_id: Member.session_id
+				send_command(
+					true,
+					'Membership.PathList', {
+						path: Path,
+						recurse: Recurse
 					},
-					path: Path,
-					recurse: Recurse
-				});
+					callback
+				);
+				return;
+			};
 
+
+		//---------------------------------------------------------------------
+		Member.SharedPathList =
+			function SharedPathList(Path, Recurse, callback) {
+				send_command(
+					true,
+					'Membership.PathList', {
+						use_shared_folder: true,
+						path: Path,
+						recurse: Recurse
+					},
+					callback
+				);
 				return;
 			};
 
@@ -373,34 +407,31 @@ MembershipClient.OnInitialize =
 		//	Path Read
 		//=====================================================================
 
+		//---------------------------------------------------------------------
 		Member.PathRead =
 			function PathRead(Path, callback) {
-
-				// Check for requirements.
-				if (!Member.session_id) {
-					if (callback) { callback(new Error('No existing session found. Login required.'), null); }
-					return;
-				}
-
-				// Start a new transaction.
-				var transaction_id = 'TX-' + unique_id();
-
-				// Set up the response handler.
-				Socket.once('Membership.PathRead.' + transaction_id,
-					function(Err, Response) {
-						if (callback) { callback(Err, Response); }
-						return;
-					});
-
-				// Invoke the function.
-				Socket.emit('Membership.PathRead', {
-					control: {
-						transaction_id: transaction_id,
-						session_id: Member.session_id
+				send_command(
+					true,
+					'Membership.PathRead', {
+						path: Path
 					},
-					path: Path
-				});
+					callback
+				);
+				return;
+			};
 
+
+		//---------------------------------------------------------------------
+		Member.SharedPathRead =
+			function SharedPathRead(Path, callback) {
+				send_command(
+					true,
+					'Membership.PathRead', {
+						use_shared_folder: true,
+						path: Path
+					},
+					callback
+				);
 				return;
 			};
 
@@ -409,35 +440,33 @@ MembershipClient.OnInitialize =
 		//	Path Write
 		//=====================================================================
 
+		//---------------------------------------------------------------------
 		Member.PathWrite =
 			function PathWrite(Path, Content, callback) {
-
-				// Check for requirements.
-				if (!Member.session_id) {
-					if (callback) { callback(new Error('No existing session found. Login required.'), null); }
-					return;
-				}
-
-				// Start a new transaction.
-				var transaction_id = 'TX-' + unique_id();
-
-				// Set up the response handler.
-				Socket.once('Membership.PathWrite.' + transaction_id,
-					function(Err, Response) {
-						if (callback) { callback(Err, Response); }
-						return;
-					});
-
-				// Invoke the function.
-				Socket.emit('Membership.PathWrite', {
-					control: {
-						transaction_id: transaction_id,
-						session_id: Member.session_id
+				send_command(
+					true,
+					'Membership.PathWrite', {
+						path: Path,
+						content: Content
 					},
-					path: Path,
-					content: Content
-				});
+					callback
+				);
+				return;
+			};
 
+
+		//---------------------------------------------------------------------
+		Member.SharedPathWrite =
+			function SharedPathWrite(Path, Content, callback) {
+				send_command(
+					true,
+					'Membership.PathWrite', {
+						use_shared_folder: true,
+						path: Path,
+						content: Content
+					},
+					callback
+				);
 				return;
 			};
 
@@ -446,34 +475,31 @@ MembershipClient.OnInitialize =
 		//	Path Make
 		//=====================================================================
 
+		//---------------------------------------------------------------------
 		Member.PathMake =
 			function PathMake(Path, callback) {
-
-				// Check for requirements.
-				if (!Member.session_id) {
-					if (callback) { callback(new Error('No existing session found. Login required.'), null); }
-					return;
-				}
-
-				// Start a new transaction.
-				var transaction_id = 'TX-' + unique_id();
-
-				// Set up the response handler.
-				Socket.once('Membership.PathMake.' + transaction_id,
-					function(Err, Response) {
-						if (callback) { callback(Err, Response); }
-						return;
-					});
-
-				// Invoke the function.
-				Socket.emit('Membership.PathMake', {
-					control: {
-						transaction_id: transaction_id,
-						session_id: Member.session_id
+				send_command(
+					true,
+					'Membership.PathMake', {
+						path: Path
 					},
-					path: Path
-				});
+					callback
+				);
+				return;
+			};
 
+
+		//---------------------------------------------------------------------
+		Member.SharedPathMake =
+			function SharedPathMake(Path, callback) {
+				send_command(
+					true,
+					'Membership.PathMake', {
+						use_shared_folder: true,
+						path: Path
+					},
+					callback
+				);
 				return;
 			};
 
@@ -482,34 +508,31 @@ MembershipClient.OnInitialize =
 		//	Path Clean
 		//=====================================================================
 
+		//---------------------------------------------------------------------
 		Member.PathClean =
 			function PathClean(Path, callback) {
-
-				// Check for requirements.
-				if (!Member.session_id) {
-					if (callback) { callback(new Error('No existing session found. Login required.'), null); }
-					return;
-				}
-
-				// Start a new transaction.
-				var transaction_id = 'TX-' + unique_id();
-
-				// Set up the response handler.
-				Socket.once('Membership.PathClean.' + transaction_id,
-					function(Err, Response) {
-						if (callback) { callback(Err, Response); }
-						return;
-					});
-
-				// Invoke the function.
-				Socket.emit('Membership.PathClean', {
-					control: {
-						transaction_id: transaction_id,
-						session_id: Member.session_id
+				send_command(
+					true,
+					'Membership.PathClean', {
+						path: Path
 					},
-					path: Path
-				});
+					callback
+				);
+				return;
+			};
 
+
+		//---------------------------------------------------------------------
+		Member.SharedPathClean =
+			function SharedPathClean(Path, callback) {
+				send_command(
+					true,
+					'Membership.PathClean', {
+						use_shared_folder: true,
+						path: Path
+					},
+					callback
+				);
 				return;
 			};
 
@@ -518,34 +541,31 @@ MembershipClient.OnInitialize =
 		//	Path Delete
 		//=====================================================================
 
+		//---------------------------------------------------------------------
 		Member.PathDelete =
 			function PathDelete(Path, callback) {
-
-				// Check for requirements.
-				if (!Member.session_id) {
-					if (callback) { callback(new Error('No existing session found. Login required.'), null); }
-					return;
-				}
-
-				// Start a new transaction.
-				var transaction_id = 'TX-' + unique_id();
-
-				// Set up the response handler.
-				Socket.once('Membership.PathDelete.' + transaction_id,
-					function(Err, Response) {
-						if (callback) { callback(Err, Response); }
-						return;
-					});
-
-				// Invoke the function.
-				Socket.emit('Membership.PathDelete', {
-					control: {
-						transaction_id: transaction_id,
-						session_id: Member.session_id
+				send_command(
+					true,
+					'Membership.PathDelete', {
+						path: Path
 					},
-					path: Path
-				});
+					callback
+				);
+				return;
+			};
 
+
+		//---------------------------------------------------------------------
+		Member.SharedPathDelete =
+			function SharedPathDelete(Path, callback) {
+				send_command(
+					true,
+					'Membership.PathDelete', {
+						use_shared_folder: true,
+						path: Path
+					},
+					callback
+				);
 				return;
 			};
 

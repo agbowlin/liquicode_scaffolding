@@ -27,6 +27,7 @@ function Membership() {
 //---------------------------------------------------------------------
 Membership.ApplicationName = 'default';
 Membership.RootFolder = npm_path.resolve(__dirname, 'members');
+Membership.SharedFolderName = '$shared';
 Membership.PASSWORDS_USE_SALTED_HASH = true;
 
 
