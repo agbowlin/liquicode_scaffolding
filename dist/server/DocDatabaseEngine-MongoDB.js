@@ -48,6 +48,8 @@ function DocDatabaseEngine(Services, EngineConfig) {
 DocDatabaseEngine.Query =
 	function Query(CollectionName, Request, callback) {
 
+		//------------------------------------------
+		// Construct a MongoDB connection url string.
 		var url = 'mongodb://';
 		if (DocDatabaseEngine.EngineConfig.username) {
 			url += DocDatabaseEngine.EngineConfig.username;
@@ -60,30 +62,8 @@ DocDatabaseEngine.Query =
 		url += ':' + DocDatabaseEngine.EngineConfig.port;
 		url += '/' + DocDatabaseEngine.EngineConfig.database;
 
-		// //------------------------------------------
-		// // Define the database server.
-		// var mongo_server = npm_mongodb.Server(
-		// 	DocDatabaseEngine.EngineConfig.host,
-		// 	DocDatabaseEngine.EngineConfig.port,
-		// 	DocDatabaseEngine.EngineConfig.opts
-		// );
-
-		// //------------------------------------------
-		// // Get a database instance.
-		// // var database_name = DocDatabaseEngine.Services.ServerConfig.Application.application_name;
-		// // database_name = database_name.toLowerCase();
-		// // database_name = database_name.replace('.', "_");
-		// // database_name = npm_sanitize(database_name);
-		// var database = npm_mongodb.Db(
-		// 	database_name,
-		// 	mongo_server, {
-		// 		native_parser: false,
-		// 		safe: true
-		// 	});
-
-		// //------------------------------------------
-		// // Open the database.
-		// database.open(
+		//------------------------------------------
+		// Open the database.
 		npm_mongodb.connect(url,
 			function(err, database) {
 				if (err) { callback(err, null); return; }
