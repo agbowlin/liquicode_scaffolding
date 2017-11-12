@@ -53,7 +53,8 @@ Services.ServerConfig = npm_fs_extra.readJsonSync('./app-server.config');
 
 // Include the Logger module.
 // Use the application name as the log group.
-Services.Logger = require('./Logger.js').Logger(Services.ServerConfig.Application.application_name);
+// Services.Logger = require('./Logger.js').Logger(Services.ServerConfig.Application.application_name);
+Services.Logger = require('liqui-logger/js/logger.js').Logger(Services.ServerConfig.Application.application_name);
 
 // Configure the logger with fields from the server configuration object.
 if (Services.ServerConfig.Logger && Services.ServerConfig.Logger.LogTargets) {
@@ -87,7 +88,7 @@ if (Services.ServerConfig.Logger && Services.ServerConfig.Logger.LogTargets) {
 //=====================================================================
 
 // Include the membership module.
-Services.Membership = require('./MembershipSocketIO.js');
+Services.Membership = require('liquicode_membership/MembershipSocketIO.js');
 
 // Configure Membership with fields from the server configuration object.
 Services.Membership.ApplicationName = Services.ServerConfig.Application.application_name;
@@ -102,7 +103,7 @@ Services.Membership.RootFolder = npm_path.resolve(__dirname, Services.ServerConf
 //=====================================================================
 //=====================================================================
 
-Services.DocDatabase = require('./DocDatabase.js')(Services);
+Services.DocDatabase = require('liquicode_membership/DocDatabase.js')(Services);
 Services.DocDatabase.OnInitialize();
 
 //=====================================================================
