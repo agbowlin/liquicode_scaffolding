@@ -207,13 +207,6 @@ make_folder(npm_path.join(targetpath, 'members'));
 // Files we always update
 copy_file(npm_path.join(sourcepath, 'server/server.js'), npm_path.join(targetpath, 'server/server.js'), true);
 
-copy_file(npm_path.join(sourcepath, 'server/Logger.js'), npm_path.join(targetpath, 'server/Logger.js'), true);
-copy_file(npm_path.join(sourcepath, 'server/Membership.js'), npm_path.join(targetpath, 'server/Membership.js'), true);
-copy_file(npm_path.join(sourcepath, 'server/MembershipSocketIO.js'), npm_path.join(targetpath, 'server/MembershipSocketIO.js'), true);
-copy_file(npm_path.join(sourcepath, 'server/DocDatabase.js'), npm_path.join(targetpath, 'server/DocDatabase.js'), true);
-copy_file(npm_path.join(sourcepath, 'server/DocDatabaseEngine-MongoDB.js'), npm_path.join(targetpath, 'server/DocDatabaseEngine-MongoDB.js'), true);
-copy_file(npm_path.join(sourcepath, 'server/DocDatabaseEngine-NeDB.js'), npm_path.join(targetpath, 'server/DocDatabaseEngine-NeDB.js'), true);
-
 // Files we only install, not update
 copy_file(npm_path.join(sourcepath, 'server/README.md'), npm_path.join(targetpath, 'server/README.md'), app_options.install);
 copy_file(npm_path.join(sourcepath, 'server/package.json'), npm_path.join(targetpath, 'server/package.json'), app_options.install);
@@ -229,9 +222,6 @@ console.log('Copying Client Files');
 // Files we always update
 copy_file(npm_path.join(sourcepath, 'client/index.css'), npm_path.join(targetpath, 'client/index.css'), true);
 copy_file(npm_path.join(sourcepath, 'client/index.js'), npm_path.join(targetpath, 'client/index.js'), true);
-
-copy_file(npm_path.join(sourcepath, 'client/MembershipClient.js'), npm_path.join(targetpath, 'client/MembershipClient.js'), true);
-copy_file(npm_path.join(sourcepath, 'client/DocDatabaseClient.js'), npm_path.join(targetpath, 'client/DocDatabaseClient.js'), true);
 
 // Files we only install, not update
 copy_file(npm_path.join(sourcepath, 'client/index.html'), npm_path.join(targetpath, 'client/index.html'), app_options.install);
