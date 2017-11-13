@@ -43,6 +43,110 @@ AppClient.OnInitialize =
 		Svcs.AppConfig.alert_on_server_error = true;
 
 
+		Scope.MyData = {};
+		var MyData = Scope.MyData;
+		MyData.sample_data = 'Hello!';
+
+
+		//=====================================================================
+		//=====================================================================
+		//
+		//		AppClient.OnConnect
+		//
+		//=====================================================================
+		//=====================================================================
+
+		//---------------------------------------------------------------------
+		AppClient.OnConnect =
+			function OnConnect(Scope) {
+				Scope.MyData.sample_data = 'Hello, World!';
+				return;
+			};
+
+
+		//=====================================================================
+		//=====================================================================
+		//
+		//		AppClient.OnLogin
+		//
+		//=====================================================================
+		//=====================================================================
+
+		//---------------------------------------------------------------------
+		AppClient.OnLogin =
+			function OnLogin(Scope) {
+				Scope.MyData.sample_data = 'Hello, ' + Scope.Svcs.Member.member_name + '!';
+				// Svcs.Framework.Alert('Welcome ' + Scope.Member.member_name + '!');
+				return;
+			};
+
+
+		//=====================================================================
+		//=====================================================================
+		//
+		//		AppClient.OnLogout
+		//
+		//=====================================================================
+		//=====================================================================
+
+		//---------------------------------------------------------------------
+		AppClient.OnLogout =
+			function OnLogout(Scope) {
+				// Svcs.Framework.Alert('Goodbye ' + Scope.Member.member_name + '!');
+				return;
+			};
+
+
+		//=====================================================================
+		//=====================================================================
+		//
+		//		AppClient.SendCommand
+		//
+		//=====================================================================
+		//=====================================================================
+
+
+		//---------------------------------------------------------------------
+		AppClient.UniqueID =
+			function UniqueID() {
+				return Math.random().toString(36).substr(2, 9);
+			}
+
+
+		//---------------------------------------------------------------------
+		AppClient.SendCommand =
+			function SendCommand(RequiresSession, Command, Parameters, callback) {
+
+				// Check for requirements.
+				if (RequiresSession && !Svcs.Member.session_id) {
+					if (callback) { callback(Error('No existing session found. Login required.'), null); }
+					return;
+				}
+
+				// Start a new transaction.
+				var transaction_id = 'TX-' + AppClient.UniqueID();
+
+				// Set up the one time response handler.
+				Svcs.Socket.once(Command + '.' + transaction_id,
+					function(Err, Response) {
+						if (callback) { callback(Err, Response); }
+						return;
+					});
+
+				// Clone the command parameters and mark it with our control structure.
+				var parameters = JSON.parse(JSON.stringify(Parameters));
+				parameters.control = {
+					transaction_id: transaction_id,
+					session_id: Svcs.Member.session_id
+				};
+
+				// Invoke the function.
+				Svcs.Socket.emit(Command, parameters);
+
+				return;
+			}
+
+
 		//=====================================================================
 		//=====================================================================
 		//
@@ -53,10 +157,6 @@ AppClient.OnInitialize =
 
 
 		//==========================================
-		Scope.MyData = {};
-		var MyData = Scope.MyData;
-		MyData.sample_data = 'Hello!';
-
 		// Add navigation items to the sidebar.
 
 		$('#app-sidebar-list').html('');
@@ -99,55 +199,6 @@ AppClient.OnInitialize =
 			})
 		);
 
-		return;
-	};
-
-
-//=====================================================================
-//=====================================================================
-//
-//		AppClient.OnConnect
-//
-//=====================================================================
-//=====================================================================
-
-//---------------------------------------------------------------------
-AppClient.OnConnect =
-	function OnConnect(Scope) {
-		Scope.MyData.sample_data = 'Hello, World!';
-		return;
-	};
-
-
-//=====================================================================
-//=====================================================================
-//
-//		AppClient.OnLogin
-//
-//=====================================================================
-//=====================================================================
-
-//---------------------------------------------------------------------
-AppClient.OnLogin =
-	function OnLogin(Scope) {
-		Scope.MyData.sample_data = 'Hello, ' + Scope.Svcs.Member.member_name + '!';
-		// Svcs.Framework.Alert('Welcome ' + Scope.Member.member_name + '!');
-		return;
-	};
-
-
-//=====================================================================
-//=====================================================================
-//
-//		AppClient.OnLogout
-//
-//=====================================================================
-//=====================================================================
-
-//---------------------------------------------------------------------
-AppClient.OnLogout =
-	function OnLogout(Scope) {
-		// Svcs.Framework.Alert('Goodbye ' + Scope.Member.member_name + '!');
 		return;
 	};
 
